@@ -1,0 +1,7 @@
+log/*
+raw/*
+MRD_input/*
+MRD_output/*
+*.mat
+*.asv
+*.xprot
