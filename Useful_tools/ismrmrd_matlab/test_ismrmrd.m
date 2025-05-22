@@ -1,18 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This is a demo code for checking the ismrmrd header and data structure
-%
-% Provided by the Gadgetron team
-% Last modified: Zihan Ning <zihan.1.ning@kcl.ac.uk><ningzihan1996@gmail.com>
-%                King's College London
-%                22-May-2025
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 clearvars; close all; clc;clear all;
-addpath(genpath('Useful_tools'))
+addpath('/home/zn23/matlab/usual_used/ismrmrd_matlab')
 
-%% Choose the ISMRMRD file for checking
-% <<<<<<< HEAD
-filename = 'input_radial_spiral_37ech_1.h5';
+% define the filename
+filename = 'input_highres_SWI_TS58_PFon_defaultxsl.h5';
 
 % dataset definition
 dset = ismrmrd.Dataset(filename, 'dataset');
@@ -111,13 +101,20 @@ N_reverse_data = sum(reverse_data)
 
 % image_data = find(parallel_calibration+navigation_data+phase_corr_data==0);
 image_data = find(noise_data + parallel_calibration  ==0);
-reference_data = find(parallel_calibration  ==1);
-noise_data = find(noise_data  ==1);
+other_data = find(parallel_calibration  ==1);
+extract_noise_data = find(noise_data == 1);
 
 %% Create matrix of image readout only
 readout_size = size(data_struct.data{1,image_data(1,1)},1);
 N_coils = size(data_struct.data{1,image_data(1,1)},2);
 kspace = zeros(readout_size, N_phase_encode, N_coils,N_slices);
+
+% % try to extract the noise signal
+% if N_noise_data > 0
+%     readout_size_noise = size(data_struct.data{1,extract_noise_data(1,1)},1);
+%     N_coils_noise = size(data_struct.data{1,extract_noise_data(1,1)},2);
+%     kspace_noise = zeros(readout_size_noise, N_phase_encode, N_coils_noise,N_slices);
+% end
 
 for ind = image_data
     kspace(:,data_struct.head.idx.kspace_encode_step_1(1,ind)+1,:,data_struct.head.idx.kspace_encode_step_2(1,ind)+1) = data_struct.data{1,ind};
@@ -129,7 +126,7 @@ for ind = other_data
 end
 size(parallelcali)
 
-for ind = noise_data
+for ind = extract_noise_data
     noise(:,data_struct.head.idx.kspace_encode_step_1(1,ind)+1,:,data_struct.head.idx.kspace_encode_step_2(1,ind)+1) = data_struct.data{1,ind};
 end
 size(noise)

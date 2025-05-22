@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+@King's College London
+22-May-2025
+-->
+
+<Framework>
+    <Component name="Default">
+        <data_saved_path>/home/zn23/data/</data_saved_path>
+    </Component>
+    <Component name="Sodium_radial">
+        <data_saved_path>/home/zn23/data/sodium_radial/</data_saved_path>
+    </Component>
+    <!-- Add more components here -->
+</Framework>

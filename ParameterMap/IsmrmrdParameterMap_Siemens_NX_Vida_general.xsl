@@ -837,6 +837,24 @@
                     </userParameterLong>
                 </xsl:if>
                 
+                <xsl:if test="siemens/YAPS/iNoOfFourierLines">
+                    <userParameterLong>
+                        <name>iNoOfFourierLines</name>
+                        <value>
+                            <xsl:value-of select="siemens/YAPS/iNoOfFourierLines" />
+                        </value>
+                    </userParameterLong>
+                </xsl:if>
+                
+                <xsl:if test="siemens/MEAS/sKSpace/lImagesPerSlab">
+                    <userParameterLong>
+                        <name>lImagesPerSlab</name>
+                        <value>
+                            <xsl:value-of select="siemens/MEAS/sKSpace/lImagesPerSlab" />
+                        </value>
+                    </userParameterLong>
+                </xsl:if>
+                
                 <!--Acceleration related-->
                 <xsl:if test="siemens/DICOM/ucPATMode">
                     <userParameterLong>
@@ -1239,6 +1257,15 @@
                         </value>
                       </userParameterDouble>
                   </xsl:if>
+                  
+                  <xsl:if test="siemens/DICOM/dPhaseFOV">
+                      <userParameterDouble>
+                        <name>dPhaseFOV</name>
+                        <value>
+                            <xsl:value-of select="siemens/DICOM/dPhaseFOV" />
+                        </value>
+                      </userParameterDouble>
+                  </xsl:if>
                       
                   <!--Add user parameters here, end-->
 
@@ -1264,6 +1291,14 @@
                         <name>tScanningSequence_zihan</name>
                         <value>
                             <xsl:value-of select="siemens/DICOM/tScanningSequence" />
+                        </value>
+                    </userParameterString>
+                </xsl:if>
+                <xsl:if test="siemens/DICOM/SoftwareVersions">
+                    <userParameterString>
+                        <name>SoftwareVersions</name>
+                        <value>
+                            <xsl:value-of select="siemens/DICOM/SoftwareVersions" />
                         </value>
                     </userParameterString>
                 </xsl:if>

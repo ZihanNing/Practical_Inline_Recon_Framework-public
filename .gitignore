@@ -5,3 +5,4 @@ MRD_output/*
 *.mat
 *.asv
 *.xprot
+*.json

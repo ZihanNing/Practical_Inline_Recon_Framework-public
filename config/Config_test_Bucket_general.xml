@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <version>2</version>
+
+   <readers>
+       <reader>
+         <classname>AcquisitionReader</classname>
+         <dll>gadgetron_core_readers</dll>
+       </reader>
+
+       <reader>
+         <classname>WaveformReader</classname>
+         <dll>gadgetron_core_readers</dll>
+       </reader>
+   </readers>
+
+  <writers>
+    <writer>
+      <classname>ImageWriter</classname>
+      <dll>gadgetron_core_writers</dll>
+    </writer>
+  </writers>
+    
+    <stream>  
+        <!-- Noise prewhitening -->
+        <!--ZN: Default Gadgetron Noise prewhitening gadget will consume the noise lines after processing-->
+        <!--<gadget><name>NoiseAdjust</name><dll>gadgetron_mricore</dll><classname>NoiseAdjustGadget</classname></gadget>-->
+
+        <!-- RO asymmetric echo handling -->
+        <!--ZN: Disable if not needed-->
+        <gadget><name>AsymmetricEcho</name><dll>gadgetron_mricore</dll><classname>AsymmetricEchoAdjustROGadget</classname></gadget>
+
+        <!-- RO oversampling removal -->
+        <!--ZN: Disable if not needed-->
+        <gadget><name>RemoveROOversampling</name><dll>gadgetron_mricore</dll><classname>RemoveROOversamplingGadget</classname></gadget>
+        
+        <!--Accumulate Noise lines by streaming-->
+        <!--ZN: Disable this if Default Gadgetron Noise prewhitening gadget has been used-->
+        <gadget>
+            <name>AccTrig</name>
+            <dll>gadgetron_mricore</dll>
+            <classname>FlagTriggerGadget</classname>
+            <property><name>trigger_flags</name><value>is_noise_measurement</value></property>
+        </gadget>
+
+	<!--Accumulate Kspace lines for imaging and ACS lines by streaming-->
+        <!--ZN: Essential part-->
+        <gadget>
+            <name>AccTrig</name>
+            <dll>gadgetron_mricore</dll>
+            <classname>AcquisitionAccumulateTriggerGadget</classname>
+            <property><name>trigger_dimension</name><value></value></property>
+            <property><name>sorting_dimension</name><value></value></property>
+        </gadget>
+        
+	<!--Stream the lines to the external port-->
+        <!--ZN: The port number can be customized, but should keep aligned here with the answer port-->
+        <external>
+          <connect port="23200"/>
+        </external> 
+        
+	<!--ZN: Some standard post-processing gadgets-->
+        <gadget>
+          <dll>gadgetron_mricore</dll>          <classname>AutoScaleGadget</classname>
+        </gadget>
+
+        <gadget>
+          <dll>gadgetron_mricore</dll>
+          <classname>FloatToUShortGadget</classname>
+        </gadget>
+
+        <gadget>
+          <dll>gadgetron_mricore</dll>
+          <classname>ImageFinishGadget</classname>
+        </gadget>
+        
+    </stream>
+
+</configuration>

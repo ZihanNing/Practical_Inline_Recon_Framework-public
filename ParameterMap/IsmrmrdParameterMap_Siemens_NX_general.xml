@@ -144,6 +144,9 @@
         <p><s>MEAS.sFastImaging.lTurboFactor</s>                     <d>siemens.MEAS.sFastImaging.lTurboFactor</d></p>
         <p><s>MEAS.sFastImaging.lEchoTrainDuration</s>               <d>siemens.MEAS.sFastImaging.lEchoTrainDuration</d></p>
         <p><s>DICOM.RFEchoTrainLength</s>                            <d>siemens.DICOM.RFEchoTrainLength</d></p>
+        <!--some default parameters which might be useful-->
+        <p><s>DICOM.SoftwareVersions</s>                     <d>siemens.DICOM.SoftwareVersions</d></p>
+        <p><s>DICOM.dPhaseFOV</s>                     <d>siemens.DICOM.dPhaseFOV</d></p>
         <!-- added by ZN end -->
 
         <!-- Coil information -->

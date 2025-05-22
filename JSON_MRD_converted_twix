@@ -1,0 +1,72 @@
+{
+	"data": null,
+	"image": null,
+	"hdr": {
+		"encodedSpace": {
+			"matrixSize": [128,64,1],
+			"FOVmm": [400,200,5]
+		},
+		"reconSpace": {
+			"matrixSize": [64,64,1],
+			"FOVmm": [200,200,5]
+		},
+		"Dicom": {
+			"tPatientPosition": "HFS",
+			"adFlipAngleDegree": 90,
+			"dPhaseFOV": 200,
+			"lGlobalTablePosCor": null,
+			"lGlobalTablePosTra": null,
+			"lGlobalTablePosSag": null,
+			"SoftwareVersions": "syngo MR XA60"
+		},
+		"Meas": {
+			"alTE": null,
+			"alTR": 151000,
+			"flReadoutOSFactor": null,
+			"alDwellTime": null,
+			"iNoOfFourierLines": 1000,
+			"lImagesPerSlab": 64
+		},
+		"Protocol": {
+			"dOverallImageScaleFactor": null
+		},
+		"MeasYaps": {
+			"sWipMemBlock": {
+				"alFree": [
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				]
+			}
+		}
+	}
+}
