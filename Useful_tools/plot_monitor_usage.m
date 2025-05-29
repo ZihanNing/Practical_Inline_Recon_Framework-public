@@ -1,5 +1,5 @@
 % Change this to your actual log filename
-filename = '/home/zn23/monitor_log_PID718223.txt';
+filename = '//home/zn23/Gadgetron_Parallel_Framework/Useful_tools/monitor_log_PID30575.txt';
 
 % Open the file
 fid = fopen(filename);

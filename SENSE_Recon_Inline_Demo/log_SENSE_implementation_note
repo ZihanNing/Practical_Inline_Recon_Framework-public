@@ -1,0 +1,35 @@
+parameters to be converted:
+=================================reconInversion==========================
+% acquired grid size
+NImageCols=TW.hdr.Meas.NImageCols;
+NImageCols=TW.hdr.Meas.NImageCols;else NImageCols=TW.(field).NCol;end
+if TW.(field).NPar==1;rec.Enc.(t).AcqN=[NImageCols TW.(field).NLin-TW.(field).skipLin TW.(field).NSli];rec.Enc.(t).ThreeD=0;%MS2D
+else rec.Enc.(t).AcqN=[NImageCols TW.(field).NLin-TW.(field).skipLin TW.(field).NPar-TW.(field).skipPar];rec.Enc.(t).ThreeD=1;%3D
+end
+
+rec.Enc.(t).CoilN=TW.(field).NCha;
+
+% oversampling factors
+TW.hdr.Meas.flPhaseOS
+TW.hdr.Meas.flSliceOS
+
+% acceleration
+TW.hdr.Meas.alRegridMode(1)
+TW.hdr.MeasYaps.sKSpace.dPhaseResolution
+TW.hdr.MeasYaps.sKSpace.dSliceResolution
+TW.hdr.Dicom.flReadoutOSFactor
+
+% partial fourier
+TW.hdr.Config.N0FPEFTLength TW.hdr.Config.N0F3DFTLength
+TW.(field).centerLin
+TW.(field).centerPar
+
+% output grid sizes
+TW.hdr.MeasYaps.sSliceArray.asSlice{1}
+
+% geometry
+TW.(field).slicePos(:,iSlicePositionsMin)
+TW.hdr.Dicom.tPatientPosition
+
+% multi-band
+TW.hdr.Meas.MultiBandFactor

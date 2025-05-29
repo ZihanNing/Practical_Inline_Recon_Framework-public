@@ -794,6 +794,7 @@
                 </xsl:if>
                 
                 <!--Added by Zihan, start-->
+                <!--Default parameters-->
                 <xsl:if test="siemens/MEAS/lScanTimeSec">
                     <userParameterLong>
                         <name>lScanTimeSec_zihan</name>
@@ -851,6 +852,15 @@
                         <name>lImagesPerSlab</name>
                         <value>
                             <xsl:value-of select="siemens/MEAS/sKSpace/lImagesPerSlab" />
+                        </value>
+                    </userParameterLong>
+                </xsl:if>
+                
+                <xsl:if test="siemens/YAPS/alRegridMode">
+                    <userParameterLong>
+                        <name>alRegridMode</name>
+                        <value>
+                            <xsl:value-of select="siemens/YAPS/alRegridMode" />
                         </value>
                     </userParameterLong>
                 </xsl:if>
@@ -1263,6 +1273,24 @@
                         <name>dPhaseFOV</name>
                         <value>
                             <xsl:value-of select="siemens/DICOM/dPhaseFOV" />
+                        </value>
+                      </userParameterDouble>
+                  </xsl:if>
+                  
+                  <xsl:if test="siemens/MEAS/sKSpace/dPhaseResolution">
+                      <userParameterDouble>
+                        <name>dPhaseResolution</name>
+                        <value>
+                            <xsl:value-of select="siemens/MEAS/sKSpace/dPhaseResolution" />
+                        </value>
+                      </userParameterDouble>
+                  </xsl:if>
+                  
+                  <xsl:if test="siemens/MEAS/sKSpace/dSliceResolution">
+                      <userParameterDouble>
+                        <name>dSliceResolution</name>
+                        <value>
+                            <xsl:value-of select="siemens/MEAS/sKSpace/dSliceResolution" />
                         </value>
                       </userParameterDouble>
                   </xsl:if>

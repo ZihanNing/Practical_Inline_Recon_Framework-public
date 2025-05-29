@@ -1,5 +1,5 @@
 
-function [] = handle_connection_radial_recon(connection)
+function [] = handle_connection_sense(connection)
     %%% This is a blank handle
     %%% Just read in Bucket including noise scan (refer to:
     %%% config/configDISORDER_test_Bucket_SWI.xml)
@@ -55,12 +55,20 @@ function [] = handle_connection_radial_recon(connection)
 
     %% GENERAL INPUT CONVERTOR (ISMRMRD > TWIX-LIKE RAW)
     % bucket2buffer | matlab version
-    twix_like = BucketToBuffer_matlab(bucketData,connection.header,noiseData,0,'radial');
+    twix_like = BucketToBuffer_matlab(bucketData,connection.header,noiseData,0);
     
     %% SAVE RAW AND INFO FOR PARALLEL COMPUTATION
-    save_raw_info(twix_like,connection.header,'Sodium_radial','radial_MEGE_volume');
+    Recon_ID = 'SENSE_ACS'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
+    save_raw_info(twix_like,connection.header,Recon_ID,'sense_acs');
     
     %% CALL SUBCALL FUNCTION IN PARALLEL AND RELEASE SCANNER RECON CHAIN
+    debug_mode = 1; % 1: debug mode-run the background function on the interface directly; 0: auto mode-launch a matlab program to run target function on the background
+    if debug_mode
+%         handle_connection_background_sense_acs
+        feval(getReconAlg(Recon_ID)) % the implemented recon pipe can be attached with Recon_ID in the config
+    else % call the function by a bash 
+        
+    end
     
     
     % do nothing and return nothing

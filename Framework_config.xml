@@ -9,6 +9,13 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
     <Component name="Default">
         <data_saved_path>/home/zn23/data/</data_saved_path>
     </Component>
+    <Component name="SENSE_ACS">
+        <data_saved_path>/home/zn23/data/sense/</data_saved_path>
+        <recon_alg>handle_connection_background_sense_acs</recon_alg>
+    </Component>
+    <Component name="SENSE_exterREF">
+        <data_saved_path>/home/zn23/data/sense/</data_saved_path>
+    </Component>
     <Component name="Sodium_radial">
         <data_saved_path>/home/zn23/data/sodium_radial/</data_saved_path>
     </Component>

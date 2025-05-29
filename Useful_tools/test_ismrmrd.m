@@ -12,7 +12,7 @@ addpath(genpath('Useful_tools'))
 
 %% Choose the ISMRMRD file for checking
 % <<<<<<< HEAD
-filename = 'input_radial_spiral_37ech_1.h5';
+filename = 'input_SWI_SENSE_twinsinvivo.h5';
 
 % dataset definition
 dset = ismrmrd.Dataset(filename, 'dataset');

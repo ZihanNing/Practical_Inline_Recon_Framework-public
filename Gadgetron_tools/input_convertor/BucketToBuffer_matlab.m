@@ -15,7 +15,7 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
 
     if nargin < 3 || isempty(noiseData); noiseData=[];end 
     if nargin < 4 || isempty(saveJSON_flag); saveJSON_flag = 0; end 
-    if nargin < 4 || isempty(compulsory_traj); compulsory_traj = []; end % ZN: in case the traj is encoded wrong in the twix header
+    if nargin < 5 || isempty(compulsory_traj); compulsory_traj = []; end % ZN: in case the traj is encoded wrong in the twix header
     
 
     type_traj = connection_hdr.encoding.trajectory; 
@@ -524,6 +524,8 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
             [twix.hdr.Meas.flPhaseOS,status] = searchUPfield(hdr_UP,'Double','flPhaseOS_zihan');
             [twix.hdr.Meas.flSliceOS,status] = searchUPfield(hdr_UP,'Double','flSliceOS_zihan');
             [twix.hdr.MeasYaps.sRXSPEC.alDwellTime{1},status] = searchUPfield(hdr_UP,'Double','alDwellTime_zihan');
+            [twix.hdr.MeasYaps.sKSpace.dPhaseResolution,status] = searchUPfield(hdr_UP,'Double','dPhaseResolution');
+            [twix.hdr.MeasYaps.sKSpace.dSliceResolution,status] = searchUPfield(hdr_UP,'Double','dSliceResolution');
              
             % Long
             [twix.hdr.Dicom.lGlobalTablePosTra,status] = searchUPfield(hdr_UP,'Long','lGlobalTablePosTra_zihan'); % geom
@@ -540,6 +542,8 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
             
             [twix.hdr.MeasYaps.sWipMemBlock.alFree{2},status] = searchUPfield(hdr_UP,'Long','sWipMemBlock_alFree_2');  % WIP (user defined parameters in sequence)
             [twix.hdr.MeasYaps.sWipMemBlock.alFree{3},status] = searchUPfield(hdr_UP,'Long','sWipMemBlock_alFree_3');  % WIP (user defined parameters in sequence)
+            
+            [twix.hdr.Meas.alRegridMode(1),status] = searchUPfield(hdr_UP,'Long','alRegridMode');  
  
             
             % String
