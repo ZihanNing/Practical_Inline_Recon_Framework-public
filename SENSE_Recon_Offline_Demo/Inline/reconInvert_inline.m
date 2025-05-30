@@ -45,6 +45,19 @@ rec.Enc.(t).Accel(3)=1/TW.hdr.MeasYaps.sKSpace.dSliceResolution;
 fprintf('Acceleration factors:%s\n',sprintf(' %.3f',rec.Enc.(t).Accel));
 if rec.Enc.(t).RegridMode<=1;rec.Enc.(t).AcqN(1)=rec.Enc.(t).AcqN(1)/TW.hdr.Dicom.flReadoutOSFactor;end
 
+%DEAL WITH BIPOLAR READOUT (ONLY FOR GADGETRON)
+% ZN: this will be updated in BucketToBuffer later
+if typ == 3
+    flag_bipolar = 1; % ZN: good to replace this with a ismrmrd header
+    if flag_bipolar
+        data = rec.TWD.(t);
+        Necho = size(data,ndims(data));
+        if Necho>=2;evenEchoIdx = 2:2:Necho;end % ZN: only flip the even echo
+        data(:,:,:,:,:,evenEchoIdx) = flip(data(:,:,:,:,:,evenEchoIdx),1);
+        rec.TWD.(t) = data; 
+    end
+end
+
 %PARTIAL FOURIER
 if strcmp(field,'image')
 %     rec.Enc.(t).AcqNNoPF=rec.Enc.(t).AcqN;
@@ -204,6 +217,7 @@ end
 % else
 %     rec.N.(t)=[];
 % end
+rec.N.(t)=[];
 
 %INVERT PHASE
 if strcmp(field,'image');fieldPhase='phasecor';
@@ -262,6 +276,7 @@ if strcmp(field,'image');rec.Ay=rec.Ay+(1-rec.Enc.(t).APF{2});end
 %MULTIBAND
 rec.Enc.(t).MultiBandFactor=1;
 rec.Ay=ifftshiftGPU(rec.Ay,2);
+rec.Az = [];
 
 %INVERT
 blkSz=blkSz*2;

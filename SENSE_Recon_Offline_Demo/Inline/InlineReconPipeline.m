@@ -71,7 +71,7 @@ for n=n0:3
     
     %WRITE
     tsta=tic;
-    rec=reconWrite_inline(rec,n);
+    rec=reconWrite_inline(rec,n,'final');
     fprintf('Time writing %s: %.2f\n',typV(n),toc(tsta));
 end
 
