@@ -22,6 +22,7 @@ function save_raw_info(twix_like,hdrConnection,ProjectName,save_tag)
     hdrConnection = check_overwrite(hdrConnection);
     fileName = hdrConnection.measurementInformation.protocolName;
     twix_like.hdr.fileName = fileName; % ZN: for following writing to prevent overwritting
+    twix_like.hdr.save_path = save_path; % to save the result in the same folder
     isRef = contains(fileName, 'REF');
     if isRef
         raw_name = ['RAW_DATA_REF_',fileName,'.mat']; % ZN: the raw data file's name will contain seq_name

@@ -140,6 +140,7 @@
         <p><s>DICOM.flSliceOS</s>                     <d>siemens.DICOM.flSliceOS</d></p>
         <p><s>DICOM.ucPATMode</s>                     <d>siemens.DICOM.ucPATMode</d></p>
         <p><s>MEAS.sKSpace.ucEnableEllipticalScanning</s>                     <d>siemens.MEAS.sKSpace.ucEnableEllipticalScanning</d></p>
+        <p><s>MEAS.sPat.lRefLinesPE</s>                     <d>siemens.MEAS.sPat.lRefLinesPE</d></p>
         <!--tse seq-->
         <p><s>MEAS.sFastImaging.lTurboFactor</s>                     <d>siemens.MEAS.sFastImaging.lTurboFactor</d></p>
         <p><s>MEAS.sFastImaging.lEchoTrainDuration</s>               <d>siemens.MEAS.sFastImaging.lEchoTrainDuration</d></p>

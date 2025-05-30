@@ -12,6 +12,15 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
     <Component name="SENSE_ACS">
         <data_saved_path>/home/zn23/data/sense/</data_saved_path>
         <recon_alg>handle_connection_background_sense_acs</recon_alg>
+        
+        <!-- Read by the Bash script to call the custom recon -->
+        <logFile>/home/zn23/Gadgetron_Parallel_Framework/log/GPU_status_log.txt</logFile> <!--This need to be a default file that used for all recons in this server-->
+        <maxWaitTime>900</maxWaitTime>
+        <interval>10</interval>
+        <matlabFunction>handle_connection_background_sense_acs</matlabFunction>
+        
+        <!--Add path for the custom recon-->
+        <support_func_path>/home/zn23/Gadgetron_Parallel_Framework/SENSE_Recon_Offline_Demo</support_func_path>
     </Component>
     <Component name="SENSE_exterREF">
         <data_saved_path>/home/zn23/data/sense/</data_saved_path>

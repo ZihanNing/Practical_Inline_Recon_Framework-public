@@ -31,8 +31,8 @@
         <gadget><name>AsymmetricEcho</name><dll>gadgetron_mricore</dll><classname>AsymmetricEchoAdjustROGadget</classname></gadget>
 
         <!-- RO oversampling removal -->
-        <!--ZN: Disable if not needed-->
-        <gadget><name>RemoveROOversampling</name><dll>gadgetron_mricore</dll><classname>RemoveROOversamplingGadget</classname></gadget>
+        <!--ZN: Add if needed - could save some saving time-->
+        <!--<gadget><name>RemoveROOversampling</name><dll>gadgetron_mricore</dll><classname>RemoveROOversamplingGadget</classname></gadget>-->
         
         <!--Accumulate Noise lines by streaming-->
         <!--ZN: Disable this if Default Gadgetron Noise prewhitening gadget has been used-->

@@ -544,9 +544,11 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
             [twix.hdr.MeasYaps.sWipMemBlock.alFree{3},status] = searchUPfield(hdr_UP,'Long','sWipMemBlock_alFree_3');  % WIP (user defined parameters in sequence)
             
             [twix.hdr.Meas.alRegridMode(1),status] = searchUPfield(hdr_UP,'Long','alRegridMode');  
+            
+            [twix.hdr.Meas.lRefLinesPE,status] = searchUPfield(hdr_UP,'Long','lRefLinesPE');   % ACS line info
  
             
-            % String
+            % Stringsort_bucket = zeros(N_RO,N_Cha,n_rep,N_Ave,N_Con);
             [twix.hdr.Meas.tScanningSequence,status] = searchUPfield(hdr_UP,'String','tScanningSequence_zihan'); % sequency type
             
             %%% if more, add here...
@@ -643,22 +645,66 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
     readref_flag = 0;
     if bucket.reference.count>0; readref_flag = 1; end % ZN: there's reference/calibration lines to be read
     if readref_flag
-        Num_refLin = 64; % ZN: this is currently hard-coded but might be able to get this from connection.header by modifying parametermap
-        Num_refPar = bucket.reference.count/Num_refLin;
-        if mod(Num_refPar,1)~=0;error('Hard coded number in linear direction is not suitable for the calibration scan! Aborted!\n'); end
-        twix.reference.data = complex(zeros( ...
+        Num_refLin = max(bucket.reference.header.kspace_encode_step_1) + 1;
+        Num_refPar = max(bucket.reference.header.kspace_encode_step_2) + 1;
+        Num_refCon = max(bucket.reference.header.contrast) + 1;
+        Num_refAve = max(bucket.reference.header.average) + 1;
+        twix.refscan = complex(zeros( ...
             size(bucket.reference.data, 1), ... % RO
             size(bucket.reference.data, 2), ... % CHA
             Num_refLin, ... % PE1, Lin
             Num_refPar, ... % PE2, Par
+            Num_refAve,... % Ave
+            Num_refCon,... % contrast/echo/inv/etc...
             'single' ...
         ));
     
-        for i = 1:bucket.reference.count
-            encode_step_1 = bucket.reference.header.kspace_encode_step_1(i);
-            encode_step_2 = bucket.reference.header.kspace_encode_step_2(i);
-            twix.reference.data(:,:,encode_step_1 + 1, encode_step_2 + 1) = squeeze(bucket.reference.data(:, :, i));    % ZN: there shouldnt be any zero-padding in kspace for calibration scans
-        end        
+        id = 1:length(bucket.reference.header.kspace_encode_step_1); 
+            refLin = double(dynInd(bucket.reference.header.kspace_encode_step_1,id,2));
+            refPar = double(dynInd(bucket.reference.header.kspace_encode_step_2,id,2)); 
+            refCon = double(dynInd(bucket.reference.header.contrast,id,2));  
+            refAve = double(dynInd(bucket.reference.header.average,id,2)); 
+        id=[];
+        
+        n_rep = length(refLin) / (Num_refCon*Num_refAve);
+        sort_refLin = zeros(n_rep,Num_refCon,Num_refAve);
+        sort_refPar = sort_refLin;
+        sort_refCon = sort_refLin;
+        sort_refAve = sort_refLin;
+        for i = 0:Num_refCon-1
+            for j = 0:Num_refAve-1
+                idx = find(refCon == i & refAve == j);
+                if numel(idx) ~= n_rep; fprintf('Mismatch in expected number of repeatation for contrast %s, average %s.\n',num2str(N_Con),num2str(N_Ave)); break; end
+                sort_refLin(:,i+1,j+1) = refLin(idx);
+                sort_refPar(:,i+1,j+1) = refPar(idx);
+                sort_refCon(:,i+1,j+1) = refCon(idx);
+                sort_refAve(:,i+1,j+1) = refAve(idx);
+            end
+        end
+            
+        % ref: Bucket2Buffer
+        n_rep = length(refLin) / (Num_refCon*Num_refAve);
+        sort_refbucket = zeros(size(bucket.reference.data, 1),size(bucket.reference.data, 2),n_rep,Num_refAve,Num_refCon);
+        for contrast = 0:Num_refCon-1
+            for average = 0:Num_refAve-1
+                refidx = find(refCon == contrast & refAve == average);
+                if numel(refidx) ~= n_rep; fprintf('Mismatch in expected number of repeatation for contrast %s, average %s.\n',num2str(Num_refCon),num2str(Num_refCon)); break; end
+                sort_refbucket(:,:,:,average+1,contrast+1) = bucket.reference.data(:,:,refidx);
+            end
+        end
+        for contrast = 1:Num_refCon
+            for average = 1:Num_refAve
+                for i = 1:size(sort_refLin,1)
+                    encode_step_1 = sort_refLin(i,1);
+                    encode_step_2 = sort_refPar(i,1);
+                    twix.refscan(:, :, encode_step_1 + 1, encode_step_2 + 1, average, contrast) = squeeze(sort_refbucket(:, :, i,average, contrast));
+                end
+            end
+        end
+        mask2 = squeeze( any( twix.refscan~=0, [1,3,4,5,6] ) );   % might be some zero rows in the PE directions, crop them
+        mask3 = squeeze( any( twix.refscan~=0, [1,2,4,5,6] ) );   
+        twix.refscan = twix.refscan( :, mask2, mask3, :, :, : ); 
+        twix.refscan = twix.refscan(:,:,:,:,1,1); % usually just take out the first contrast/average as the reference
     end
      
     % ZN: dimension of read-out ref [Col, Cha, Lin, Par]

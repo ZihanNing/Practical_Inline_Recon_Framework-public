@@ -64,10 +64,10 @@ rec.Alg.useBuiltInCalibration=1;%To use built in calibration, 1 uses only phases
 rec.Alg.averagePolaritySensitivities=0;%0->not average at all, 1-> average after calculation, 2-> average before calculation
 
 %Exceptions
-if contains(rec.Nam.caseIn,'DISORDER_INVIVO_7T_02');rec.Alg.supportReadoutS=[0.4 0.85];rec.Alg.supportReadout=[0.45 0.8];end
-if contains(rec.Nam.caseIn,'DISORDER_03') || contains(rec.Nam.caseIn,'DISORDER_05');rec.Alg.supportReadoutS=[0.275 0.725];rec.Alg.supportReadout=[0.325 0.675];end
-
-if contains(rec.Nam.caseIn,'24GiulioPET');rec.Alg.ovesamplingFactors(3)=0.8;end
+% if contains(rec.Nam.caseIn,'DISORDER_INVIVO_7T_02');rec.Alg.supportReadoutS=[0.4 0.85];rec.Alg.supportReadout=[0.45 0.8];end
+% if contains(rec.Nam.caseIn,'DISORDER_03') || contains(rec.Nam.caseIn,'DISORDER_05');rec.Alg.supportReadoutS=[0.275 0.725];rec.Alg.supportReadout=[0.325 0.675];end
+% 
+% if contains(rec.Nam.caseIn,'24GiulioPET');rec.Alg.ovesamplingFactors(3)=0.8;end
 
 rec.Alg.maxNumberRepeats=10;
 

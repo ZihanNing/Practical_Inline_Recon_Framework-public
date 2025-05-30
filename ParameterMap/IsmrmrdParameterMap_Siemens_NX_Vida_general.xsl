@@ -865,6 +865,15 @@
                     </userParameterLong>
                 </xsl:if>
                 
+                <xsl:if test="siemens/MEAS/sPat/lRefLinesPE">
+                    <userParameterLong>
+                        <name>lRefLinesPE</name>
+                        <value>
+                            <xsl:value-of select="siemens/MEAS/sPat/lRefLinesPE" />
+                        </value>
+                    </userParameterLong>
+                </xsl:if>
+                
                 <!--Acceleration related-->
                 <xsl:if test="siemens/DICOM/ucPATMode">
                     <userParameterLong>

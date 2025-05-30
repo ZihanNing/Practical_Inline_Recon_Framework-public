@@ -12,49 +12,47 @@
 
 usage() {
   cat <<EOF
-Usage: $0 -l LOG_FILE -f MATLAB_FUNCTION [-w MAX_WAIT_TIME] [-i INTERVAL]
+Usage: $0 -l LOG_FILE -f MATLAB_FUNCTION -r Recon_ID [-w MAX_WAIT_TIME] [-i INTERVAL]
 
   -l LOG_FILE          Path to the GPU status log (required)
-  -f MATLAB_FUNCTION   Name of the MATLAB function to run when a GPU is free (required)
+  -f MATLAB_FUNCTION   Name of the MATLAB function to run (required)
+  -r Recon_ID          Recon identifier to pass to the MATLAB function (required)
   -w MAX_WAIT_TIME     Max wait time in seconds before running verify_GPU_status.sh (default: 900)
   -i INTERVAL          Polling interval in seconds (default: 10)
 EOF
   exit 1
 }
 
-# --- Default values ---
+# --- Defaults ---
 MAX_WAIT_TIME=900
 INTERVAL=10
 
 # --- Parse options ---
-while getopts ":l:f:w:i:" opt; do
+while getopts ":l:f:r:w:i:" opt; do
   case $opt in
     l) LOG_FILE="$OPTARG" ;;
     f) MATLAB_FUNCTION="$OPTARG" ;;
+    r) RECON_ID="$OPTARG" ;;
     w) MAX_WAIT_TIME="$OPTARG" ;;
     i) INTERVAL="$OPTARG" ;;
     *) usage ;;
   esac
 done
 
-# --- Check required args ---
-[[ -z "$LOG_FILE" || -z "$MATLAB_FUNCTION" ]] && usage
+# --- Validate required args ---
+[[ -z "$LOG_FILE" || -z "$MATLAB_FUNCTION" || -z "$RECON_ID" ]] && usage
 
-# --- Internal variables ---
 WAIT_TIME=0
 
-# --- Helper: read latest non-empty line ---
 get_latest_gpu_status() {
   grep -v '^$' "$LOG_FILE" | tail -n1
 }
 
-# --- Helper: check for free GPU ---
 check_gpu_free() {
-  local line status gpu_id
-  line="${1#*: }"                   # strip everything before first ": "
-  IFS=';' read -ra parts <<< "$line"
+  local line="${1#*: }" parts status gpu_id state
+  IFS=';' read -ra parts <<<"$line"
   for status in "${parts[@]}"; do
-    status="${status//^[[:space:]]*|[[:space:]]*$}"  # trim
+    status="$(echo "$status" | xargs)"        # trim
     gpu_id="${status%%_*}"
     state="${status#*_}"
     state="${state%%_*}"
@@ -83,7 +81,8 @@ while true; do
     echo "GPU $free_gpu is free. Launching MATLAB..."
     ulimit -c unlimited
     ulimit -n 4096
-    matlab -r "$MATLAB_FUNCTION" &
+    # Call your MATLAB function with the Recon_ID argument
+    matlab -r "try, ${MATLAB_FUNCTION}('${RECON_ID}'), catch e, disp(getReport(e)), exit(1), end, exit(0);" &
     exit 0
   fi
 
@@ -94,7 +93,6 @@ while true; do
   if (( WAIT_TIME >= MAX_WAIT_TIME )); then
     echo "Max wait exceeded. Running verify_GPU_status.sh in background..."
     bash verify_GPU_status.sh &
-    # reset timer so verify runs periodically every MAX_WAIT_TIME
     WAIT_TIME=0
   fi
 done

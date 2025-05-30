@@ -1,4 +1,4 @@
-function rec=reconInvert(rec,typ,field)
+function rec=reconInvert_inline(rec,typ,field)
 
 %RECONINVERT   Inverts data
 %   REC=RECONINVERT(REC,TYP,{FIELD})
@@ -47,29 +47,45 @@ if rec.Enc.(t).RegridMode<=1;rec.Enc.(t).AcqN(1)=rec.Enc.(t).AcqN(1)/TW.hdr.Dico
 
 %PARTIAL FOURIER
 if strcmp(field,'image')
-    rec.Enc.(t).AcqNNoPF=rec.Enc.(t).AcqN;
-    if rec.Enc.(t).ThreeD;rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength TW.hdr.Config.N0F3DFTLength];
-    else rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength rec.Enc.(t).AcqN(3)];
-    end
-    pad=rec.Enc.(t).AcqN-rec.Enc.(t).AcqNNoPF;
-    rec.Enc.(t).APF=cell(1,3);
-    for d=1:3
-        rec.Enc.(t).APF{d}=ones(rec.Enc.(t).AcqNNoPF(d),1,'single');
-        if useGPU;rec.Enc.(t).APF{d}=gpuArray(rec.Enc.(t).APF{d});end
-        rec.Enc.(t).APF{d}=padarray(rec.Enc.(t).APF{d},pad(d),0,'post');
-    end   
-    pad=[pad(1) 0 pad(2:3)];
-    rec.TWD.(t)=padarray(rec.TWD.(t),pad,0,'post');
-    if rec.Enc.(t).ThreeD;dims=[3 4];else dims=3;end
-    cshift=zeros(1,4);
-    for d=dims
-        if d==3;cshift(3)=ceil((rec.Enc.(t).AcqN(2)+1)/2)-TW.(field).centerLin(1);
-        else cshift(4)=ceil((rec.Enc.(t).AcqN(3)+1)/2)-TW.(field).centerPar(1);
-        end                
-        rec.Enc.(t).APF{d-1}=circshift(rec.Enc.(t).APF{d-1},cshift(d));
-    end
-    rec.TWD.(t)=circshift(rec.TWD.(t),cshift);
-    for d=1:3;rec.Enc.(t).APF{d}=shiftdim(rec.Enc.(t).APF{d},d-1);end
+%     rec.Enc.(t).AcqNNoPF=rec.Enc.(t).AcqN;
+%     if rec.Enc.(t).ThreeD;rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength TW.hdr.Config.N0F3DFTLength];
+%     else rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength rec.Enc.(t).AcqN(3)];
+%     end
+%     pad=rec.Enc.(t).AcqN-rec.Enc.(t).AcqNNoPF;
+%     rec.Enc.(t).APF=cell(1,3);
+%     for d=1:3
+%         rec.Enc.(t).APF{d}=ones(rec.Enc.(t).AcqNNoPF(d),1,'single');
+%         if useGPU;rec.Enc.(t).APF{d}=gpuArray(rec.Enc.(t).APF{d});end
+%         rec.Enc.(t).APF{d}=padarray(rec.Enc.(t).APF{d},pad(d),0,'post');
+%     end   
+%     pad=[pad(1) 0 pad(2:3)];
+%     rec.TWD.(t)=padarray(rec.TWD.(t),pad,0,'post');
+%     if rec.Enc.(t).ThreeD;dims=[3 4];else dims=3;end
+%     cshift=zeros(1,4);
+%     for d=dims
+%         if d==3;cshift(3)=ceil((rec.Enc.(t).AcqN(2)+1)/2)-TW.(field).centerLin(1);
+%         else cshift(4)=ceil((rec.Enc.(t).AcqN(3)+1)/2)-TW.(field).centerPar(1);
+%         end                
+%         rec.Enc.(t).APF{d-1}=circshift(rec.Enc.(t).APF{d-1},cshift(d));
+%     end
+%     rec.TWD.(t)=circshift(rec.TWD.(t),cshift);
+%     for d=1:3;rec.Enc.(t).APF{d}=shiftdim(rec.Enc.(t).APF{d},d-1);end
+
+    % easier tool for zero-padding due to PF
+    % ZN: taking care both partial Fourier and (reconstruction resolution < acquisition resolution)
+    % ZN: only pad the Lin & Par, supposing that asymmetric echo is handled by AsymmetricEcho gadget
+    matrix_size = rec.TW.(t).sampling_description.encoded_matrix; % to be padded matrix size
+    Acq_matrix_size = rec.Enc.(t).AcqN; % current/acquired matrix size
+    Lin_center = max(rec.TW.(t).image.centerLin);
+    Par_center = max(rec.TW.(t).image.centerPar);
+    Lin = rec.TW.(t).image.sort_Lin(:,1);
+    Par = rec.TW.(t).image.sort_Par(:,1);
+    % padding
+    [rec.TWD.(t),kspace_Pad,Lin,Par] = zeroPadKSpace(rec.TWD.(t),matrix_size,Acq_matrix_size,Lin_center,Par_center,Lin,Par,1);
+    % modify parameters accordingly
+    rec.Enc.(t).AcqN(2:3) = size(rec.TWD.(t),3:4);
+    A = rec.TWD.(t); A = A(:,:,:,:,1,1); A = permute(A, [1 3 4 2]); acc_A = sum(A, 4);           
+    rec.Enc.(t).APF = findMatrixByNonZero(acc_A);
 end
 fprintf('Acquired size:%s\n',sprintf(' %d',rec.Enc.(t).AcqN));
 
@@ -92,14 +108,15 @@ fprintf('Output size:%s\n',sprintf(' %d',rec.Enc.(t).OutN));%This is not used
 %     fprintf('Slice separation: %.2f\n',rec.Enc.(t).SliceSeparation);
 % end
 
-aux=TW.hdr.MeasYaps.sSliceArray.asSlice{1};
+% aux=TW.hdr.MeasYaps.sSliceArray.asSlice{1};
 %FULL ACQUIRED FOV
-if rec.Enc.(t).ThreeD
-    rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV aux.dThickness];rec.Enc.(t).SliceThickness=0;
-else 
-    rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV rec.Enc.(t).SliceSeparation*rec.Enc.(t).AcqN(3)];rec.Enc.(t).SliceThickness=aux.dThickness;
-    fprintf('Slice thickness: %.2f\n',rec.Enc.(t).SliceSeparation);
-end
+% if rec.Enc.(t).ThreeD
+%     rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV aux.dThickness];rec.Enc.(t).SliceThickness=0;
+% else 
+%     rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV rec.Enc.(t).SliceSeparation*rec.Enc.(t).AcqN(3)];rec.Enc.(t).SliceThickness=aux.dThickness;
+%     fprintf('Slice thickness: %.2f\n',rec.Enc.(t).SliceSeparation);
+% end
+rec.Enc.(t).AcqFOV = TW.sampling_description.recon_fov; % used the FOV and matrix size provided by the header
 rec.Enc.(t).AcqFOV=rec.Enc.(t).AcqFOV.*rec.Enc.(t).Overs;
 fprintf('Acquired field of view:%s\n',sprintf(' %.2f',rec.Enc.(t).AcqFOV));
 
@@ -117,34 +134,63 @@ iSlicePositionsMin=1;
 if ~isempty(rec.Alg.maxNumberRepeats);rec.TWD.(t)=dynInd(rec.TWD.(t),1:min(size(rec.TWD.(t),9),rec.Alg.maxNumberRepeats),9);end
 
 %%%%%%%%%%%%%%%%%%%%%%%GEOMETRY%%%%%%%%%%%%%%%%%%%%%%%
-N=rec.Enc.(t).AcqN;
-MS=rec.Enc.(t).AcqDelta;
-S=diag([MS 1]);
-rec.Geom.(t).MS=MS;
-slicePos=TW.(field).slicePos(:,iSlicePositionsMin);
-quaternionRaw = slicePos(4:7);
-R=eye(4);
-R(1:3,1:3)=convertNIIGeom(ones([1,3]),quaternionRaw','qForm','sForm');%PE-RO-SL to PCS
-R=R(:,[2 1 3 4]);
-T=eye(4);T(1:3,4)=slicePos(1:3);%in mm for center FOV (I think)
-%MT=T*R(:,[2 1 3 4])*S;%Of the center of the FOV
-MT=T*R*S;%Of the center of the FOV
-Nsub=N/2;
-if ~rec.Enc.(t).ThreeD;Nsub(3)=1/2;end
-%Nsub(1)=Nsub(1)-2;%---it is the solution
-T(:,4)=MT*[-floor(Nsub)';1];
-%T(:,4)=MT*[-Nsub';1];
-%MT=T*R(:,[2 1 3 4])*S;%Of the origin
-MT=T*R*S;
-rec.Geom.(t).patientPosition=TW.hdr.Dicom.tPatientPosition;
-fprintf('Patient position: %s\n',rec.Geom.(t).patientPosition);
-rec.Geom.(t).PCS2RAS=getPCS2RAS(rec.Geom.(t).patientPosition);
-rec.Geom.(t).MT=rec.Geom.(t).PCS2RAS*MT;
-% tI=rec.Geom.(t).MT*[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))';1]; % ZN: debug, should be here, but comment out
-% %[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))']
-% %tI
-% %tI=rec.Geom.(t).MT*[vr(1)-1;0;0;1];
-% rec.Geom.(t).MT(1:3,4)=tI(1:3);
+% N=rec.Enc.(t).AcqN;
+% MS=rec.Enc.(t).AcqDelta;
+% S=diag([MS 1]);
+% rec.Geom.(t).MS=MS;
+% slicePos=TW.(field).slicePos(:,iSlicePositionsMin);
+% quaternionRaw = slicePos(4:7);
+% R=eye(4);
+% R(1:3,1:3)=convertNIIGeom(ones([1,3]),quaternionRaw','qForm','sForm');%PE-RO-SL to PCS
+% R=R(:,[2 1 3 4]);
+% T=eye(4);T(1:3,4)=slicePos(1:3);%in mm for center FOV (I think)
+% %MT=T*R(:,[2 1 3 4])*S;%Of the center of the FOV
+% MT=T*R*S;%Of the center of the FOV
+% Nsub=N/2;
+% if ~rec.Enc.(t).ThreeD;Nsub(3)=1/2;end
+% %Nsub(1)=Nsub(1)-2;%---it is the solution
+% T(:,4)=MT*[-floor(Nsub)';1];
+% %T(:,4)=MT*[-Nsub';1];
+% %MT=T*R(:,[2 1 3 4])*S;%Of the origin
+% MT=T*R*S;
+% rec.Geom.(t).patientPosition=TW.hdr.Dicom.tPatientPosition;
+% fprintf('Patient position: %s\n',rec.Geom.(t).patientPosition);
+% rec.Geom.(t).PCS2RAS=getPCS2RAS(rec.Geom.(t).patientPosition);
+% rec.Geom.(t).MT=rec.Geom.(t).PCS2RAS*MT;
+% % tI=rec.Geom.(t).MT*[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))';1]; % ZN: debug, should be here, but comment out
+% % %[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))']
+% % %tI
+% % %tI=rec.Geom.(t).MT*[vr(1)-1;0;0;1];
+% % rec.Geom.(t).MT(1:3,4)=tI(1:3);
+
+% for the twix-like structure, some geom related headers are still missing
+% we use another way to compute the geom
+if typ == 2 % refscan
+    % In the new geom computation method, the geom of ACS is compute based
+    % on the geom of the high-res image
+    
+    % matrix info about high-res image
+    matrixSize_x = rec.TW.S.sampling_description.encoded_matrix; % Assume the NImageCols for refscan & high-res is the same
+    AcqVoxelSize_x=rec.Enc.S.AcqFOV./matrixSize_x; % the AcqFOV of refscan & high-res should be the same
+    ACSSize = rec.Enc.S.AcqN;
+    TablePosTra = TW.hdr.Dicom.lGlobalTablePosTra;
+    
+    % include some hdr information
+    image_hdr = rec.TW.S.image; % small hdrs of each kspace lines
+    hdr = rec.TW.S.hdr;
+    
+    % geom computation
+    geom = computeGeom(AcqVoxelSize_x,matrixSize_x,hdr,image_hdr,TablePosTra,1,ACSSize);
+    
+    % rec structure
+    rec.Geom.S.PCS2RAS = geom.PCS2RAS; % ACS
+    rec.Geom.S.MT = geom.APhiACS;
+    rec.Geom.S.MS=rec.Enc.S.AcqDelta;
+    rec.Geom.x.PCS2RAS = rec.Geom.S.PCS2RAS; % image
+    rec.Geom.x.MT = geom.APhiRec;
+    rec.Geom.x.MS=AcqVoxelSize_x;
+    
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%INVERSION%%%%%%%%%%%%%%%%%%%%%%%
 %INVERT NOISE

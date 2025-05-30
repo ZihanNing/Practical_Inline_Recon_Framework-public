@@ -29,6 +29,7 @@
             <lAccelFactPE>2</lAccelFactPE>
             <lAccelFact3D>1</lAccelFact3D>
             <lRefLinesPE>64</lRefLinesPE>
+            <lRefLinesPE>64</lRefLinesPE>
         </sPat>
         <sSliceArray>
             <lSize>1</lSize>

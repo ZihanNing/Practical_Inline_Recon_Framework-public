@@ -59,28 +59,36 @@ function [] = handle_connection_sense(connection)
     
     %% SAVE RAW AND INFO FOR PARALLEL COMPUTATION
     Recon_ID = 'SENSE_ACS'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
-    save_raw_info(twix_like,connection.header,Recon_ID,'sense_acs');
+    save_raw_info(twix_like,connection.header,Recon_ID,Recon_ID);
     
     %% CALL SUBCALL FUNCTION IN PARALLEL AND RELEASE SCANNER RECON CHAIN
     debug_mode = 1; % 1: debug mode-run the background function on the interface directly; 0: auto mode-launch a matlab program to run target function on the background
     if debug_mode
 %         handle_connection_background_sense_acs
+        fprintf('=========== Debug mode \n');
         feval(getReconAlg(Recon_ID)) % the implemented recon pipe can be attached with Recon_ID in the config
     else % call the function by a bash 
-        
+        cfg = readScriptConfig(Recon_ID); % get the bash script input by the Recon_ID (info in Framework_config.xml)
+        % excute the bash script in parallel
+        bashScript = './Bash_script/Parallel_launch_MonitorGPU.sh'; % The bash script 'Parallel_launch_MonitorGPU' will monitor GPU usage status and decide to launch recons or queue up
+        cmd = sprintf('%s -l "%s" -f "%s" -r "%s" -w %d -i %d &', ...
+              bashScript, ...
+              cfg.logFile, ...
+              cfg.matlabFunction, ...
+              Recon_ID, ...
+              cfg.maxWaitTime, ...
+              cfg.interval);
+        fprintf('=========== Launching custom recon %s in the background... \n', cfg.matlabFunction);
+        status = system(cmd);
+        if status~=0
+            error('%s:LaunchFailed', ...
+                  'Failed to start gpu_wait.sh (exit code %s).', bashScript, num2str(status));
+        end 
     end
     
-    
-    % do nothing and return nothing
-    % ZN: please put your own reconstruction code here
-    fprintf('=========== Do nothing and shut down the MATLAB.\n');
-    
-    % ZN: if you'd like to send the image back to the scanner with this
-    % handle, the sending out part still need to be developed
-    
-%     exit
-%     system('./kill_all_matlab.sh');
-%     exit;
+    %% REALEASE THE ICE PIPE
+    fprintf('=========== Close the saving procedure and return control to ICE. \n');    
+    if ~debug_mode; exit; end
 end
 
 
