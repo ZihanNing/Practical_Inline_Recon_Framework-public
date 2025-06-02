@@ -66,9 +66,29 @@ function handle_connection_background_sense_acs(Recon_ID)
         
         %% Custom reconstruction
         % Put your custom reconstruction here
-        
         % e.g., the SENSE reconstruction demo case
         rec=InlineReconPipeline(twix_like);
+        
+        %% Save the image to be retrieved
+        % define saving related config
+        config.send_mag = 1;
+        config.send_phs = 1;
+        config.save_path = twix_like.hdr.save_path;
+        config.fileName = twix_like.hdr.fileName; % prevent overwriting
+        config.seq_type = recogSeqType(twix_like.hdr.sequenceParameters.sequence_type,...
+        twix_like.hdr.Meas.tScanningSequence,1);
+        % image to be saved and later retrieved
+        x = squeeze(rec.x); % [RO Lin Par Con]
+        
+        % save the imag for later retrieval
+        [fileToSend, status] = save_for_retrieval(x,twix_like,config);
+        if status
+            fprintf('Images to be retrieved successfully saved! Shutting down the background computation! \n');
+            fprintf('===========================     THE END   ==============================\n');
+        else
+            fprintf('An error occurred during saving the images to be retrieved!\n');
+        end
+        
         
     catch SubcallError % If any errors during the custom recon
         fprintf('An error occurred in the custom recon!\n');
