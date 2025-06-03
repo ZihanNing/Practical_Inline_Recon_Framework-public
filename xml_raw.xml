@@ -2,8 +2,8 @@
 <siemens>
     <MEAS>
         <sKSpace>
-            <lBaseResolution>288</lBaseResolution>
-            <lPhaseEncodingLines>256</lPhaseEncodingLines>
+            <lBaseResolution>224</lBaseResolution>
+            <lPhaseEncodingLines>200</lPhaseEncodingLines>
             <lPartitions>52</lPartitions>
             <dPhaseResolution>1</dPhaseResolution>
             <dSliceResolution>1</dSliceResolution>
@@ -25,36 +25,37 @@
         </sPrepPulses>
         <sPat>
             <ucPATMode>2</ucPATMode>
-            <ucRefScanMode>2</ucRefScanMode>
+            <ucRefScanMode>4</ucRefScanMode>
             <lAccelFactPE>2</lAccelFactPE>
             <lAccelFact3D>1</lAccelFact3D>
             <lRefLinesPE>64</lRefLinesPE>
+            <lRefLines3D>46</lRefLines3D>
             <lRefLinesPE>64</lRefLinesPE>
         </sPat>
         <sSliceArray>
             <lSize>1</lSize>
             <asSlice>
                 <s0>
-                    <dReadoutFOV>230</dReadoutFOV>
-                    <dPhaseFOV>204.444</dPhaseFOV>
+                    <dReadoutFOV>180</dReadoutFOV>
+                    <dPhaseFOV>160.714</dPhaseFOV>
                     <dThickness>144</dThickness>
-                    <dInPlaneRot>1.56521</dInPlaneRot>
+                    <dInPlaneRot>1.5413</dInPlaneRot>
                 </s0>
             </asSlice>
         </sSliceArray>
         <sRXSPEC>
-            <alDwellTime>12400</alDwellTime>
-            <alDwellTime>12400</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
-            <alDwellTime>6700</alDwellTime>
+            <alDwellTime>15900</alDwellTime>
+            <alDwellTime>15900</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
+            <alDwellTime>8600</alDwellTime>
             <alDwellTime>0</alDwellTime>
             <alDwellTime>0</alDwellTime>
             <alDwellTime>0</alDwellTime>
@@ -1091,12 +1092,12 @@
         <ucMotionCorSAMEROrig>true</ucMotionCorSAMEROrig>
         <ucOneSeriesForAllMeas>4</ucOneSeriesForAllMeas>
         <sWipMemBlock>
-            <alFree>1</alFree>
-            <alFree>1</alFree>
-            <alFree>1</alFree>
+            <alFree>2</alFree>
+            <alFree>5</alFree>
+            <alFree>8</alFree>
             <alFree>0</alFree>
-            <alFree>1</alFree>
-            <alFree>0</alFree>
+            <alFree>2</alFree>
+            <alFree>22</alFree>
             <alFree>2</alFree>
             <alFree>1</alFree>
             <alFree>1</alFree>
@@ -1178,7 +1179,7 @@
             <lNoOfPreps>1</lNoOfPreps>
             <lInlineEvaMode>1</lInlineEvaMode>
         </sInlineCardioEval>
-        <tProtocolName>SWI_UKBB_Gadget</tProtocolName>
+        <tProtocolName>SWI_DIS_smallFOV_exterREF_Gadget</tProtocolName>
         <sDiffusion>
             <alBValue>0</alBValue>
             <alBValue>0</alBValue>
@@ -1309,9 +1310,15 @@
             <alBValue>0</alBValue>
             <alBValue>0</alBValue>
         </sDiffusion>
-        <lScanTimeSec>178</lScanTimeSec>
+        <lScanTimeSec>126</lScanTimeSec>
         <asCoilSelectMeas>
             <ID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
                 <tCoilID>HeadNeck_64_CS</tCoilID>
                 <tCoilID>HeadNeck_64_CS</tCoilID>
                 <tCoilID>HeadNeck_64_CS</tCoilID>
@@ -1431,65 +1438,77 @@
                 <lCoilCopy>1</lCoilCopy>
                 <lCoilCopy>1</lCoilCopy>
                 <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
             </Coil>
             <Elem>
+                <tElement>N25</tElement>
+                <tElement>N20</tElement>
+                <tElement>N21</tElement>
+                <tElement>N22</tElement>
+                <tElement>N23</tElement>
+                <tElement>N24</tElement>
+                <tElement>H25</tElement>
+                <tElement>H20</tElement>
+                <tElement>H21</tElement>
+                <tElement>H22</tElement>
+                <tElement>H23</tElement>
+                <tElement>H24</tElement>
+                <tElement>H13</tElement>
+                <tElement>H10</tElement>
+                <tElement>H11</tElement>
+                <tElement>H12</tElement>
                 <tElement>N32</tElement>
                 <tElement>N30</tElement>
                 <tElement>N10</tElement>
                 <tElement>N31</tElement>
                 <tElement>N11</tElement>
                 <tElement>N12</tElement>
-                <tElement>H12</tElement>
-                <tElement>H10</tElement>
-                <tElement>H11</tElement>
-                <tElement>H13</tElement>
-                <tElement>H21</tElement>
-                <tElement>H20</tElement>
-                <tElement>H22</tElement>
-                <tElement>H23</tElement>
-                <tElement>H24</tElement>
-                <tElement>H25</tElement>
-                <tElement>H84</tElement>
+                <tElement>H86</tElement>
                 <tElement>H80</tElement>
                 <tElement>H81</tElement>
                 <tElement>H82</tElement>
                 <tElement>H83</tElement>
+                <tElement>H84</tElement>
                 <tElement>H85</tElement>
-                <tElement>H86</tElement>
                 <tElement>H87</tElement>
-                <tElement>H32</tElement>
+                <tElement>H35</tElement>
                 <tElement>H30</tElement>
                 <tElement>H31</tElement>
+                <tElement>H32</tElement>
                 <tElement>H33</tElement>
                 <tElement>H34</tElement>
-                <tElement>H35</tElement>
-                <tElement>H49</tElement>
+                <tElement>H43</tElement>
                 <tElement>H40</tElement>
                 <tElement>H41</tElement>
                 <tElement>H42</tElement>
-                <tElement>H43</tElement>
                 <tElement>H44</tElement>
                 <tElement>H45</tElement>
                 <tElement>H46</tElement>
                 <tElement>H47</tElement>
                 <tElement>H48</tElement>
-                <tElement>H66</tElement>
+                <tElement>H49</tElement>
+                <tElement>H68</tElement>
                 <tElement>H60</tElement>
                 <tElement>H61</tElement>
                 <tElement>H62</tElement>
                 <tElement>H63</tElement>
                 <tElement>H64</tElement>
                 <tElement>H65</tElement>
+                <tElement>H66</tElement>
                 <tElement>H67</tElement>
-                <tElement>H68</tElement>
                 <tElement>H69</tElement>
+                <tElement>H71</tElement>
                 <tElement>H51</tElement>
                 <tElement>H52</tElement>
                 <tElement>H53</tElement>
                 <tElement>H54</tElement>
                 <tElement>H70</tElement>
                 <tElement>H50</tElement>
-                <tElement>H71</tElement>
                 <tElement>H55</tElement>
             </Elem>
             <Select>
@@ -1551,138 +1570,156 @@
                 <lElementSelected>1</lElementSelected>
                 <lElementSelected>1</lElementSelected>
                 <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
             </Select>
             <Rx>
+                <lRxChannelConnected>32</lRxChannelConnected>
+                <lRxChannelConnected>21</lRxChannelConnected>
+                <lRxChannelConnected>21</lRxChannelConnected>
+                <lRxChannelConnected>22</lRxChannelConnected>
+                <lRxChannelConnected>22</lRxChannelConnected>
+                <lRxChannelConnected>32</lRxChannelConnected>
+                <lRxChannelConnected>23</lRxChannelConnected>
+                <lRxChannelConnected>13</lRxChannelConnected>
+                <lRxChannelConnected>13</lRxChannelConnected>
+                <lRxChannelConnected>14</lRxChannelConnected>
+                <lRxChannelConnected>14</lRxChannelConnected>
+                <lRxChannelConnected>23</lRxChannelConnected>
+                <lRxChannelConnected>2</lRxChannelConnected>
+                <lRxChannelConnected>1</lRxChannelConnected>
+                <lRxChannelConnected>1</lRxChannelConnected>
+                <lRxChannelConnected>2</lRxChannelConnected>
                 <lRxChannelConnected>12</lRxChannelConnected>
                 <lRxChannelConnected>10</lRxChannelConnected>
                 <lRxChannelConnected>10</lRxChannelConnected>
                 <lRxChannelConnected>11</lRxChannelConnected>
                 <lRxChannelConnected>11</lRxChannelConnected>
                 <lRxChannelConnected>12</lRxChannelConnected>
-                <lRxChannelConnected>2</lRxChannelConnected>
-                <lRxChannelConnected>1</lRxChannelConnected>
-                <lRxChannelConnected>1</lRxChannelConnected>
-                <lRxChannelConnected>2</lRxChannelConnected>
-                <lRxChannelConnected>13</lRxChannelConnected>
-                <lRxChannelConnected>13</lRxChannelConnected>
-                <lRxChannelConnected>14</lRxChannelConnected>
-                <lRxChannelConnected>14</lRxChannelConnected>
-                <lRxChannelConnected>21</lRxChannelConnected>
-                <lRxChannelConnected>21</lRxChannelConnected>
-                <lRxChannelConnected>28</lRxChannelConnected>
+                <lRxChannelConnected>31</lRxChannelConnected>
                 <lRxChannelConnected>19</lRxChannelConnected>
                 <lRxChannelConnected>19</lRxChannelConnected>
                 <lRxChannelConnected>20</lRxChannelConnected>
                 <lRxChannelConnected>20</lRxChannelConnected>
+                <lRxChannelConnected>30</lRxChannelConnected>
+                <lRxChannelConnected>30</lRxChannelConnected>
+                <lRxChannelConnected>31</lRxChannelConnected>
+                <lRxChannelConnected>5</lRxChannelConnected>
+                <lRxChannelConnected>3</lRxChannelConnected>
+                <lRxChannelConnected>3</lRxChannelConnected>
+                <lRxChannelConnected>4</lRxChannelConnected>
+                <lRxChannelConnected>4</lRxChannelConnected>
+                <lRxChannelConnected>5</lRxChannelConnected>
+                <lRxChannelConnected>16</lRxChannelConnected>
+                <lRxChannelConnected>15</lRxChannelConnected>
+                <lRxChannelConnected>15</lRxChannelConnected>
+                <lRxChannelConnected>16</lRxChannelConnected>
+                <lRxChannelConnected>24</lRxChannelConnected>
+                <lRxChannelConnected>24</lRxChannelConnected>
+                <lRxChannelConnected>25</lRxChannelConnected>
+                <lRxChannelConnected>25</lRxChannelConnected>
+                <lRxChannelConnected>26</lRxChannelConnected>
+                <lRxChannelConnected>26</lRxChannelConnected>
+                <lRxChannelConnected>29</lRxChannelConnected>
+                <lRxChannelConnected>17</lRxChannelConnected>
+                <lRxChannelConnected>17</lRxChannelConnected>
+                <lRxChannelConnected>18</lRxChannelConnected>
+                <lRxChannelConnected>18</lRxChannelConnected>
+                <lRxChannelConnected>27</lRxChannelConnected>
+                <lRxChannelConnected>27</lRxChannelConnected>
+                <lRxChannelConnected>28</lRxChannelConnected>
                 <lRxChannelConnected>28</lRxChannelConnected>
                 <lRxChannelConnected>29</lRxChannelConnected>
-                <lRxChannelConnected>29</lRxChannelConnected>
-                <lRxChannelConnected>4</lRxChannelConnected>
-                <lRxChannelConnected>3</lRxChannelConnected>
-                <lRxChannelConnected>3</lRxChannelConnected>
-                <lRxChannelConnected>4</lRxChannelConnected>
-                <lRxChannelConnected>5</lRxChannelConnected>
-                <lRxChannelConnected>5</lRxChannelConnected>
-                <lRxChannelConnected>24</lRxChannelConnected>
-                <lRxChannelConnected>15</lRxChannelConnected>
-                <lRxChannelConnected>15</lRxChannelConnected>
-                <lRxChannelConnected>16</lRxChannelConnected>
-                <lRxChannelConnected>16</lRxChannelConnected>
-                <lRxChannelConnected>22</lRxChannelConnected>
-                <lRxChannelConnected>22</lRxChannelConnected>
-                <lRxChannelConnected>23</lRxChannelConnected>
-                <lRxChannelConnected>23</lRxChannelConnected>
-                <lRxChannelConnected>24</lRxChannelConnected>
-                <lRxChannelConnected>26</lRxChannelConnected>
-                <lRxChannelConnected>17</lRxChannelConnected>
-                <lRxChannelConnected>17</lRxChannelConnected>
-                <lRxChannelConnected>18</lRxChannelConnected>
-                <lRxChannelConnected>18</lRxChannelConnected>
-                <lRxChannelConnected>25</lRxChannelConnected>
-                <lRxChannelConnected>25</lRxChannelConnected>
-                <lRxChannelConnected>26</lRxChannelConnected>
-                <lRxChannelConnected>27</lRxChannelConnected>
-                <lRxChannelConnected>27</lRxChannelConnected>
-                <lRxChannelConnected>6</lRxChannelConnected>
-                <lRxChannelConnected>6</lRxChannelConnected>
-                <lRxChannelConnected>7</lRxChannelConnected>
-                <lRxChannelConnected>7</lRxChannelConnected>
-                <lRxChannelConnected>8</lRxChannelConnected>
-                <lRxChannelConnected>8</lRxChannelConnected>
                 <lRxChannelConnected>9</lRxChannelConnected>
+                <lRxChannelConnected>6</lRxChannelConnected>
+                <lRxChannelConnected>6</lRxChannelConnected>
+                <lRxChannelConnected>7</lRxChannelConnected>
+                <lRxChannelConnected>7</lRxChannelConnected>
+                <lRxChannelConnected>8</lRxChannelConnected>
+                <lRxChannelConnected>8</lRxChannelConnected>
                 <lRxChannelConnected>9</lRxChannelConnected>
             </Rx>
             <ADC>
+                <lADCChannelConnected>63</lADCChannelConnected>
+                <lADCChannelConnected>42</lADCChannelConnected>
+                <lADCChannelConnected>41</lADCChannelConnected>
+                <lADCChannelConnected>44</lADCChannelConnected>
+                <lADCChannelConnected>43</lADCChannelConnected>
+                <lADCChannelConnected>64</lADCChannelConnected>
+                <lADCChannelConnected>46</lADCChannelConnected>
+                <lADCChannelConnected>25</lADCChannelConnected>
+                <lADCChannelConnected>26</lADCChannelConnected>
+                <lADCChannelConnected>27</lADCChannelConnected>
+                <lADCChannelConnected>28</lADCChannelConnected>
+                <lADCChannelConnected>45</lADCChannelConnected>
+                <lADCChannelConnected>4</lADCChannelConnected>
+                <lADCChannelConnected>1</lADCChannelConnected>
+                <lADCChannelConnected>2</lADCChannelConnected>
+                <lADCChannelConnected>3</lADCChannelConnected>
                 <lADCChannelConnected>23</lADCChannelConnected>
                 <lADCChannelConnected>20</lADCChannelConnected>
                 <lADCChannelConnected>19</lADCChannelConnected>
                 <lADCChannelConnected>22</lADCChannelConnected>
                 <lADCChannelConnected>21</lADCChannelConnected>
                 <lADCChannelConnected>24</lADCChannelConnected>
-                <lADCChannelConnected>3</lADCChannelConnected>
-                <lADCChannelConnected>1</lADCChannelConnected>
-                <lADCChannelConnected>2</lADCChannelConnected>
-                <lADCChannelConnected>4</lADCChannelConnected>
-                <lADCChannelConnected>26</lADCChannelConnected>
-                <lADCChannelConnected>25</lADCChannelConnected>
-                <lADCChannelConnected>27</lADCChannelConnected>
-                <lADCChannelConnected>28</lADCChannelConnected>
-                <lADCChannelConnected>41</lADCChannelConnected>
-                <lADCChannelConnected>42</lADCChannelConnected>
-                <lADCChannelConnected>56</lADCChannelConnected>
+                <lADCChannelConnected>61</lADCChannelConnected>
                 <lADCChannelConnected>37</lADCChannelConnected>
                 <lADCChannelConnected>38</lADCChannelConnected>
                 <lADCChannelConnected>40</lADCChannelConnected>
                 <lADCChannelConnected>39</lADCChannelConnected>
-                <lADCChannelConnected>55</lADCChannelConnected>
-                <lADCChannelConnected>57</lADCChannelConnected>
-                <lADCChannelConnected>58</lADCChannelConnected>
-                <lADCChannelConnected>8</lADCChannelConnected>
+                <lADCChannelConnected>60</lADCChannelConnected>
+                <lADCChannelConnected>59</lADCChannelConnected>
+                <lADCChannelConnected>62</lADCChannelConnected>
+                <lADCChannelConnected>9</lADCChannelConnected>
                 <lADCChannelConnected>6</lADCChannelConnected>
                 <lADCChannelConnected>5</lADCChannelConnected>
+                <lADCChannelConnected>8</lADCChannelConnected>
                 <lADCChannelConnected>7</lADCChannelConnected>
                 <lADCChannelConnected>10</lADCChannelConnected>
-                <lADCChannelConnected>9</lADCChannelConnected>
-                <lADCChannelConnected>48</lADCChannelConnected>
+                <lADCChannelConnected>32</lADCChannelConnected>
                 <lADCChannelConnected>29</lADCChannelConnected>
                 <lADCChannelConnected>30</lADCChannelConnected>
                 <lADCChannelConnected>31</lADCChannelConnected>
-                <lADCChannelConnected>32</lADCChannelConnected>
-                <lADCChannelConnected>44</lADCChannelConnected>
-                <lADCChannelConnected>43</lADCChannelConnected>
-                <lADCChannelConnected>45</lADCChannelConnected>
-                <lADCChannelConnected>46</lADCChannelConnected>
+                <lADCChannelConnected>48</lADCChannelConnected>
                 <lADCChannelConnected>47</lADCChannelConnected>
+                <lADCChannelConnected>49</lADCChannelConnected>
+                <lADCChannelConnected>50</lADCChannelConnected>
+                <lADCChannelConnected>51</lADCChannelConnected>
                 <lADCChannelConnected>52</lADCChannelConnected>
+                <lADCChannelConnected>58</lADCChannelConnected>
                 <lADCChannelConnected>34</lADCChannelConnected>
                 <lADCChannelConnected>33</lADCChannelConnected>
                 <lADCChannelConnected>36</lADCChannelConnected>
                 <lADCChannelConnected>35</lADCChannelConnected>
-                <lADCChannelConnected>50</lADCChannelConnected>
-                <lADCChannelConnected>49</lADCChannelConnected>
-                <lADCChannelConnected>51</lADCChannelConnected>
                 <lADCChannelConnected>54</lADCChannelConnected>
                 <lADCChannelConnected>53</lADCChannelConnected>
+                <lADCChannelConnected>56</lADCChannelConnected>
+                <lADCChannelConnected>55</lADCChannelConnected>
+                <lADCChannelConnected>57</lADCChannelConnected>
+                <lADCChannelConnected>17</lADCChannelConnected>
                 <lADCChannelConnected>12</lADCChannelConnected>
                 <lADCChannelConnected>11</lADCChannelConnected>
                 <lADCChannelConnected>14</lADCChannelConnected>
                 <lADCChannelConnected>13</lADCChannelConnected>
                 <lADCChannelConnected>16</lADCChannelConnected>
                 <lADCChannelConnected>15</lADCChannelConnected>
-                <lADCChannelConnected>17</lADCChannelConnected>
                 <lADCChannelConnected>18</lADCChannelConnected>
             </ADC>
         </asCoilSelectMeas>
     </MEAS>
     <DICOM>
         <adFlipAngleDegree>15</adFlipAngleDegree>
-        <tPatientName>xxxxxxxxxxx</tPatientName>
+        <tPatientName>xxxxxxxxxxxxx</tPatientName>
         <lPatientSex>1</lPatientSex>
-        <lGlobalTablePosTra>-29</lGlobalTablePosTra>
+        <lGlobalTablePosTra>-32</lGlobalTablePosTra>
         <Manufacturer>Siemens</Manufacturer>
         <ManufacturersModelName>MAGNETOM Vida</ManufacturersModelName>
-        <InstitutionName>Guys and St Thomas NHS Foundation Trust</InstitutionName>
-        <lFrequency>123220822</lFrequency>
+        <InstitutionName>St Thomas Hospital</InstitutionName>
+        <lFrequency>123220827</lFrequency>
         <Modality>MR</Modality>
         <tScanningSequence>GR</tScanningSequence>
         <tMRAcquisitionType>3D</tMRAcquisitionType>
@@ -1692,7 +1729,7 @@
         <flSliceOS>0.083333</flSliceOS>
         <ucPATMode>2</ucPATMode>
         <SoftwareVersions>syngo MR XA60</SoftwareVersions>
-        <dPhaseFOV>204.444</dPhaseFOV>
+        <dPhaseFOV>160.714</dPhaseFOV>
     </DICOM>
     <YAPS>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
@@ -1759,25 +1796,25 @@
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
-        <iNoOfFourierColumns>576</iNoOfFourierColumns>
-        <iNoOfFourierLines>223</iNoOfFourierLines>
+        <iNoOfFourierColumns>448</iNoOfFourierColumns>
+        <iNoOfFourierLines>174</iNoOfFourierLines>
         <iNoOfFourierPartitions>46</iNoOfFourierPartitions>
-        <iRoFTLength>576</iRoFTLength>
-        <iPEFTLength>256</iPEFTLength>
+        <iRoFTLength>448</iRoFTLength>
+        <iPEFTLength>200</iPEFTLength>
         <i3DFTLength>52</i3DFTLength>
         <tMRAcquisitionType>3D</tMRAcquisitionType>
         <flReadoutOSFactor>2</flReadoutOSFactor>
         <iNSet>1</iNSet>
-        <flUsedPatientWeight>69</flUsedPatientWeight>
+        <flUsedPatientWeight>60</flUsedPatientWeight>
         <tPatientPosition>HFS</tPatientPosition>
         <ReconMeasDependencies>
             <RFMap>0</RFMap>
-            <SenMap>30</SenMap>
-            <Noise>30</Noise>
+            <SenMap>180</SenMap>
+            <Noise>180</Noise>
         </ReconMeasDependencies>
         <flMagneticFieldStrength>2.89362</flMagneticFieldStrength>
-        <iMaxNoOfRxChannels>58</iMaxNoOfRxChannels>
-        <tFrameOfReference>1.3.12.2.1107.5.2.50.176289.1.20250522080623012.0.0.4971</tFrameOfReference>
+        <iMaxNoOfRxChannels>64</iMaxNoOfRxChannels>
+        <tFrameOfReference>1.3.12.2.1107.5.2.50.176289.1.20250502102001241.0.0.4968</tFrameOfReference>
         <alRegridMode>1</alRegridMode>
         <alRegridMode>1</alRegridMode>
         <alRegridRampupTime>0</alRegridRampupTime>
@@ -1792,18 +1829,17 @@
         <aflRegridADCDuration>0</aflRegridADCDuration>
         <alRegridDestSamples>0</alRegridDestSamples>
         <alRegridDestSamples>0</alRegridDestSamples>
-        <lFirstFourierLine>1</lFirstFourierLine>
         <alRegridMode>1</alRegridMode>
         <alRegridMode>1</alRegridMode>
     </YAPS>
     <IRIS>
         <RECOMPOSE>
-            <PatientID>xxxxxxxx</PatientID>
+            <PatientID>xxxxxxxxxxxxxxxx</PatientID>
             <PatientBirthDay>xxxxxxxx</PatientBirthDay>
-            <StudyLOID>1.2.840.114350.2.632.2.798268.2.245679439.1</StudyLOID>
+            <StudyLOID>1.3.12.2.1107.5.2.50.176289.30000025050205555783800000005</StudyLOID>
         </RECOMPOSE>
     </IRIS>
     <HEADER>
-        <MeasUID>31</MeasUID>
+        <MeasUID>186</MeasUID>
     </HEADER>
 </siemens>

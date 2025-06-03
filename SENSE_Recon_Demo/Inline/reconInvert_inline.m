@@ -1,4 +1,4 @@
-function rec=reconInvert_inline(rec,typ,field)
+function rec=reconInvert_inline(rec,typ,field,recon_flexFOV)
 
 %RECONINVERT   Inverts data
 %   REC=RECONINVERT(REC,TYP,{FIELD})
@@ -6,11 +6,12 @@ function rec=reconInvert_inline(rec,typ,field)
 %   * TYP is the type of data to invert, one of the following, 1->body, 
 %2->surface, 3->data
 %   * {FIELD} is the field with header info, it defaults to 'image', other
-%   options are 'refscan'
+%   options are 'refscan' and 'exterREF'
 %   ** REC is a recon structure
 %
 
 if nargin<3 || isempty(field);field='image';end
+if nargin<4 || isempty(recon_flexFOV);recon_flexFOV=[];end % recon to the FOV set in the sequence parameter
 
 typV=['B' 'S' 'x'];
 t=typV(typ);
@@ -47,19 +48,19 @@ if rec.Enc.(t).RegridMode<=1;rec.Enc.(t).AcqN(1)=rec.Enc.(t).AcqN(1)/TW.hdr.Dico
 
 %DEAL WITH BIPOLAR READOUT (ONLY FOR GADGETRON)
 % ZN: this will be updated in BucketToBuffer later
-if typ == 3
+if typ == 3 && ndims(rec.TWD.(t))>4
     flag_bipolar = 1; % ZN: good to replace this with a ismrmrd header
     if flag_bipolar
         data = rec.TWD.(t);
         Necho = size(data,ndims(data));
         if Necho>=2;evenEchoIdx = 2:2:Necho;end % ZN: only flip the even echo
         data(:,:,:,:,:,evenEchoIdx) = flip(data(:,:,:,:,:,evenEchoIdx),1);
-        rec.TWD.(t) = data; 
+        rec.TWD.(t) = data;  data = [];
     end
 end
 
 %PARTIAL FOURIER
-if strcmp(field,'image')
+if strcmp(field,'image') 
 %     rec.Enc.(t).AcqNNoPF=rec.Enc.(t).AcqN;
 %     if rec.Enc.(t).ThreeD;rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength TW.hdr.Config.N0F3DFTLength];
 %     else rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength rec.Enc.(t).AcqN(3)];
@@ -178,20 +179,18 @@ if ~isempty(rec.Alg.maxNumberRepeats);rec.TWD.(t)=dynInd(rec.TWD.(t),1:min(size(
 
 % for the twix-like structure, some geom related headers are still missing
 % we use another way to compute the geom
-if typ == 2 % refscan
+if isequal(field,'refscan') % refscan ACS
     % In the new geom computation method, the geom of ACS is compute based
     % on the geom of the high-res image
-    
-    % matrix info about high-res image
     matrixSize_x = rec.TW.S.sampling_description.encoded_matrix; % Assume the NImageCols for refscan & high-res is the same
     AcqVoxelSize_x=rec.Enc.S.AcqFOV./matrixSize_x; % the AcqFOV of refscan & high-res should be the same
     ACSSize = rec.Enc.S.AcqN;
     TablePosTra = TW.hdr.Dicom.lGlobalTablePosTra;
-    
+
     % include some hdr information
     image_hdr = rec.TW.S.image; % small hdrs of each kspace lines
     hdr = rec.TW.S.hdr;
-    
+
     % geom computation
     geom = computeGeom(AcqVoxelSize_x,matrixSize_x,hdr,image_hdr,TablePosTra,1,ACSSize);
     
@@ -202,7 +201,43 @@ if typ == 2 % refscan
     rec.Geom.x.PCS2RAS = rec.Geom.S.PCS2RAS; % image
     rec.Geom.x.MT = geom.APhiRec;
     rec.Geom.x.MS=AcqVoxelSize_x;
+else % for external REF or imageitself
+    matrixSize_x = rec.Enc.(t).AcqN;
+    AcqVoxelSize_x=rec.Enc.(t).AcqDelta;
+    TablePosTra = TW.hdr.Dicom.lGlobalTablePosTra;
+
+    % include some hdr information
+    image_hdr = rec.TW.(t).image; % small hdrs of each kspace lines
+    hdr = rec.TW.(t).hdr;
+
+    % geom computation
+    geom = computeGeom(AcqVoxelSize_x,matrixSize_x,hdr,image_hdr,TablePosTra,0);
     
+    % rec structure
+    rec.Geom.(t).PCS2RAS = geom.PCS2RAS; % exterREF
+    rec.Geom.(t).MT = geom.APhiRec;
+    rec.Geom.(t).MS=AcqVoxelSize_x;
+    
+%     if ~isempty(recon_flexFOV) % recon to an enlarged FOV 
+%         % Caution to use - the reference must cover the recon FOV
+%         % an external REF with large FOV will be needed
+%         
+%         % save the original parameter
+%         Acq_FOVSize = rec.Enc.(t).AcqN;
+%         Acq_VoxelSize = rec.Enc.(t).AcqDelta;
+%         Ori_APhiRec = geom.APhiRec;
+%         Ori_APhiRecOrig = geom.APhiRecOrig;
+%         Ori_permuteHist = geom.permuteHist;
+%         
+%         % recompute geom for the new reconstruction matrix size (FOV)
+%         rec.Enc.(t).RecN = recon_flexFOV;
+%         rec.Enc.(t).AcqN = recon_flexFOV;
+%         [rec.Enc.(t).AcqDelta,rec.Geom.(t).MT,New_APhiRecOrig]=alignResolGeom(rec.Enc.(t).RecN,...
+%             Acq_FOVSize,Acq_VoxelSize,...
+%             Ori_APhiRec,Ori_APhiRecOrig,Ori_permuteHist);
+%         fprintf('Changing the FOV size to [%s,%s,%s].\n',...
+%             num2str(rec.Enc.(t).RecN(1)),num2str(rec.Enc.(t).RecN(2)),num2str(rec.Enc.(t).RecN(3)));
+%     end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%INVERSION%%%%%%%%%%%%%%%%%%%%%%%
@@ -221,7 +256,7 @@ rec.N.(t)=[];
 
 %INVERT PHASE
 if strcmp(field,'image');fieldPhase='phasecor';
-elseif strcmp(field,'refscan');fieldPhase='refscanPC';
+elseif strcmp(field,'refscan')||strcmp(field,'exterREF');fieldPhase='refscanPC';
 else error('Unrecognized field: %s',field);
 end
 % if isfield(TW,fieldPhase) && ~isfield(rec,'PS')

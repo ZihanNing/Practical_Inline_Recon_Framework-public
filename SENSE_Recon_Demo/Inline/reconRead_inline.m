@@ -32,7 +32,7 @@ t=typV(typ);
 %     rec.TW.(t).image.flagIgnoreSeg=1;%Ignores segment mdh index
     %return
         
-    if isfield(rec.TW.(t),'refscan') && ~isfield(rec,'PS') && rec.Alg.useBuiltInCalibration>0 && ~strcmp(t,'x')
+    if (isfield(rec.TW.(t),'refscan') && ~isfield(rec,'PS') && rec.Alg.useBuiltInCalibration>0 && ~strcmp(t,'x')) 
         %RENAME FIELD AND READ DATA
         if rec.Alg.useBuiltInCalibration==2
             typ=2;
@@ -69,6 +69,32 @@ t=typV(typ);
             typ=3;
             rec.TW=renameStructField(rec.TW,'S','x');t=typV(typ);
         end
+        cont=1;
+    elseif rec.Alg.useBuiltInCalibration==-2 % external REF
+        rec.TWD.(t)=rec.TW.(t).data;  
+        %size(rec.TWD.(t))
+    
+        fprintf('----------------------\n');
+        fprintf('Reconstructing refscan\n');tsta=tic;
+
+        %INVERT
+        tsta=tic;
+%         rec=reconInvert(rec,typ,'refscan');
+        rec=reconInvert_inline(rec,typ,'exterREF');
+        fprintf('Time inverting %s: %.2f\n',t,toc(tsta));
+    
+        %RECONSTRUCT
+        tsta=tic;
+        rec=reconReconstruct(rec,typ,'refscan');
+        fprintf('Time reconstructing %s: %.2f\n',t,toc(tsta));
+        
+        %WRITE
+        tsta=tic;
+        rec=reconWrite_inline(rec,typ,'refscan');
+        fprintf('Time writing %s: %.2f\n',t,toc(tsta));
+
+
+        fprintf('----------------------\n');    
         cont=1;
     else
         cont=0;
