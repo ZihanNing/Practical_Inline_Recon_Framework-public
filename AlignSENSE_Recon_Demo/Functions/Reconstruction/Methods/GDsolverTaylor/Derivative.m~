@@ -1,0 +1,56 @@
+
+function [y] = Derivative(x, dim, di, n)
+
+%DERIVATIVE   Computes the derivative of an array along certain dimenisionsns
+%   [Y]=DERIVATIVE(X,DI,N,DIM)
+% X : Signal to compute the derivative from
+% {DI} : Direction of the derivatice. Forward (1 = default) or transpose% (0) differentiation
+% {n} : Differentiation order
+% {dim} : Dimensions over which to differentiate
+
+if nargin< 2 || isempty(dim); dim = 1; end
+if nargin< 3 || isempty(di); di = 1; end
+if nargin< 4 || isempty(n); n = 1; end
+
+NX = size(x);
+
+%%% Dimensions to work on
+NDIM = 1:ndims(x); %NDIM(NX==1) = [];
+NDIM_weight = ones(size(NDIM));
+
+NDIM_exclude = setdiff(NDIM, dim);
+NDIM_weight(NDIM_exclude) = 0;
+
+y = zeros(NX);
+
+for dim = NDIM
+    if NDIM_weight(dim) > 0 
+        
+        if di ==1% Forward differentiation
+            x_ext = cat(dim, x, dynInd(x, 1, dim)); % make circular
+            
+            dif = diff(x_ext,n,dim);
+            y = y + NDIM_weight(dim) * dif;
+        
+        elseif di==0 % Transpose differentiation
+            x_ext = cat(dim, x, dynInd(x, 1, dim)); % make circular
+            x_ext = circshift( x_ext, dim, 1); %shift one to the left
+            
+            dif = diff(x_ext,n,dim);
+            y = y - NDIM_weight(dim) * dif;
+        end
+        
+        
+    end
+end
+
+
+end
+
+
+
+
+
+
+    
+    

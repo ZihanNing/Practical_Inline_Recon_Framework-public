@@ -2,44 +2,48 @@
 <siemens>
     <MEAS>
         <sKSpace>
-            <lBaseResolution>64</lBaseResolution>
-            <lPhaseEncodingLines>64</lPhaseEncodingLines>
-            <lPartitions>64</lPartitions>
+            <lBaseResolution>256</lBaseResolution>
+            <lPhaseEncodingLines>269</lPhaseEncodingLines>
+            <lPartitions>208</lPartitions>
             <dPhaseResolution>1</dPhaseResolution>
             <dSliceResolution>1</dSliceResolution>
             <ucTrajectory>1</ucTrajectory>
-            <lImagesPerSlab>64</lImagesPerSlab>
+            <lImagesPerSlab>208</lImagesPerSlab>
             <ucPhasePartialFourier>16</ucPhasePartialFourier>
             <ucSlicePartialFourier>16</ucSlicePartialFourier>
             <lRadialViews>64</lRadialViews>
-            <ucMultiSliceMode>2</ucMultiSliceMode>
+            <ucMultiSliceMode>4</ucMultiSliceMode>
             <unReordering>1</unReordering>
-            <ucMultiSliceMode>2</ucMultiSliceMode>
+            <ucMultiSliceMode>4</ucMultiSliceMode>
             <ucSlicePartialFourier>16</ucSlicePartialFourier>
             <lRadialViews>64</lRadialViews>
-            <ucMultiSliceMode>2</ucMultiSliceMode>
+            <ucMultiSliceMode>4</ucMultiSliceMode>
         </sKSpace>
         <sPrepPulses>
             <adT2PrepDuration>40</adT2PrepDuration>
         </sPrepPulses>
         <sPat>
-            <ucPATMode>1</ucPATMode>
-            <ucRefScanMode>1</ucRefScanMode>
-            <lAccelFactPE>1</lAccelFactPE>
+            <ucPATMode>2</ucPATMode>
+            <ucRefScanMode>4</ucRefScanMode>
+            <lAccelFactPE>2</lAccelFactPE>
             <lAccelFact3D>1</lAccelFact3D>
+            <lRefLinesPE>64</lRefLinesPE>
+            <lRefLines3D>64</lRefLines3D>
+            <lRefLinesPE>64</lRefLinesPE>
         </sPat>
         <sSliceArray>
             <lSize>1</lSize>
             <asSlice>
                 <s0>
-                    <dReadoutFOV>200</dReadoutFOV>
-                    <dPhaseFOV>200</dPhaseFOV>
-                    <dThickness>5</dThickness>
+                    <dReadoutFOV>256</dReadoutFOV>
+                    <dPhaseFOV>256</dPhaseFOV>
+                    <dThickness>208</dThickness>
+                    <dInPlaneRot>0.0994006</dInPlaneRot>
                 </s0>
             </asSlice>
         </sSliceArray>
         <sRXSPEC>
-            <alDwellTime>30000</alDwellTime>
+            <alDwellTime>8200</alDwellTime>
             <alDwellTime>0</alDwellTime>
             <alDwellTime>0</alDwellTime>
             <alDwellTime>0</alDwellTime>
@@ -296,7 +300,7 @@
             <alDwellTime>0</alDwellTime>
             <alDwellTime>0</alDwellTime>
         </sRXSPEC>
-        <alTR>151000</alTR>
+        <alTR>2000000</alTR>
         <alTR>0</alTR>
         <alTR>0</alTR>
         <alTR>0</alTR>
@@ -552,7 +556,7 @@
         <alTR>0</alTR>
         <alTR>0</alTR>
         <alTR>0</alTR>
-        <alTE>600</alTE>
+        <alTE>1970</alTE>
         <alTE>0</alTE>
         <alTE>0</alTE>
         <alTE>0</alTE>
@@ -809,8 +813,8 @@
         <alTE>0</alTE>
         <alTE>0</alTE>
         <lContrasts>1</lContrasts>
-        <alTI>0</alTI>
-        <alTI>0</alTI>
+        <alTI>880000</alTI>
+        <alTI>1000000</alTI>
         <alTI>0</alTI>
         <alTI>0</alTI>
         <alTI>0</alTI>
@@ -1078,26 +1082,24 @@
             <lSegments>1</lSegments>
             <ucSegmentationMode>1</ucSegmentationMode>
             <lEPIFactor>1</lEPIFactor>
-            <lTurboFactor>1</lTurboFactor>
+            <lTurboFactor>208</lTurboFactor>
             <lEchoTrainDuration>700</lEchoTrainDuration>
         </sFastImaging>
         <lAverages>1</lAverages>
+        <ucSequenceType>1</ucSequenceType>
         <ucReconstructionMode>1</ucReconstructionMode>
-        <ucMotionCorSAMEROrig>true</ucMotionCorSAMEROrig>
-        <ucOneSeriesForAllMeas>1</ucOneSeriesForAllMeas>
+        <ucOneSeriesForAllMeas>4</ucOneSeriesForAllMeas>
         <sWipMemBlock>
-            <alFree>1000</alFree>
-            <alFree>36</alFree>
+            <alFree>2</alFree>
+            <alFree>15</alFree>
+            <alFree>9</alFree>
             <alFree>0</alFree>
-            <alFree>1000</alFree>
-            <alFree>100</alFree>
-            <alFree>0</alFree>
-            <alFree>0</alFree>
-            <alFree>0</alFree>
+            <alFree>2</alFree>
+            <alFree>22</alFree>
             <alFree>0</alFree>
             <alFree>0</alFree>
-            <alFree>0</alFree>
-            <alFree>0</alFree>
+            <alFree>28080</alFree>
+            <alFree>3</alFree>
             <alFree>0</alFree>
             <alFree>0</alFree>
             <alFree>0</alFree>
@@ -1149,10 +1151,12 @@
             <alFree>0</alFree>
             <alFree>0</alFree>
             <alFree>0</alFree>
-            <alFree>12345</alFree>
+            <alFree>0</alFree>
+            <alFree>0</alFree>
+            <alFree>0</alFree>
+            <adFree>1</adFree>
             <adFree>0</adFree>
             <adFree>0</adFree>
-            <adFree>2</adFree>
             <adFree>0</adFree>
             <adFree>0</adFree>
             <adFree>0</adFree>
@@ -1173,7 +1177,7 @@
             <lNoOfPreps>1</lNoOfPreps>
             <lInlineEvaMode>1</lInlineEvaMode>
         </sInlineCardioEval>
-        <tProtocolName>KCL_miniflash_JC_merina1000proj_tro2_spiral_37e_tept6_t245v_fa90</tProtocolName>
+        <tProtocolName>T1_MPRAGE_DISORDER_sag_Gad</tProtocolName>
         <sDiffusion>
             <alBValue>0</alBValue>
             <alBValue>0</alBValue>
@@ -1304,41 +1308,73 @@
             <alBValue>0</alBValue>
             <alBValue>0</alBValue>
         </sDiffusion>
-        <lScanTimeSec>151</lScanTimeSec>
+        <lScanTimeSec>283</lScanTimeSec>
         <asCoilSelectMeas>
             <ID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
-                <tCoilID>23Na1Tx32Rx_1H_Head</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
+                <tCoilID>HeadNeck_64_CS</tCoilID>
             </ID>
             <Coil>
                 <lCoilCopy>1</lCoilCopy>
@@ -1374,40 +1410,104 @@
                 <lCoilCopy>1</lCoilCopy>
                 <lCoilCopy>1</lCoilCopy>
                 <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
+                <lCoilCopy>1</lCoilCopy>
             </Coil>
             <Elem>
-                <tElement>X01</tElement>
-                <tElement>X02</tElement>
-                <tElement>X03</tElement>
-                <tElement>X04</tElement>
-                <tElement>X05</tElement>
-                <tElement>X06</tElement>
-                <tElement>X07</tElement>
-                <tElement>X08</tElement>
-                <tElement>X09</tElement>
-                <tElement>X10</tElement>
-                <tElement>X11</tElement>
-                <tElement>X12</tElement>
-                <tElement>X13</tElement>
-                <tElement>X14</tElement>
-                <tElement>X15</tElement>
-                <tElement>X16</tElement>
-                <tElement>X17</tElement>
-                <tElement>X18</tElement>
-                <tElement>X19</tElement>
-                <tElement>X20</tElement>
-                <tElement>X21</tElement>
-                <tElement>X22</tElement>
-                <tElement>X23</tElement>
-                <tElement>X24</tElement>
-                <tElement>X25</tElement>
-                <tElement>X26</tElement>
-                <tElement>X27</tElement>
-                <tElement>X28</tElement>
-                <tElement>X29</tElement>
-                <tElement>X30</tElement>
-                <tElement>X31</tElement>
-                <tElement>X32</tElement>
+                <tElement>H13</tElement>
+                <tElement>H10</tElement>
+                <tElement>H11</tElement>
+                <tElement>H12</tElement>
+                <tElement>H33</tElement>
+                <tElement>H30</tElement>
+                <tElement>H31</tElement>
+                <tElement>H32</tElement>
+                <tElement>H34</tElement>
+                <tElement>H35</tElement>
+                <tElement>H55</tElement>
+                <tElement>H51</tElement>
+                <tElement>H52</tElement>
+                <tElement>H53</tElement>
+                <tElement>H54</tElement>
+                <tElement>H70</tElement>
+                <tElement>H50</tElement>
+                <tElement>H71</tElement>
+                <tElement>N32</tElement>
+                <tElement>N30</tElement>
+                <tElement>N10</tElement>
+                <tElement>N31</tElement>
+                <tElement>N11</tElement>
+                <tElement>N12</tElement>
+                <tElement>H24</tElement>
+                <tElement>H20</tElement>
+                <tElement>H21</tElement>
+                <tElement>H22</tElement>
+                <tElement>H23</tElement>
+                <tElement>H25</tElement>
+                <tElement>H46</tElement>
+                <tElement>H40</tElement>
+                <tElement>H41</tElement>
+                <tElement>H42</tElement>
+                <tElement>H43</tElement>
+                <tElement>H44</tElement>
+                <tElement>H45</tElement>
+                <tElement>H47</tElement>
+                <tElement>H48</tElement>
+                <tElement>H49</tElement>
+                <tElement>H68</tElement>
+                <tElement>H60</tElement>
+                <tElement>H61</tElement>
+                <tElement>H62</tElement>
+                <tElement>H63</tElement>
+                <tElement>H64</tElement>
+                <tElement>H65</tElement>
+                <tElement>H66</tElement>
+                <tElement>H67</tElement>
+                <tElement>H69</tElement>
+                <tElement>H87</tElement>
+                <tElement>H80</tElement>
+                <tElement>H81</tElement>
+                <tElement>H82</tElement>
+                <tElement>H83</tElement>
+                <tElement>H84</tElement>
+                <tElement>H85</tElement>
+                <tElement>H86</tElement>
+                <tElement>N23</tElement>
+                <tElement>N20</tElement>
+                <tElement>N21</tElement>
+                <tElement>N22</tElement>
+                <tElement>N24</tElement>
+                <tElement>N25</tElement>
             </Elem>
             <Select>
                 <lElementSelected>1</lElementSelected>
@@ -1442,94 +1542,192 @@
                 <lElementSelected>1</lElementSelected>
                 <lElementSelected>1</lElementSelected>
                 <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
+                <lElementSelected>1</lElementSelected>
             </Select>
             <Rx>
+                <lRxChannelConnected>2</lRxChannelConnected>
+                <lRxChannelConnected>1</lRxChannelConnected>
                 <lRxChannelConnected>1</lRxChannelConnected>
                 <lRxChannelConnected>2</lRxChannelConnected>
+                <lRxChannelConnected>4</lRxChannelConnected>
+                <lRxChannelConnected>3</lRxChannelConnected>
                 <lRxChannelConnected>3</lRxChannelConnected>
                 <lRxChannelConnected>4</lRxChannelConnected>
                 <lRxChannelConnected>5</lRxChannelConnected>
+                <lRxChannelConnected>5</lRxChannelConnected>
+                <lRxChannelConnected>9</lRxChannelConnected>
+                <lRxChannelConnected>6</lRxChannelConnected>
                 <lRxChannelConnected>6</lRxChannelConnected>
                 <lRxChannelConnected>7</lRxChannelConnected>
+                <lRxChannelConnected>7</lRxChannelConnected>
+                <lRxChannelConnected>8</lRxChannelConnected>
                 <lRxChannelConnected>8</lRxChannelConnected>
                 <lRxChannelConnected>9</lRxChannelConnected>
+                <lRxChannelConnected>12</lRxChannelConnected>
+                <lRxChannelConnected>10</lRxChannelConnected>
                 <lRxChannelConnected>10</lRxChannelConnected>
                 <lRxChannelConnected>11</lRxChannelConnected>
+                <lRxChannelConnected>11</lRxChannelConnected>
                 <lRxChannelConnected>12</lRxChannelConnected>
+                <lRxChannelConnected>23</lRxChannelConnected>
+                <lRxChannelConnected>13</lRxChannelConnected>
                 <lRxChannelConnected>13</lRxChannelConnected>
                 <lRxChannelConnected>14</lRxChannelConnected>
+                <lRxChannelConnected>14</lRxChannelConnected>
+                <lRxChannelConnected>23</lRxChannelConnected>
+                <lRxChannelConnected>25</lRxChannelConnected>
+                <lRxChannelConnected>15</lRxChannelConnected>
                 <lRxChannelConnected>15</lRxChannelConnected>
                 <lRxChannelConnected>16</lRxChannelConnected>
-                <lRxChannelConnected>17</lRxChannelConnected>
-                <lRxChannelConnected>18</lRxChannelConnected>
-                <lRxChannelConnected>19</lRxChannelConnected>
-                <lRxChannelConnected>20</lRxChannelConnected>
-                <lRxChannelConnected>21</lRxChannelConnected>
-                <lRxChannelConnected>22</lRxChannelConnected>
-                <lRxChannelConnected>23</lRxChannelConnected>
+                <lRxChannelConnected>16</lRxChannelConnected>
+                <lRxChannelConnected>24</lRxChannelConnected>
                 <lRxChannelConnected>24</lRxChannelConnected>
                 <lRxChannelConnected>25</lRxChannelConnected>
                 <lRxChannelConnected>26</lRxChannelConnected>
+                <lRxChannelConnected>26</lRxChannelConnected>
+                <lRxChannelConnected>29</lRxChannelConnected>
+                <lRxChannelConnected>17</lRxChannelConnected>
+                <lRxChannelConnected>17</lRxChannelConnected>
+                <lRxChannelConnected>18</lRxChannelConnected>
+                <lRxChannelConnected>18</lRxChannelConnected>
+                <lRxChannelConnected>27</lRxChannelConnected>
                 <lRxChannelConnected>27</lRxChannelConnected>
                 <lRxChannelConnected>28</lRxChannelConnected>
+                <lRxChannelConnected>28</lRxChannelConnected>
                 <lRxChannelConnected>29</lRxChannelConnected>
+                <lRxChannelConnected>31</lRxChannelConnected>
+                <lRxChannelConnected>19</lRxChannelConnected>
+                <lRxChannelConnected>19</lRxChannelConnected>
+                <lRxChannelConnected>20</lRxChannelConnected>
+                <lRxChannelConnected>20</lRxChannelConnected>
+                <lRxChannelConnected>30</lRxChannelConnected>
                 <lRxChannelConnected>30</lRxChannelConnected>
                 <lRxChannelConnected>31</lRxChannelConnected>
+                <lRxChannelConnected>22</lRxChannelConnected>
+                <lRxChannelConnected>21</lRxChannelConnected>
+                <lRxChannelConnected>21</lRxChannelConnected>
+                <lRxChannelConnected>22</lRxChannelConnected>
+                <lRxChannelConnected>32</lRxChannelConnected>
                 <lRxChannelConnected>32</lRxChannelConnected>
             </Rx>
             <ADC>
+                <lADCChannelConnected>4</lADCChannelConnected>
                 <lADCChannelConnected>1</lADCChannelConnected>
                 <lADCChannelConnected>2</lADCChannelConnected>
                 <lADCChannelConnected>3</lADCChannelConnected>
-                <lADCChannelConnected>4</lADCChannelConnected>
-                <lADCChannelConnected>5</lADCChannelConnected>
-                <lADCChannelConnected>6</lADCChannelConnected>
                 <lADCChannelConnected>7</lADCChannelConnected>
+                <lADCChannelConnected>6</lADCChannelConnected>
+                <lADCChannelConnected>5</lADCChannelConnected>
                 <lADCChannelConnected>8</lADCChannelConnected>
-                <lADCChannelConnected>9</lADCChannelConnected>
                 <lADCChannelConnected>10</lADCChannelConnected>
-                <lADCChannelConnected>11</lADCChannelConnected>
-                <lADCChannelConnected>12</lADCChannelConnected>
-                <lADCChannelConnected>13</lADCChannelConnected>
-                <lADCChannelConnected>14</lADCChannelConnected>
-                <lADCChannelConnected>15</lADCChannelConnected>
-                <lADCChannelConnected>16</lADCChannelConnected>
-                <lADCChannelConnected>17</lADCChannelConnected>
+                <lADCChannelConnected>9</lADCChannelConnected>
                 <lADCChannelConnected>18</lADCChannelConnected>
-                <lADCChannelConnected>19</lADCChannelConnected>
-                <lADCChannelConnected>20</lADCChannelConnected>
-                <lADCChannelConnected>21</lADCChannelConnected>
-                <lADCChannelConnected>22</lADCChannelConnected>
+                <lADCChannelConnected>12</lADCChannelConnected>
+                <lADCChannelConnected>11</lADCChannelConnected>
+                <lADCChannelConnected>14</lADCChannelConnected>
+                <lADCChannelConnected>13</lADCChannelConnected>
+                <lADCChannelConnected>16</lADCChannelConnected>
+                <lADCChannelConnected>15</lADCChannelConnected>
+                <lADCChannelConnected>17</lADCChannelConnected>
                 <lADCChannelConnected>23</lADCChannelConnected>
+                <lADCChannelConnected>20</lADCChannelConnected>
+                <lADCChannelConnected>19</lADCChannelConnected>
+                <lADCChannelConnected>22</lADCChannelConnected>
+                <lADCChannelConnected>21</lADCChannelConnected>
                 <lADCChannelConnected>24</lADCChannelConnected>
+                <lADCChannelConnected>45</lADCChannelConnected>
                 <lADCChannelConnected>25</lADCChannelConnected>
                 <lADCChannelConnected>26</lADCChannelConnected>
                 <lADCChannelConnected>27</lADCChannelConnected>
                 <lADCChannelConnected>28</lADCChannelConnected>
+                <lADCChannelConnected>46</lADCChannelConnected>
+                <lADCChannelConnected>49</lADCChannelConnected>
                 <lADCChannelConnected>29</lADCChannelConnected>
                 <lADCChannelConnected>30</lADCChannelConnected>
                 <lADCChannelConnected>31</lADCChannelConnected>
                 <lADCChannelConnected>32</lADCChannelConnected>
+                <lADCChannelConnected>48</lADCChannelConnected>
+                <lADCChannelConnected>47</lADCChannelConnected>
+                <lADCChannelConnected>50</lADCChannelConnected>
+                <lADCChannelConnected>51</lADCChannelConnected>
+                <lADCChannelConnected>52</lADCChannelConnected>
+                <lADCChannelConnected>58</lADCChannelConnected>
+                <lADCChannelConnected>34</lADCChannelConnected>
+                <lADCChannelConnected>33</lADCChannelConnected>
+                <lADCChannelConnected>36</lADCChannelConnected>
+                <lADCChannelConnected>35</lADCChannelConnected>
+                <lADCChannelConnected>54</lADCChannelConnected>
+                <lADCChannelConnected>53</lADCChannelConnected>
+                <lADCChannelConnected>56</lADCChannelConnected>
+                <lADCChannelConnected>55</lADCChannelConnected>
+                <lADCChannelConnected>57</lADCChannelConnected>
+                <lADCChannelConnected>62</lADCChannelConnected>
+                <lADCChannelConnected>37</lADCChannelConnected>
+                <lADCChannelConnected>38</lADCChannelConnected>
+                <lADCChannelConnected>40</lADCChannelConnected>
+                <lADCChannelConnected>39</lADCChannelConnected>
+                <lADCChannelConnected>60</lADCChannelConnected>
+                <lADCChannelConnected>59</lADCChannelConnected>
+                <lADCChannelConnected>61</lADCChannelConnected>
+                <lADCChannelConnected>43</lADCChannelConnected>
+                <lADCChannelConnected>42</lADCChannelConnected>
+                <lADCChannelConnected>41</lADCChannelConnected>
+                <lADCChannelConnected>44</lADCChannelConnected>
+                <lADCChannelConnected>64</lADCChannelConnected>
+                <lADCChannelConnected>63</lADCChannelConnected>
             </ADC>
         </asCoilSelectMeas>
     </MEAS>
     <DICOM>
-        <adFlipAngleDegree>90</adFlipAngleDegree>
-        <tPatientName>xxxxxxxxxx</tPatientName>
-        <lPatientSex>3</lPatientSex>
+        <adFlipAngleDegree>8</adFlipAngleDegree>
+        <tPatientName>xxxxxxxxxxxxxxxxxxxxxxx</tPatientName>
+        <lPatientSex>2</lPatientSex>
+        <lGlobalTablePosTra>-54</lGlobalTablePosTra>
         <Manufacturer>Siemens</Manufacturer>
-        <ManufacturersModelName>MAGNETOM Terra.X</ManufacturersModelName>
-        <InstitutionName>Kings Colleague London</InstitutionName>
-        <lFrequency>78617226</lFrequency>
+        <ManufacturersModelName>MAGNETOM Vida</ManufacturersModelName>
+        <InstitutionName>St Thomas Hospital</InstitutionName>
+        <lFrequency>123257422</lFrequency>
         <Modality>MR</Modality>
-        <tScanningSequence>RM</tScanningSequence>
-        <tMRAcquisitionType>2D</tMRAcquisitionType>
-        <DeviceSerialNumber>237209</DeviceSerialNumber>
-        <SoftwareVersions>syngo MR XA60</SoftwareVersions>
+        <tScanningSequence>GR\IR</tScanningSequence>
+        <tMRAcquisitionType>3D</tMRAcquisitionType>
+        <DeviceSerialNumber>176289</DeviceSerialNumber>
+        <SoftwareVersions>syngo MR XA50</SoftwareVersions>
         <flReadoutOSFactor>2</flReadoutOSFactor>
-        <ucPATMode>1</ucPATMode>
-        <SoftwareVersions>syngo MR XA60</SoftwareVersions>
-        <dPhaseFOV>200</dPhaseFOV>
+        <flPhaseOS>0.050781</flPhaseOS>
+        <ucPATMode>2</ucPATMode>
+        <SoftwareVersions>syngo MR XA50</SoftwareVersions>
+        <dPhaseFOV>256</dPhaseFOV>
     </DICOM>
     <YAPS>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
@@ -1596,24 +1794,26 @@
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
         <aflMaxwellCoefficients>0</aflMaxwellCoefficients>
-        <iNoOfFourierColumns>128</iNoOfFourierColumns>
-        <iNoOfFourierLines>1000</iNoOfFourierLines>
-        <iRoFTLength>128</iRoFTLength>
-        <iPEFTLength>64</iPEFTLength>
-        <i3DFTLength>1</i3DFTLength>
-        <tMRAcquisitionType>2D</tMRAcquisitionType>
+        <iNoOfFourierColumns>512</iNoOfFourierColumns>
+        <iNoOfFourierLines>269</iNoOfFourierLines>
+        <iNoOfFourierPartitions>208</iNoOfFourierPartitions>
+        <iRoFTLength>512</iRoFTLength>
+        <iPEFTLength>270</iPEFTLength>
+        <i3DFTLength>208</i3DFTLength>
+        <tMRAcquisitionType>3D</tMRAcquisitionType>
         <flReadoutOSFactor>2</flReadoutOSFactor>
         <iNSet>1</iNSet>
-        <flUsedPatientWeight>50</flUsedPatientWeight>
+        <flUsedPatientWeight>75</flUsedPatientWeight>
         <tPatientPosition>HFS</tPatientPosition>
         <ReconMeasDependencies>
             <RFMap>0</RFMap>
-            <SenMap>0</SenMap>
-            <Noise>0</Noise>
+            <SenMap>105</SenMap>
+            <Noise>105</Noise>
         </ReconMeasDependencies>
-        <flMagneticFieldStrength>6.98094</flMagneticFieldStrength>
-        <iMaxNoOfRxChannels>32</iMaxNoOfRxChannels>
-        <tFrameOfReference>1.3.12.2.1107.5.2.61.237209.1.20250507085032135.0.0.0</tFrameOfReference>
+        <flMagneticFieldStrength>2.89362</flMagneticFieldStrength>
+        <iMaxNoOfRxChannels>64</iMaxNoOfRxChannels>
+        <tFrameOfReference>1.3.12.2.1107.5.2.50.176289.1.20240409210020363.0.0.4946</tFrameOfReference>
+        <lEchoSpacing>5940</lEchoSpacing>
         <alRegridMode>1</alRegridMode>
         <alRegridMode>1</alRegridMode>
         <alRegridRampupTime>0</alRegridRampupTime>
@@ -1633,12 +1833,12 @@
     </YAPS>
     <IRIS>
         <RECOMPOSE>
-            <PatientID>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</PatientID>
+            <PatientID>xxxxxxxxxxxxxxxxxxxxxxxx</PatientID>
             <PatientBirthDay>xxxxxxxx</PatientBirthDay>
-            <StudyLOID>1.3.12.2.1107.5.2.61.237209.30000025050609222286300000007</StudyLOID>
+            <StudyLOID>1.3.12.2.1107.5.2.50.176289.30000024040919123010700000011</StudyLOID>
         </RECOMPOSE>
     </IRIS>
     <HEADER>
-        <MeasUID>165</MeasUID>
+        <MeasUID>107</MeasUID>
     </HEADER>
 </siemens>
