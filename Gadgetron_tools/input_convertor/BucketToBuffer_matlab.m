@@ -169,7 +169,7 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
                 hdr_UP.Long = connection_hdr.userParameters.userParameterLong;
                 [twix.hdr.MeasYaps.sWipMemBlock.alFree{32},status] = searchUPfield(hdr_UP,'Long','UP_sWipMemBlock_alFree_32');
                 [twix.hdr.Meas.alDwellTime,status] = searchUPfield(hdr_UP,'Long','UP_dwellTime'); % ZN: I only took out the alDwellTime{1} from twix header here
-                [twix.hdr.Meas.alTE,status] = searchUPfield(hdr_UP,'Long','UP_alTE'); % ZN: I only took out the alTE{1} from the twix header; current version might not used for multiecho cases
+%                 [twix.hdr.Meas.alTE,status] = searchUPfield(hdr_UP,'Long','UP_alTE'); % ZN: I only took out the alTE{1} from the twix header; current version might not used for multiecho cases
                 [twix.hdr.Dicom.lGlobalTablePosCor,status] = searchUPfield(hdr_UP,'Long','UP_lGlobalTablePosCor'); % geom
                 [twix.hdr.Dicom.lGlobalTablePosTra,status] = searchUPfield(hdr_UP,'Long','UP_lGlobalTablePosTra'); % geom
                 [twix.hdr.Dicom.lGlobalTablePosSag,status] = searchUPfield(hdr_UP,'Long','UP_lGlobalTablePosSag'); % geom
@@ -182,6 +182,16 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
                 hdr_UP.String = connection_hdr.userParameters.userParameterString;
                 [twix.hdr.Dicom.SoftwareVersions,status] = searchUPfield(hdr_UP,'String','SoftwareVersions'); % software version
             end
+            
+            %% ZN: handling the header for reconstructed image
+            % usually since the scanner cannot provide reconstructions for
+            % such non-cartesian imaging, we will use the metadata of the
+            % retrievall dummy scan (which will be a dummy scan with
+            % Cartesian traj with the matched matrix size of the
+            % reconstructed image)
+
+            % ZN: we maintain the small header for each kspace line just in case
+            twix.bucket_header = bucket.data.header;
         case 'spiral'
             %% ZN: initializaton 
             N_RO = size(bucket.data.data, 1);
@@ -325,6 +335,9 @@ function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_f
                 hdr_UP.String = connection_hdr.userParameters.userParameterString;
                 [twix.hdr.Dicom.SoftwareVersions,status] = searchUPfield(hdr_UP,'String','SoftwareVersions'); % software version
             end
+            
+            % ZN: we maintain the small header for each kspace line just in case
+            twix.bucket_header = bucket.data.header;
             
         otherwise 
             %% ZN: this is for Cartesian trajectory (still need to be tidied up)

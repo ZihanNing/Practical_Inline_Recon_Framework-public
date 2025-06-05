@@ -1,5 +1,5 @@
 
-function [] = handle_connection_ReadandSave_template(connection)
+function [] = handle_connection_radial(connection)
     %%% This is a blank handle
     %%% Just read in Bucket including noise scan (refer to:
     %%% config/configDISORDER_test_Bucket_SWI.xml)
@@ -55,11 +55,11 @@ function [] = handle_connection_ReadandSave_template(connection)
 
     %% GENERAL INPUT CONVERTOR (ISMRMRD > TWIX-LIKE RAW)
     % bucket2buffer | matlab version
-    twix_like = BucketToBuffer_matlab(bucketData,connection.header,noiseData,0);
+    twix_like = BucketToBuffer_matlab(bucketData,connection.header,noiseData,0,'radial');
     
     %% SAVE RAW AND INFO FOR PARALLEL COMPUTATION
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
-    Recon_ID = 'SENSE_ACS'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
+    Recon_ID = 'NUFFT_radial'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     save_raw_info(twix_like,connection.header,Recon_ID,Recon_ID);
@@ -70,22 +70,44 @@ function [] = handle_connection_ReadandSave_template(connection)
     debug_mode = 1; % 1: debug mode-run the background function on the interface directly; 0: auto mode-launch a matlab program to run target function on the background
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    
     if debug_mode
 %         handle_connection_background_sense_acs
         fprintf('=========== Debug mode \n');
         feval(getReconAlg(Recon_ID)) % the implemented recon pipe can be attached with Recon_ID in the config
     else % call the function by a bash 
-        cfg = readScriptConfig(Recon_ID); % get the bash script input by the Recon_ID (info in Framework_config.xml)
-        % excute the bash script in parallel
-        bashScript = './Bash_script/Parallel_launch_MonitorGPU.sh'; % The bash script 'Parallel_launch_MonitorGPU' will monitor GPU usage status and decide to launch recons or queue up
-        cmd = sprintf('%s -l "%s" -f "%s" -r "%s" -w %d -i %d &', ...
-              bashScript, ...
-              cfg.logFile, ...
-              cfg.matlabFunction, ...
-              Recon_ID, ...
-              cfg.maxWaitTime, ...
-              cfg.interval);
+        % Read parameters from XML
+        cfg = readScriptConfig(Recon_ID);
+        % If your input‐files live under a particular folder, e.g. twix_like.hdr.save_path:
+        save_path = twix_like.hdr.save_path;  % path where input files are expected
+        % Path to the updated bash wrapper
+        bashScript = './Bash_script/Parallel_launch_MonitorGPU_Inputs.sh';
+
+        % Build the command, including -c and -u only if flagCheckInputs==1
+        if cfg.flagCheckInputs == 1
+            % Prepend save_path to each filename/pattern from cfg.inputList
+            fullPatterns = cellfun(@(p) fullfile(save_path, p), cfg.inputList, 'UniformOutput', false);
+            joinedPatterns = strjoin(fullPatterns, ' ');
+            cmd = sprintf(...
+                '%s -l "%s" -f "%s" -r "%s" -w %d -i %d -c %d -u "%s" &', ...
+                bashScript, ...
+                cfg.logFile, ...
+                cfg.matlabFunction, ...
+                Recon_ID, ...
+                cfg.maxWaitTime, ...
+                cfg.interval, ...
+                cfg.flagCheckInputs, ...
+                joinedPatterns);
+        else
+            % No input‐check required
+            cmd = sprintf(...
+                '%s -l "%s" -f "%s" -r "%s" -w %d -i %d -c 0 &', ...
+                bashScript, ...
+                cfg.logFile, ...
+                cfg.matlabFunction, ...
+                Recon_ID, ...
+                cfg.maxWaitTime, ...
+                cfg.interval);
+        end
         fprintf('=========== Launching custom recon %s in the background... \n', cfg.matlabFunction);
         status = system(cmd);
         if status~=0

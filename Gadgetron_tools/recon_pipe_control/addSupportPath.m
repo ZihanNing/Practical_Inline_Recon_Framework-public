@@ -1,11 +1,23 @@
-function supportPath = addSupportPath(Recon_ID)
-% addSupportPath  Add support_func_path for a given Recon_ID to MATLAB path
+function supportPaths = addSupportPath(Recon_ID)
+% addSupportPath  Add one or more support_func_path entries for a given Recon_ID to MATLAB path
 %
-%   supportPath = addSupportPath(Recon_ID) parses Framework_config.xml in the
-%   current folder, locates <Component name="Recon_ID">, extracts its
-%   <support_func_path> value, and adds that folder (and its subfolders) to
-%   the MATLAB search path. Returns the full path string added.
-% 
+%   supportPaths = addSupportPath(Recon_ID) parses Framework_config.xml in the
+%   current folder, locates <Component name="Recon_ID">, extracts all
+%   <support_func_path> values, verifies they exist, and adds each (and its
+%   subfolders) to the MATLAB search path. Returns a cell array of the full
+%   paths added.
+%
+%   Example XML fragment:
+%     <Component name="NUFFT_radial">
+%         ...
+%         <support_func_path>/home/zn23/matlab/merina_recon</support_func_path>
+%         <support_func_path>/home/zn23/matlab/another_toolbox</support_func_path>
+%     </Component>
+%
+%   Then calling addSupportPath('NUFFT_radial') will add both folders (and
+%   subfolders) to the MATLAB path and return:
+%     {'/home/zn23/matlab/merina_recon', '/home/zn23/matlab/another_toolbox'}
+%
 %   by Zihan Ning
 
     xmlFile = 'Framework_config.xml';
@@ -35,26 +47,31 @@ function supportPath = addSupportPath(Recon_ID)
               'No <Component name="%s"> found in %s.', Recon_ID, xmlFile);
     end
 
-    % Extract <support_func_path>
+    % Extract all <support_func_path> nodes
     nodes = compNode.getElementsByTagName('support_func_path');
-    if nodes.getLength < 1
+    nNodes = nodes.getLength;
+    if nNodes < 1
         error('addSupportPath:MissingTag', ...
-              '<support_func_path> not found under Component "%s".', Recon_ID);
-    end
-    textNode = nodes.item(0).getFirstChild;
-    if isempty(textNode) || all(isspace(char(textNode.getData)))
-        error('addSupportPath:EmptyPath', ...
-              '<support_func_path> for Component "%s" is empty.', Recon_ID);
-    end
-    supportPath = strtrim(char(textNode.getData));
-
-    % Verify directory exists
-    if ~isfolder(supportPath)
-        error('addSupportPath:InvalidPath', ...
-              'support_func_path "%s" does not exist or is not a folder.', supportPath);
+              'No <support_func_path> tags found under Component "%s".', Recon_ID);
     end
 
-    % Add to MATLAB path
-    addpath(genpath(supportPath));
-    fprintf('Added support path: %s (and subfolders)\n', supportPath);
+    % Preallocate cell array for paths
+    supportPaths = cell(1, nNodes);
+
+    for idx = 0:(nNodes-1)
+        textNode = nodes.item(idx).getFirstChild;
+        if isempty(textNode) || all(isspace(char(textNode.getData)))
+            error('addSupportPath:EmptyPath', ...
+                  '<support_func_path> entry #%d under Component "%s" is empty.', idx+1, Recon_ID);
+        end
+        pathStr = strtrim(char(textNode.getData));
+        if ~isfolder(pathStr)
+            error('addSupportPath:InvalidPath', ...
+                  'support_func_path "%s" does not exist or is not a directory.', pathStr);
+        end
+        % Add this folder (and subfolders) to MATLAB path
+        addpath(genpath(pathStr));
+        supportPaths{idx+1} = pathStr;
+        fprintf('Added support path: %s (and subfolders)\n', pathStr);
+    end
 end

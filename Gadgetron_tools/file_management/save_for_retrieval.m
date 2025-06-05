@@ -1,4 +1,4 @@
-function [fileToSend_all,status] = save_for_retrieval(x,twix,config)
+function [fileToSend_all,status] = save_for_retrieval(x,twix,config,flag_savewometa)
 % This is a function to save the file/image to be retrieved by a retrieval
 % dummy scan or a retro-recon
 % Input:
@@ -19,6 +19,15 @@ function [fileToSend_all,status] = save_for_retrieval(x,twix,config)
 % by Zihan Ning @ King's college london
 % 2 June 2025
 
+% flag_savewometa = 1, just save the reconstructed image without its
+% ISMRMRD metadata generated from the raw
+% This will be essential for the sequence that the scanner cannot provide a
+% conventional reconstruction (e.g., non-cartesian sequences)
+% the metadata of the image will be generated from the raw of the retrieval
+% dummy scan, which should be aligned for the matrix size (and FOV) with
+% the reconstructed image
+if nargin < 4 || isempty(flag_savewometa); flag_savewometa=0;end 
+
 status = 0;
 %% POST-PROCESSING OF THE IMAGE TO BE SEND OUT
 if length(size(x))>3; NCon = size(x,4); else; NCon = 1; end % if multi-inv or multi-echo
@@ -30,7 +39,7 @@ end
 x = circshift(x,-1,3);
 % ZN: make the matrix size of the reconstructed image align with
 % the sequence to receive the image from gadgetron 
-[x,~,~] = alignMatrixSize(twix.hdr,x,1);
+if ~isequal(config.seq_type,'radial'); [x,~,~] = alignMatrixSize(twix.hdr,x,1); end % might need to be modified for non-Cartesian traj
 
 
 %% CREATE FILE TO SEND
@@ -44,11 +53,15 @@ if config.send_phs; fileToSend_all.Phs = {}; end
 
 for con = 1:NCon
     if config.send_mag % Magnitude
-        fileToSend = ...
-            gadgetron.types.Image.from_data(...
-                                            permute(abs(x(:,:,:,con)), [4 1:3]), ...%Coil profiles first by convention of this (gadgetron) function
-                                            ref_func(twix) ... % generate the header of the reconstructed image based on twix-like raw
-                                            );
+        if flag_savewometa % save the image without meta
+            fileToSend.data = permute(abs(x(:,:,:,con)), [4 1:3]); %Coil profiles first by convention of this (gadgetron) function
+        else % generate headers and meta with the image
+            fileToSend = ...
+                gadgetron.types.Image.from_data(...
+                                                permute(abs(x(:,:,:,con)), [4 1:3]), ...%Coil profiles first by convention of this (gadgetron) function
+                                                ref_func(twix) ... % generate the header of the reconstructed image based on twix-like raw
+                                                );
+        end
         fileToSend.header.image_type = gadgetron.types.Image.MAGNITUDE;
         fileToSend.header.data_type = gadgetron.types.Image.FLOAT;
         fileToSend.header.image_series_index = 1; % ZN: to be within a image tag (MAG)
@@ -56,11 +69,15 @@ for con = 1:NCon
         fileToSend_all.Mag{end+1} = fileToSend; % add to the structure
     end
     if config.send_phs % Phase
+        if flag_savewometa % save the image without meta
+            fileToSend.data = permute(angle(x(:,:,:,con)), [4 1:3]); %Coil profiles first by convention of this (gadgetron) function
+        else % generate headers and meta with the image 
         fileToSend = ...
             gadgetron.types.Image.from_data(...
                                             permute(angle(x(:,:,:,con)), [4 1:3]), ...%Coil profiles first by convention of this (gadgetron) function
                                             ref_func(twix) ... % generate the header of the reconstructed image based on twix-like raw
                                             );
+        end
         fileToSend.header.image_type = gadgetron.types.Image.PHASE;
         fileToSend.header.data_type = gadgetron.types.Image.FLOAT;
         fileToSend.header.image_series_index = 2; % ZN: to be within a image tag (PHS)
