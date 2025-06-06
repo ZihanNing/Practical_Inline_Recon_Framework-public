@@ -70,7 +70,7 @@ function handle_connection_background_alignsense_acs(Recon_ID)
         %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
         % Put your custom reconstruction here
         % e.g., the SENSE reconstruction demo case
-        rec=InlineReconPipeline(twix_like);
+        rec=Inline_AlignSENSE_recon(twix_like);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         %% Save the image to be retrieved

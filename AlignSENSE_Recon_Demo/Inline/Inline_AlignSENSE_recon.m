@@ -77,13 +77,13 @@ switch accel_type
                temp =  solveXT_gadgetron(recTemp);
                temp = gatherStruct(temp);
                p = cat(4,p,temp.x);
-               x = cat(4,x,temp.d);
-               T = temp.T;
+               rec.x = cat(4,x,temp.d);
+               rec.T = temp.T;
                temp = [];
             else % Do not estimate the 
                temp = solveXT_gadgetron(recTemp,T);
-               p = cat(4,p,temp.x); % Aq, without MoCo
-               x = cat(4,x,temp.d); % Di, with MoCo
+               rec.p = cat(4,p,temp.x); % Aq, without MoCo
+               rec.x = cat(4,x,temp.d); % Di, with MoCo
             end
         end
     otherwise % ZN: for CAIPI or other undersampling pattern
@@ -94,5 +94,5 @@ switch accel_type
         flag_generateAq = 0; % ZN: for flexsampling pattern, the Aq image will need to be generated seperately
         [img_Di,img_Aq] = solveXT_gadgetron_FlexSamp(rec, flag_generateAq);
         if ~isempty(img_Aq);p = img_Aq; end
-        x=img_Di;
+        rec.x=img_Di;
 end
