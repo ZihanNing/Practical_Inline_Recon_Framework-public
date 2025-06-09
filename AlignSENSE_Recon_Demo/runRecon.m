@@ -49,7 +49,7 @@ solve_espirit = 1;
 isFailed = 0;
 
 fprintf('=========== Estimating coil sensitivity map using ACS line.\n'); 
-sens_name = ['REF_DATA_ACS_',fileName,'.mat']; % ZN: the ref file will contain seq name in the file name
+sens_name = ['REF_DATA_ACS_',fileUnique{p}{f},'.mat']; % ZN: the ref file will contain seq name in the file name
 nameRef = fullfile( rec.Names.pathOu, sens_name);
 
 recS = rec; % ZN: borrow the rec structure
@@ -60,164 +60,58 @@ recS.Plan.Suff=''; recS.Plan.SuffOu='';
 recS=solveSensit7T(recS); 
 save(nameRef, 'recS','-v7.3');
 
-%%
-    %BUILD THE REFERENCE DATA - SENSITIVITY MAPS
-    useACS_flag = 1; % ZN: 1- use ACS line for coil sensitivity map estimation; 0 - use external ref scan for coil sensitivity map estimation
-    if useACS_flag == 0 % ZN: use external ref
-        for f=1:length(refUnique{p})
-            fileRef=strcat(pathIn{p},filesep,refUnique{p}{f});
-            fileRefB=strcat(pathIn{p},filesep,refBUnique{p}{f});
-            if ( ~exist(strcat(fileRef,'.mat'), 'file') || ~ismember('recS',who('-file', strcat(fileRef,'.mat')) ) ) || estSensExplicit && ~strcmp(fileRef,'')
-                dat2Se(fileRef,fileRefB,[],1,1,[]);
+%% 3. CALL RECONSTRUCTION
+% pre-set parameters
+seq_type = 'mprage';
+accel_type = 'GRAPPA'; % ZN: currently support GRAPPA (uniformed undersampling) & CAIPI undersampling
+rec.Alg.Gibbsring_flag=1; % ZN: do gibbs ringing reduction in matlab
+rec.Alg.gibbsRinging = [0.4 0.4]; 
+rec.Alg.CoilCompress_flag=0;  % ZN: do not use coil compression for MEGE sequence
+% rec.Alg.CoilCompress_flag=config.CoilCompress_flag;  % ZN: do not use coil compression for MEGE sequence
+seperate_recon = 1; %ZN: do the motion estimation for multiple contrasts seperately
+% seperate_recon = config.seperate_recon; %ZN: do the motion estimation for multiple contrasts seperately
+rec.Alg.disabledisplay = 1; % ZN: 1 - not display the image during the recon
+rec.Alg.WriteSnapshots = 0; 
+
+fprintf('=========== Reconstruction data.\n');
+switch accel_type
+    case 'GRAPPA'
+        fprintf('The data is detected to be undersampled uniformly.\n');
+        rec=assignSensitivities_bucket(rec, recS, solve_espirit);% Assign the sensitivities
+        NCon = size(rec.y,6);
+        NAve = size(rec.y,5); 
+        if isequal(seq_type,'mege') % For steady-state seq, we need to set the group motion states
+            rec.Alg.parXT.sampleToGroup = round( rec.Par.Labels.TFEfactor/prod(rec.Enc.DISORDERInfo.tileSize));
+        end
+        recTemp = rec;
+        % suppose single average for now
+        p = []; % ZN: the image before moco
+        x = []; % ZN: the image after moco
+        for con = 1:NCon
+            recTemp.Plan.Suff='_MotCorr';
+            recTemp.Plan.SuffOu=sprintf('_Con%d',con);
+            recTemp.y = dynInd(rec.y,con,6);
+            if con==1 || seperate_recon
+               temp =  solveXT_gadgetron(recTemp);
+               temp = gatherStruct(temp);
+               p = cat(4,p,temp.x);
+               rec.x = cat(4,x,temp.d);
+               rec.T = temp.T;
+               temp = [];
+            else % Do not estimate the 
+               temp = solveXT_gadgetron(recTemp,T);
+               rec.p = cat(4,p,temp.x); % Aq, without MoCo
+               rec.x = cat(4,x,temp.d); % Di, with MoCo
             end
         end
-    else % ZN: use ACSline
-        fileAcq=strcat(pathIn{p},filesep,fileIn{p}{f});%Is allowed to be a cell array
-        if ( ~exist(strcat(fileName,'_ACS.mat'), 'file') || ~ismember('recS',who('-file', strcat(fileName,'_ACS.mat')) ) ) || estSensExplicit && ~strcmp(fileName,'_ACS')
-            ACS2rec(fileAcq,1,1);
-        end
-    end
-
-    
-
-
-%% RUN RECONSTRUCTIONS
-for p=1:length(pathIn)
-    assert( length(idFile) == length(fileIn{p}),'File handling not correct.');
-
-    for f=1:length(idFile)
-        %% PREPARE RECONSTRUCTION STRUCTURE
-        %%% ADD PATH TO ALL THE FILENAMES
-        if iscell(fileIn{p}{f})
-            for n=1:length(fileIn{p}{f});fileIn{p}{f}{n}=strcat(pathIn{p},filesep,fileIn{p}{f}{n});end
-        else
-            fileIn{p}{f} = strcat(pathIn{p},filesep,fileIn{p}{f});
-        end
-
-        fileRef=strcat(pathIn{p},filesep,refIn{p}{f});
-        fileB1=strcat(pathIn{p},filesep,B1In{p}{f});
-        fileB0=strcat(pathIn{p},filesep,B0In{p}{f});
-        fileAcq=fileIn{p}{f};%Is allowed to be a cell array
-
-        %%% MERGE DATA FROM ALL STRUCTURES
-        writeSWCCFlag=0;
-        if useACS_flag == 0 % ZN: use external ref for coil sensitivity map estimation
-            rec=prepareRec(fileAcq, fileRef, fileB1, fileB0, writeSWCCFlag, [], resRecRecon{f}, supportReadoutRecon{f},useACS_flag);
-        else % ZN: use ACS line for coil sensitivity map estimation
-            rec=prepareRec(fileAcq, [], fileB1, fileB0, writeSWCCFlag, [], resRecRecon{f}, supportReadoutRecon{f},useACS_flag);
-        end
-
-        
-        %%% ADD SPATIAL INFROMATION ABOUT COILS
-%         rec.Par.preProcessing.coilGeom.RAS = coilCentroids(rec.S,rec.Par.Mine.APhiRec);
-%         [~,rec.Par.preProcessing.coilGeom.idxIS] = sort(rec.Par.preProcessing.coilGeom.RAS(3,:));
-%         ccm = eye(size(rec.S,4));
-%         ccm = ccm(flip(rec.Par.preProcessing.coilGeom.idxIS),:);
-%         rec.Par.preProcessing.coilGeom.ccmIS = ccm;ccm=[];
-
-        
-        %%% COMPRESS COILS BEFORE CALLING MOCO
-        percCoil = 17; % when you use -23, it means use 23 coils % used to be 0.9
-        if ~isempty(percCoil)
-            rec.preProcessing.compressCoils.NChaOrig = size(rec.y,4);
-            rec.preProcessing.compressCoils.percCoil = percCoil;
-            [rec.S,rec.y] = compressCoils(rec.S,percCoil,rec.y);
-            rec.Alg.parXT.perc = size(rec.y,4)*[1 1 1];%Don't allow for further coil reduction
-            fprintf('Coil compression: Number of coils compressed from %d to %d elements (%d%%).\n',rec.preProcessing.compressCoils.NChaOrig,size(rec.y,4),percCoil*100);
-        end
-
-        %%% GENERAL RECONSTRUCTION PARAMETERS
-        rec.Alg.WriteSnapshots = 1;       
-        rec.Alg.UseSoftMasking = 2; %%% ZN modified, 0 for hard masking
-        % 1 for soft masking, using SOS of the coil sensitivity map
-        % 2 for don't mask
-        % 3 for ZN defined mask
-        % for accleration by ZN
-        rec.Alg.disabledisplay = 1; % 1 - not display the image during the recon % ZN
-        rec.Alg.computeEnergy = 0; % 0 - do not compute EnBefore & EnAfter during recon (to save some time) % ZN
-        rec.Alg.setResAniManually = 0; % 1 - set ResAni manually, instead of using the result by pyramidplan
-        rec.Alg.set_resAni = [0.25 0.25 0.25];
-        rec.Alg.nIt = [300 1];  % for CG; defualt [300 1]
-        
-        
-        
-
-        Batch = 1; %YB: see solveXTB
-        rec.Par.Mine.Modal = 7; %YB: Anatomical Volumetric Encoding
-
-        rec.Alg.parXT.writeInter=0;
-
-        rec.Dyn.GPUbS = [6 7];%[2 4]
-        rec.Dyn.MaxMem = [6e6 10e6 1e6];%[6e6 2e6 1e6];%Maximum memory allowed in the gpu: first component, preprocessing, second component, actual CG-SENSE, third component certain elements of preprocessing
-
-        %% MOTION CORRECTION
-        rec.Plan.Suff='_MotCorr';rec.Plan.SuffOu='';
-        %Disabling B0 estimation
-        rec.Alg.parXB.useSH = 0;
-        rec.Alg.parXB.useTaylor = 0;
-        rec.Alg.parXB.useSusc = 0;
-
-        %Motion estimation parameters
-        rec.Alg.AlignedRec=2;%Type of reconstruction, 1-> no outlier rejection / 2-> outlier rejection / 3-> intra-shot corrections based on outlier detection / 4-> full intra-shot corrections
-        rec.Alg.parXT.groupSweeps=1;% Factor to group sweeps
-        if contains(rec.Par.Scan.Mine.RO,'H');rec.Alg.parXT.redFOV=1/3;else;rec.Alg.parXT.redFOV=0;end
-        rec.Alg.parXT.disableGrouping = 0; % 0 - enable group combined (check motion between shots and shots)
-        rec.Alg.parXT.convTransformJoint = 1;
-        rec.Alg.parXT.traLimXT=[0.03 0.01];%[0.05 0.02]; Respectively translation and rotation limits for XT estimation
-        rec.Alg.parXT.meanT=0;
-
-        %Optimisation scheme
-        rec.Alg.resPyr =  [ .5   1];
-        rec.Alg.nExtern = [ 15   1]; % number of iteration % defualt [25 1]
-        rec.Alg.parXT.estT = [ 1  0 ];
-        if ~rec.Enc.DISORDER %Need to specify the shot definition as it will not be detected automatically.
-            shotDuration = 1;%In seconds
-            numShots = [];
-            if ~isempty(shotDuration);rec.Alg.parXT.sampleToGroup = shotDuration/(1e-3*rec.Par.Labels.RepetitionTime);end
-            if ~isempty(numShots);rec.Alg.parXT.sampleToGroup = round(length(rec.Assign.z{2})/numShots);end
-        end
-        
-        % Set EllipsMask % add by ZN 
-%         rec.Alg.UseSoftMasking = 0; % ZN modified, used to be 0, for hard masking
-%         rTh=1;
-%         rec.M = getEllipsMask(rec.M,rTh)==1;
-        
-
-        %Run
-        if seqType == 0 
-            solveXTB_PT_me(rec,[]);
-        elseif seqType == 1 
-            if  ~rec.Enc.DISORDER % ZN: to deal with non-DISORDER trajectory case
-                rec.Alg.parXT.sampleToGroup = round( rec.Par.Labels.TFEfactor/prod([1 1])); % ZN: for non-DISORDER one, just one shot -> no motion correction at all
-            else
-                rec.Alg.parXT.sampleToGroup = round( rec.Par.Labels.TFEfactor/prod(rec.Enc.DISORDERInfo.tileSize));
-            end
-            
-            recTemp = rec;
-            for e=1:size(rec.y,8)
-                recTemp.Plan.Suff='_MotCorr';
-                recTemp.Plan.SuffOu=sprintf('_echo%d',e);
-                recTemp.y = dynInd(rec.y,e,8);
-                if e==1
-                   temp =  solveXTB_PT_me(recTemp,[]);
-                   T = temp.T;temp = [];
-                else
-%                    solveXTB_PT_me(recTemp,T);
-                   temp =  solveXTB_PT_me(recTemp,[]);
-                   T = temp.T;temp = [];
-                end
-            end
-        elseif seqType == 2
-            recTemp = rec;
-            for e=1:size(rec.y,10)
-                recTemp.Plan.Suff='_MotCorr';
-                recTemp.Plan.SuffOu=sprintf('_INV%d',e);
-                recTemp.y = dynInd(rec.y,e,10);
-                solveXTB_PT_me(recTemp,[]);
-            end
-            
-        end
-
-    end
+    otherwise % ZN: for CAIPI or other undersampling pattern
+        fprintf('The data is detected to be undersampled nonuniformly.\n');
+        NCon = size(rec.y,6);
+        NAve = size(rec.y,5); 
+        rec=assignSensitivities_bucket(rec, recS, solve_espirit,externalREF);% Assign the sensitivities
+        flag_generateAq = 0; % ZN: for flexsampling pattern, the Aq image will need to be generated seperately
+        [img_Di,img_Aq] = solveXT_gadgetron_FlexSamp(rec, flag_generateAq);
+        if ~isempty(img_Aq);p = img_Aq; end
+        rec.x=img_Di;
 end
 
