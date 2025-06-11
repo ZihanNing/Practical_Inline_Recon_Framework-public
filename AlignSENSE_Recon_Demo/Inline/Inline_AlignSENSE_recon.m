@@ -7,7 +7,7 @@ twix.hdr.Meas.tScanningSequence,1);
 %%% CONVERT TO REC STRUCTURE
 fprintf('=========== Converting data to a reconstruction structure.\n');
 fprintf('----------- Original raw read-in as converted twix-like data from ISMRMRD. \n');
-if isequal(seq_type,'flair') 
+if isequal(seq_type,'mege') 
     recon_flexFOV = [256 256 208];
     rec = twixlike2rec(twix,recon_flexFOV);
 else
@@ -26,22 +26,15 @@ if isfield(twix,'reference'); twix.reference = []; end
 if isfield(twix,'noise'); twix.noise = []; end
 
 
-%% 2. Estimate coil sensitivity map 
-% ZN: estimation method
+%% 2. Estimate coil sensitivity map (load the exterREF)
+recS_path = loadLatestDependency(twix.hdr.save_path, 'ExterREF_CMS');
+load(recS_path)
 solve_espirit = 1;
-isFailed = 0;
-
-fprintf('=========== Estimating coil sensitivity map using ACS line.\n'); 
-sens_name = ['REF_DATA_ACS_',fileName,'.mat']; % ZN: the ref file will contain seq name in the file name
-nameRef = fullfile( rec.Names.pathOu, sens_name);
-
-recS = rec; % ZN: borrow the rec structure
-recS.y = rec.ACS;
-recS.Enc.AcqVoxelSize = rec.Enc.UnderSampling.ACSVoxelSize;
-recS.Par.Mine.APhiRec = rec.Par.Mine.APhiACS;
+recS.x = recS.xS;
+recS.y = recS.xS;
+recS.Enc.AcqVoxelSize = recS.Geom.S.MS;
+recS.Par.Mine.APhiRec = recS.Geom.S.MT;
 recS.Plan.Suff=''; recS.Plan.SuffOu='';
-recS=solveSensit7T(recS); 
-save(nameRef, 'recS','-v7.3');
 
 %% 4. CALL RECONSTRUCTION
 % pre-set parameters

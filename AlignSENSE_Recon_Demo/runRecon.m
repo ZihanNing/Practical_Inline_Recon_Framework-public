@@ -1,5 +1,5 @@
 
-function [] = runRecon(idFile, idRef, idRefB, seqType)
+function [] = runRecon(idFile, idRef, idRefB)
 
 %% 0. Initialization
 % List with all the names of the studies

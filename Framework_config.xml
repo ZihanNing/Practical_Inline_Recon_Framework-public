@@ -50,7 +50,7 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
         <logFile>/home/gadgetron/Gadgetron_Parallel_Framework/log/GPU_status_log.txt</logFile> <!--This need to be a default file that used for all recons in this server-->
         <maxWaitTime>900</maxWaitTime>
         <interval>10</interval>
-        <matlabFunction>handle_connection_background_sense_acs</matlabFunction>
+        <matlabFunction>handle_connection_background_sense_exterREF</matlabFunction>
         <flag_checkInputs>1</flag_checkInputs>
         <InputList>
             <Input>ExterREF_CMS_*</Input> <!--Any file with the name contains ExterREF_CMS_-->
@@ -88,7 +88,26 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
         <matlabFunction>handle_connection_background_alignsense_acs</matlabFunction>
         
         <!--Add path for the custom recon-->
-        <support_func_path>//home/gadgetron/Gadgetron_Parallel_Framework/AlignSENSE_Recon_Demo</support_func_path>
+        <support_func_path>/home/gadgetron/Gadgetron_Parallel_Framework/AlignSENSE_Recon_Demo</support_func_path>
+    </Component>
+    
+    <!--AlignSENSE reconstruction with exterREF for coil senstivity map-->
+    <Component name="AlignSENSE_exterREF">
+        <data_saved_path>/home/gadgetron/data/sense/</data_saved_path> <!--Used the exterREF saved in sense folder-->
+        <recon_alg>handle_connection_background_alignsense_exterREF</recon_alg>
+        
+        <!-- Read by the Bash script to call the custom recon -->
+        <logFile>/home/gadgetron/Gadgetron_Parallel_Framework/log/GPU_status_log.txt</logFile> <!--This need to be a default file that used for all recons in this server-->
+        <maxWaitTime>900</maxWaitTime>
+        <interval>10</interval>
+        <matlabFunction>handle_connection_background_alignsense_exterREF</matlabFunction>
+        <flag_checkInputs>1</flag_checkInputs>
+        <InputList>
+            <Input>ExterREF_CMS_*</Input> <!--Any file with the name contains ExterREF_CMS_-->
+        </InputList>
+        
+        <!--Add path for the custom recon-->
+        <support_func_path>/home/gadgetron/Gadgetron_Parallel_Framework/AlignSENSE_Recon_Demo</support_func_path>
     </Component>
     
     
