@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <version>2</version>
+
+   <readers>
+       <reader>
+         <classname>AcquisitionReader</classname>
+         <dll>gadgetron_core_readers</dll>
+       </reader>
+
+       <reader>
+         <classname>WaveformReader</classname>
+         <dll>gadgetron_core_readers</dll>
+       </reader>
+   </readers>
+
+  <writers>
+    <writer>
+      <classname>ImageWriter</classname>
+      <dll>gadgetron_core_writers</dll>
+    </writer>
+  </writers>
+    
+    <stream>  
+        <!-- Noise prewhitening -->
+        <!--ZN: Default Gadgetron Noise prewhitening gadget will consume the noise lines after processing-->
+        <!--<gadget><name>NoiseAdjust</name><dll>gadgetron_mricore</dll><classname>NoiseAdjustGadget</classname></gadget>-->
+
+        <!-- RO asymmetric echo handling -->
+        <!--ZN: Disable if not needed-->
+        <gadget><name>AsymmetricEcho</name><dll>gadgetron_mricore</dll><classname>AsymmetricEchoAdjustROGadget</classname></gadget>
+
+        <!-- RO oversampling removal -->
+        <!--ZN: Add if needed - could save some saving time-->
+        <gadget><name>RemoveROOversampling</name><dll>gadgetron_mricore</dll><classname>RemoveROOversamplingGadget</classname></gadget>
+        
+        <!--Accumulate Noise lines by streaming-->
+        <!--ZN: Disable this if Default Gadgetron Noise prewhitening gadget has been used-->
+        <gadget>
+            <name>AccTrig</name>
+            <dll>gadgetron_mricore</dll>
+            <classname>FlagTriggerGadget</classname>
+            <property><name>trigger_flags</name><value>is_noise_measurement</value></property>
+        </gadget>
+
+	<!--Accumulate Kspace lines for imaging and ACS lines by streaming-->
+        <!--ZN: Essential part-->
+        <gadget>
+            <name>AccTrig</name>
+            <dll>gadgetron_mricore</dll>
+            <classname>AcquisitionAccumulateTriggerGadget</classname>
+            <property><name>trigger_dimension</name><value></value></property>
+            <property><name>sorting_dimension</name><value></value></property>
+        </gadget>
+        
+	<!--Stream the lines to the external port-->
+        <!--ZN: instead of connecting to a port that listened, launch matlab with specific handler (usually Read&Save hander) using the Gadgetron client directly-->
+        <!--    The MATLAB will be launched on the background for computation automatically without UI, use log file under /log for status monitoring -->
+        <!--    Please make sure that the handler to be used has been placed under the root of the framework folder, and MATLAB is set to be launched under the same folder -->
+        <external>
+          <!-- Change the handler if needed (demos in /matlab_handle_archive )-->
+          <execute name="handle_connection_background_alignsense_acs" type="matlab"/>
+        </external> 
+        
+	<!--ZN: Some standard post-processing gadgets-->
+        <gadget>
+          <dll>gadgetron_mricore</dll>          <classname>AutoScaleGadget</classname>
+        </gadget>
+
+        <gadget>
+          <dll>gadgetron_mricore</dll>
+          <classname>FloatToUShortGadget</classname>
+        </gadget>
+
+        <gadget>
+          <dll>gadgetron_mricore</dll>
+          <classname>ImageFinishGadget</classname>
+        </gadget>
+        
+    </stream>
+
+</configuration>

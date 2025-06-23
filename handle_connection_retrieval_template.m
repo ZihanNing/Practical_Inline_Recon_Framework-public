@@ -1,5 +1,5 @@
 
-function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
+function [] = handle_connection_retrieval_template(connection)
     %%% This is a handler to retrieve the reconstructed images back to
     %%% console 
     %%% Two methods for retrieval available based on this framework:
@@ -17,6 +17,7 @@ function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
     Recon_ID = 'SENSE_exterREF';
+    debug_mode = 0; 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     %% Write the log
@@ -34,24 +35,40 @@ function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
     
     %% LOAD THE IMAGE TO BE RETRIEVED
     hdr = connection.header;
-    % sequence name
-    fileName = hdr.measurementInformation.protocolName;
-    % patient ID
-    if isfield(hdr,'subjectInformation') && isfield(hdr.subjectInformation,'patientID')
-        patientID = hdr.subjectInformation.patientID;
+    if ~debug_mode
+        % For auto mode, the retrieved image is loaded by sorting the
+        % Recon_ID and the ID of the retrieval scan/retro-recon
+        % The image with the same patient ID & same sequence name/seq_type
+        % is loaded automatically 
+        % Caution: if you are using retrieval dummy scan, please make sure
+        % that the name aligned with the target scan
+        
+        % sequence name
+        fileName = hdr.measurementInformation.protocolName;
+        % patient ID
+        if isfield(hdr,'subjectInformation') && isfield(hdr.subjectInformation,'patientID')
+            patientID = hdr.subjectInformation.patientID;
+        else
+            fprintf('Fetal error: Patient ID cannot recognize.\n');
+            fprintf('=========== Exiting without successful retrieval.\n');
+            exit;
+        end
+        % seq_typ: just in case that the retrieval dummy scan fails to match
+        % the name
+        [tScanningSequence,~] = searchUPfield(hdr.userParameters,'String','tScanningSequence_zihan'); % sequency type
+        [seq_type,~] = recogSeqType(hdr.sequenceParameters.sequence_type,...
+            tScanningSequence,1);
+
+        % load the target image to be retrieved
+        [fileToSend,status] = load_target_image(Recon_ID, patientID, fileName, seq_typ);
     else
-        fprintf('Fetal error: Patient ID cannot recognize.\n');
-        fprintf('=========== Exiting without successful retrieval.\n');
-        exit;
+        % In the debug mode, you manually load the images to be retrieved
+        % Caution: you should launch matlab program manually and let it to
+        % listen to the port (in default, port 23200) as well
+        
+        fprintf('Manual step: please load the image to be retrieved manually! \n');
+        pause; 
     end
-    % seq_typ: just in case that the retrieval dummy scan fails to match
-    % the name
-    [tScanningSequence,~] = searchUPfield(hdr.userParameters,'String','tScanningSequence_zihan'); % sequency type
-    [seq_type,~] = recogSeqType(hdr.sequenceParameters.sequence_type,...
-        tScanningSequence,1);
-    
-    % load the target image to be retrieved
-    [fileToSend,status] = load_target_image(Recon_ID, patientID, fileName, seq_typ);
     
     %% RETRIEVE THE IMAGE BACK TO CONSOLE
     if status % the image has been found
