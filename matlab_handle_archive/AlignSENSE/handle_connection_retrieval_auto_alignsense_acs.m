@@ -1,5 +1,5 @@
 
-function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
+function [] = handle_connection_retrieval_auto_alignsense_acs(connection)
     %%% This is a handler to retrieve the reconstructed images back to
     %%% console 
     %%% Two methods for retrieval available based on this framework:
@@ -16,7 +16,7 @@ function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
     addpath(genpath('Gadgetron_tools'))
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
-    Recon_ID = 'SENSE_exterREF';
+    Recon_ID = 'AlignSENSE_ACS';
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     %% Write the log
@@ -51,15 +51,17 @@ function [] = handle_connection_retrieval_auto_alignsense_exterREF(connection)
         tScanningSequence,1);
     
     % load the target image to be retrieved
-    [fileToSend,status] = load_target_image(Recon_ID, patientID, fileName, seq_typ);
+    [fileToSend,status] = load_target_image(Recon_ID, patientID, fileName, seq_type);
     
     %% RETRIEVE THE IMAGE BACK TO CONSOLE
     if status % the image has been found
         % double check the matrix size of the image to be sent and the
         % retrieval dummy scan/retro recon alignes
         fprintf('=========== Checking the alignment of matrix size between retrieval scan and the image.\n');
-        target_matrixSize = hdr.encoding.reconSpace.matrixSize;
-        target_fov = hdr.encoding.reconSpace.field_of_view;
+        target_matrixSize = [hdr.encoding.reconSpace.matrixSize.x,...
+            hdr.encoding.reconSpace.matrixSize.y,hdr.encoding.reconSpace.matrixSize.z];
+        target_fov = [hdr.encoding.reconSpace.fieldOfView_mm.x,...
+            hdr.encoding.reconSpace.fieldOfView_mm.y,hdr.encoding.reconSpace.fieldOfView_mm.z];
         [fileToSend, status] = adjust_fileToSend(fileToSend, target_matrixSize, target_fov);
         
         % send the images

@@ -3,7 +3,7 @@ clear all
 % close all
 home_path = getenv('HOME');
 addpath(genpath([home_path,'/matlab/usual_used']))
-data_name = 'output_MPRAGE_dummy.h5';
+data_name = 'output_MPRAGE.h5';
 hinfo = hdf5info(data_name);
 header = h5read(data_name,hinfo.GroupHierarchy.Groups(1).Groups(1).Datasets(3).Name);
 img = h5read(data_name,hinfo.GroupHierarchy.Groups(1).Groups(1).Datasets(2).Name);
