@@ -1,0 +1,69 @@
+--- /home/zn23/DISORDER/Gadgetron_Framework/compare/radial/methods_recon.m
++++ /home/zn23/DISORDER/Gadgetron_Framework/compare/radial/methods_recon_inline.m
+@@ -1,4 +1,4 @@
+-function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, Tro, b1, selfcal, calpoints, shift, shift_echoes, shift_in,shift_in_TE1,shift_img,TE1only,meth_nufft,meth_script)
++function [result,res,TE,shifts,shifts_TE1] = methods_recon_inline(twix, Tro, b1, selfcal, calpoints, shift, shift_echoes, shift_in,shift_in_TE1,shift_img,TE1only,meth_nufft,meth_script)
+     %===========================================================
+     % Main k-space to image function for 23Na MERINA multi-echo
+     % reconstruction
+@@ -31,19 +31,28 @@
+     %-----------------------------------------------------------
+     % Notes: 
+     %
++    %-----------------------------------------------------------
++    % This is an inline implemented version, which takes the 
++    % converted twix-like raw within as the input
++    % for the PIPE, please see /Inline/Inline_NUFFT_radial.m
++    % 
++    % Implemented by Zihan Ning (KCL)
+     %===========================================================
+         
+     %% loading data and fetching some parameters
+-    disp(['Loading Data from ', filename]);
+-    measDat = mapVBVD(char(filename));
+-    data = squeeze(measDat.image);
++%     disp(['Loading Data from ', filename]);
++%     measDat = mapVBVD(char(filename));
++%     data = squeeze(measDat.image);
++    % instead of reading by mapVBVD, use the converted twix-like raw
++    measDat = twix; 
++    data = measDat.data;
+ 
+     if contains(measDat.hdr.Dicom.SoftwareVersions, 'XA60') % new XA60 header  
+         numROs = measDat.hdr.Meas.iNoOfFourierLines;
+         FOV = measDat.hdr.Dicom.dPhaseFOV*1e-3;
+         MTX = measDat.hdr.Meas.lImagesPerSlab;
+         TE = measDat.hdr.Meas.alTE(1)*1e-6;
+-        numEchoes = floor((data.dataSize(1)-MTX)/(2*MTX));
++        numEchoes = floor((size(data,1)-MTX)/(2*MTX));
+     else
+         numROs = measDat.hdr.Meas.NoOfFourierLines; 
+         FOV = measDat.hdr.Meas.PeFOV*1e-3;
+@@ -56,18 +65,18 @@
+         numEchoes = 0;
+     end
+     
+-    raw = measDat.image(); % comes in 3D: [readpoints*TEs, channels, spokes]
++    raw = data; % comes in 3D: [readpoints*TEs, channels, spokes]
+     numChan = size(raw,2);
+     img_out = zeros(numChan,MTX,MTX,MTX,numEchoes+1);
+     
+     
+-    %%% averaging of k-spaces
+-    if not(isempty(filename2))
+-        measDat2 = mapVBVD(char(filename2));
+-        raw2 = measDat2.image();
+-        raw = (raw + raw2) ./ 2;
+-        clear raw2
+-    end
++%     %%% averaging of k-spaces
++%     if not(isempty(filename2))
++%         measDat2 = mapVBVD(char(filename2));
++%         raw2 = measDat2.image();
++%         raw = (raw + raw2) ./ 2;
++%         clear raw2
++%     end
+ 
+     % follow yasmin's recon routine
+     if contains(meth_script, 'Yasmin')
+
