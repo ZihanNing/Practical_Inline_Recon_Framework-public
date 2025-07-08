@@ -23,38 +23,22 @@ setPath
 %% UI FOR INPUTS
 home_path = getenv('HOME')
 raw_path = [home_path,'/Gadgetron_Parallel_Framework/raw'];
-load([home_path,'/Gadgetron_Parallel_Framework/radial_NUFFT_Demo/Config_NUFFT_radial_MEGE_offline.mat']);
+%load([home_path,'/Gadgetron_Parallel_Framework/radial_NUFFT_Demo/Config_NUFFT_radial_MEGE_offline.mat']);
 
-%% PARSING INPUT %%
+settings.out_dir = 'out2';
+settings.rawarrname1 = 'meas_MID00165_FID10766_KCL_miniflash_JC_merina1000proj_tro2_spiral_37e_tept6_t245v_fa9.dat';
+settings.Tro = 2;
+settings.no_TE = 38;
+settings.check_shift = 1;
+settings.shift_img = 'Vol';
+settings.shift_noTE = 12;
+
+
+% PARSING INPUT %
 out_dir = settings.out_dir;
-meth_script = settings.meth_script;
-meth_nufft = settings.meth_nufft;
-finufft_dir = settings.finufft_dir;
-no_array_imgs = settings.no_array_images;
 array_raw1_fname = settings.rawarrname1;
-if no_array_imgs == 2
-    array_raw2_fname = settings.rawarrname2;
-end
-meth_avg = settings.meth_avg;
 Tro = settings.Tro;
 no_TE = settings.no_TE; 
-meth_sense = settings.meth_sense;
-sense_noPointscalib = settings.sense_noPointscalib; 
-path_fsl = settings.path_fsl; 
-
-skip_vol_recon = settings.check_volume;
-vol_raw_fname = settings.rawvolname;
-Tro_vol = settings.Tro;
-no_TE_vol = settings.no_TE; 
-sense_GaussKernel = settings.sense_GaussKernel;
-
-skip_adc = settings.check_adc;
-
-skip_b1_recon = settings.check_b1;
-b1_raw_fname = settings.rawb1name;
-Tro_b1 = settings.Tro;
-no_TE_b1 = settings.no_TE; 
-
 skip_shift = settings.check_shift;
 shift_noTE = settings.shift_noTE;
 shift_img = settings.shift_img; 
@@ -68,18 +52,6 @@ else
 end
 
 %% KSPACE TO IMAGE %%
-%%% recon of volume image %%% 
-if skip_vol_recon == false
-    if shift_img == "Vol" && skip_shift == false
-        doshift = 'y'; 
-    else
-        doshift = 'n';
-    end
-    disp("Commenced recon of volume image")
-    [img_vol, res_vol, ~, shift, shift_TE1] = methods_recon([raw_path,'/',vol_raw_fname],'',Tro_vol,"n","n",[],doshift,shift_noTE,[],[],shift_img,"n",meth_nufft, meth_script);
-    disp("Completed recon of volume image")
-end
-
 %%% recon of array image(s) %%%
 if contains(shift_img,"Arr") && skip_shift == false
     doshift = 'y'; 
@@ -92,22 +64,11 @@ if ~(exist('shift', 'var')) % if the shift wasn't calculated from volume images
     shift_TE1 = [];
 end
 
-if no_array_imgs == 2
-    if meth_avg == "Image"
-        disp("Commenced recon of array images")
-        [img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n",meth_nufft, meth_script);
-        disp("Reconstructed array image 1/2")
-        img_array2 = methods_recon([raw_path,'/',array_raw2_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n",meth_nufft, meth_script);
-        disp("Completed recon of array images")
-    else
-        disp("Commenced recon of array images")
-        [img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],[raw_path,'/',array_raw2_fname],Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n",meth_nufft, meth_script);
-    end
-else
-    disp("Commenced recon of array image")
-    [img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n",meth_nufft, meth_script);
-    disp("Completed recon of array image")
-end
+
+disp("Commenced recon of array image")
+[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n");
+disp("Completed recon of array image")
+
 
 %%% sos combination
 disp("Commenced sos channel combination")

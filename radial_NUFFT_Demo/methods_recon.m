@@ -1,4 +1,4 @@
-function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, Tro, b1, selfcal, calpoints, shift, shift_echoes, shift_in,shift_in_TE1,shift_img,TE1only,meth_nufft,meth_script)
+function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, Tro, b1, selfcal, calpoints, shift, shift_echoes, shift_in,shift_in_TE1,shift_img,TE1only)
     %===========================================================
     % Main k-space to image function for 23Na MERINA multi-echo
     % reconstruction
@@ -67,66 +67,48 @@ function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, 
         raw2 = measDat2.image();
         raw = (raw + raw2) ./ 2;
         clear raw2
+    end    
+    
+    % recon related settings
+    %raw = ones(size(raw)); %uncomment for psf
+    raw_TE1 = raw(1:MTX,:,:); % pick first TE
+    raw_TE1 = permute(raw_TE1,[1 3 2]);
+    if shift == "y"
+        [dr_TE1,dx_TE1,dy_TE1,dz_TE1] = methods_eccshift_TE1(raw_TE1, shift_img);
+        disp('Calculating trajectory shifts for TE1')
+    elseif not(isempty(shift_in_TE1))
+        dr_TE1 = shift_in_TE1(:,:,:,1);
+        dx_TE1 = shift_in_TE1(:,:,:,2);
+        dy_TE1 = shift_in_TE1(:,:,:,3);
+        dz_TE1 = shift_in_TE1(:,:,:,4);
+        disp('Using precalculated trajectory shifts for TE1')
+    else
+        dx_TE1 = [];
+        disp('Not using trajectory shifts for TE1')
     end
 
-    % follow yasmin's recon routine
-    if contains(meth_script, 'Yasmin')
+    %%% if we are reconstructing images for SENSE self-calibration 
+    if selfcal=='y'
+        raw_TE1(calpoints:end,:,:) = 0 + 0j;
+    end
 
-        for ch = 1:numChan
-            disp(['Utilising recon script: ', char(meth_script)]);
-            disp(['Reconstructing images for channel ',num2str(ch)]);
-            
-            dat = squeeze(data(:,ch,:));
-
-            tic; [result, TEs, res] = regrid_multiEcho(permute(dat,[2,1]), FOV, MTX, numROs, Tro, numEchoes, TE);
-            img_out(ch,:,:,:,:) = result;
-        end
-
-
-    elseif meth_script == "Sam"
-
-        disp(['Utilising recon script: ', char(meth_script)]);       
-    
-        %raw = ones(size(raw)); %uncomment for psf
-        raw_TE1 = raw(1:MTX,:,:); % pick first TE
-        raw_TE1 = permute(raw_TE1,[1 3 2]);
+    if numEchoes > 0
+        raw_TErest = raw(MTX+1:end,:,:);
+        raw_TErest = reshape(raw_TErest,[2*MTX,numEchoes,numChan,numROs]);
+        raw_TErest = permute(raw_TErest,[1,4,3,2]);
+        %calculate ecc shift
         if shift == "y"
-            [dr_TE1,dx_TE1,dy_TE1,dz_TE1] = methods_eccshift_TE1(raw_TE1, shift_img);
-            disp('Calculating trajectory shifts for TE1')
-        elseif not(isempty(shift_in_TE1))
-            dr_TE1 = shift_in_TE1(:,:,:,1);
-            dx_TE1 = shift_in_TE1(:,:,:,2);
-            dy_TE1 = shift_in_TE1(:,:,:,3);
-            dz_TE1 = shift_in_TE1(:,:,:,4);
-            disp('Using precalculated trajectory shifts for TE1')
+            disp('Calculating trajectory shifts for TErest')
+            [dr,dx,dy,dz] = methods_eccshift(raw_TErest,shift_echoes, shift_img);
+        elseif not(isempty(shift_in))
+            disp('Using precalculated trajectory shifts for TErest')
+            dr = shift_in(:,:,:,:,1);
+            dx = shift_in(:,:,:,:,2);
+            dy = shift_in(:,:,:,:,3);
+            dz = shift_in(:,:,:,:,4);
         else
-            dx_TE1 = [];
-            disp('Not using trajectory shifts for TE1')
-        end
-        
-        %%% if we are reconstructing images for SENSE self-calibration 
-        if selfcal=='y'
-            raw_TE1(calpoints:end,:,:) = 0 + 0j;
-        end
-        
-        if numEchoes > 0
-            raw_TErest = raw(MTX+1:end,:,:);
-            raw_TErest = reshape(raw_TErest,[2*MTX,numEchoes,numChan,numROs]);
-            raw_TErest = permute(raw_TErest,[1,4,3,2]);
-            %calculate ecc shift
-            if shift == "y"
-                disp('Calculating trajectory shifts for TErest')
-                [dr,dx,dy,dz] = methods_eccshift(raw_TErest,shift_echoes, shift_img);
-            elseif not(isempty(shift_in))
-                disp('Using precalculated trajectory shifts for TErest')
-                dr = shift_in(:,:,:,:,1);
-                dx = shift_in(:,:,:,:,2);
-                dy = shift_in(:,:,:,:,3);
-                dz = shift_in(:,:,:,:,4);
-            else
-                dx = [];
-                disp('Not using trajectory shifts for TErest')
-            end
+            dx = [];
+            disp('Not using trajectory shifts for TErest')
         end
                 %% global parameters
         NUFFT       = 0; 
@@ -174,12 +156,8 @@ function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, 
         weights = reshape(weights,[numROs*MTX,1]);
         weights = squeeze(repmat(weights,[1,numChan]));
         
-        if meth_nufft == "finufft"
-            out = finufft3d1(kxs, kys, kzs, double(squeeze(raw_TE1.*weights)),-1,1e-8,MTX,MTX,MTX);      
-        elseif meth_nufft == "matmri"
-            Nop = nufftOp([MTX,MTX,MTX],coords * (0.5/pi),weights, false);
-            out = Nop' * raw_TE1;
-        end
+        % recon using finufft
+        out = finufft3d1(kxs, kys, kzs, double(squeeze(raw_TE1.*weights)),-1,1e-8,MTX,MTX,MTX);      
     
         %add channel dimension for volume images
         if ndims(out) < 4
@@ -235,12 +213,9 @@ function [result,res,TE,shifts,shifts_TE1] = methods_recon(filename, filename2, 
                     %weights = repmat(weights,[1,numChan]);
 
                     raw = reshape(raw_TErest(:,:,chan,echo),[numROs*2*MTX,1]);
-                    if meth_nufft == "finufft"
-                        out = finufft3d1(kxs, kys, kzs, double(squeeze(raw.*(weights./2))),-1,1e-8,MTX,MTX,MTX);
-                    elseif meth_nufft == "matmri"
-                        Nop = nufftOp([MTX,MTX,MTX],[kxs,kys,kzs] * (0.5/pi),weights./2, false);
-                        out = Nop' * raw;
-                    end
+                    % recon using finufft
+                    out = finufft3d1(kxs, kys, kzs, double(squeeze(raw.*(weights./2))),-1,1e-8,MTX,MTX,MTX);
+                    
     %                 if ndims(out) < 4
     %                     img_out(:,:,:,:,echo+1) = reshape(out,[1,size(out)]);
     %                 else
