@@ -2,9 +2,7 @@ log/*
 raw/*
 MRD_input/*
 MRD_output/*
-CONFIG_zihan.mat
-main_to_sub_AlignSENSE_ACS.mat
-main_to_sub_NUFFT_radial.mat
+*.mat
 *.asv
 *.xprot
 *.json
