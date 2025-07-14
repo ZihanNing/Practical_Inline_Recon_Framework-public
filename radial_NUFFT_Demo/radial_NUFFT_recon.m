@@ -1,0 +1,84 @@
+%===========================================================
+% Main execution script for MERINA sodium MRI k-space to im-
+% age reconstruction. Handles various settings and options, 
+% reconstructs images with optional trajectory shift corr.,
+% combines channel images, saves images and settings. If 
+% applicable, aligns multiple repeats in image space. 
+%-----------------------------------------------------------
+% Sam Rot (UCL)
+%-----------------------------------------------------------
+% Notes: currently only has Finufft recon supported, but pl-
+% anning to include legacy reconstruction for completeness. 
+% Some extensions to come: B1 mapping and correction, B0 map-
+% ping and correction, improved trajectory realignment. 
+%===========================================================
+
+%% DEPENDENCIES 
+clear
+% addpath('dialog/')
+addpath(genpath('radial_NUFFT_Demo'));
+addpath(genpath('/home/zn23/matlab/finufft')); % ZN: load the finufft path; finufft toolbox need to be installed first
+setPath
+
+%% UI FOR INPUTS
+home_path = getenv('HOME')
+raw_path = [home_path,'/Gadgetron_Parallel_Framework/raw'];
+%load([home_path,'/Gadgetron_Parallel_Framework/radial_NUFFT_Demo/Config_NUFFT_radial_MEGE_offline.mat']);
+
+settings.out_dir = 'out2';
+settings.rawarrname1 = 'meas_MID00165_FID10766_KCL_miniflash_JC_merina1000proj_tro2_spiral_37e_tept6_t245v_fa9.dat';
+settings.Tro = 2;
+settings.no_TE = 38;
+settings.check_shift = 1;
+settings.shift_img = 'Vol';
+settings.shift_noTE = 12;
+
+
+% PARSING INPUT %
+out_dir = settings.out_dir;
+array_raw1_fname = settings.rawarrname1;
+Tro = settings.Tro;
+no_TE = settings.no_TE; 
+skip_shift = settings.check_shift;
+shift_noTE = settings.shift_noTE;
+shift_img = settings.shift_img; 
+
+%% DIRECTORY MANAGEMENT %% 
+if not(isfolder([raw_path,'/',out_dir]))
+    mkdir([raw_path,'/',out_dir])
+    disp("Created image output directory")
+else
+    error("Output directory <" + out_dir + "> already exists. Either remove it, or enter a different directory name")
+end
+
+%% KSPACE TO IMAGE %%
+%%% recon of array image(s) %%%
+if contains(shift_img,"Arr") && skip_shift == false
+    doshift = 'y'; 
+else
+    doshift = 'n';
+end
+
+if ~(exist('shift', 'var')) % if the shift wasn't calculated from volume images
+    shift = [];
+    shift_TE1 = [];
+end
+
+
+disp("Commenced recon of array image")
+[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n");
+disp("Completed recon of array image")
+
+
+%%% sos combination
+disp("Commenced sos channel combination")
+img_array_sos = squeeze(sqrt(sum(abs(img_array).^2,4)));
+disp("Completed sos channel combination")
+
+%% SAVING IMAGES %% 
+res_array = res_array * 1e3; 
+output_path = [raw_path, '/', out_dir];
+disp(['Writing final images as NIFTI file into output path ',output_path]);
+
+tmp_nii = make_nii(fliplr(abs(squeeze(img_array_sos))),[res_array,res_array,res_array]);%,[],[],mat2str(TE*1e3));
+save_nii(tmp_nii,[output_path,'/arrayimg1_sos','.nii.gz']);

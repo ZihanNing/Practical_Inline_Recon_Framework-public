@@ -6,5 +6,3 @@ MRD_output/*
 *.asv
 *.xprot
 *.json
-processed.xml
-xml_raw.xml

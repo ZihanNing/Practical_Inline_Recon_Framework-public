@@ -72,7 +72,7 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
         <matlabFunction>handle_connection_background_nufft_radial</matlabFunction>
         
         <!--Add path for the custom recon-->
-        <support_func_path>/home/zn23/matlab/merina_recon_replicate/merina_recon</support_func_path>
+        <support_func_path>/home/zn23/Gadgetron_Parallel_Framework/radial_NUFFT_Demo</support_func_path>
         <support_func_path>/home/zn23/matlab/finufft</support_func_path> <!--finufft toolbox-->
     </Component>
     
