@@ -2,7 +2,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %This is a script to perform MoCo on volumetric GRE-based sequences.
 %Code provided by:
-%Yannick Brackenier and 
+%Zihan Ning,
+%Yannick Brackenier, and
 %Lucilio Cordero-Grande.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -15,7 +16,7 @@ idRef = 1; %Should not be touched - only change if you acquired different ref sc
 idRefB = 0; % added by ZN, if there's a refB need to be used
 
 %% RUN
-seqType = 0;%seqType=0 for GRE/MPRAGE, 1 for multi-echo GRE and 2 for MP2RAGE
+seq_type = 'mprage';% mprage, mege supported for this version of the code
 tic
-runRecon(idFile, idRef,idRefB, seqType)
+runRecon(idFile, idRef,idRefB, seq_type)
 Compute_Time = toc/60

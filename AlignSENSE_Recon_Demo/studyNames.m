@@ -2,7 +2,7 @@
 pathIn{1}='/home/gadgetron/Gadgetron_Parallel_Framework/raw';%Where on the server the data is (temporally stored) NEEDS TO HAVE THE / AT THE END
 
 %% ACQUISITIONS
-fileIn{1}{1}='meas_MID00107_FID16038_T1_MPRAGE_DISORDER_twinsACS'; 
+fileIn{1}{1}='meas_MID00107_FID16038_T1_MPRAGE_TrajDISORDER_invivo'; 
 % fileIn{1}{2}='meas_MID00054_FID02071_SWI_DISORDER_fullsampled_10_10_BW500_pose2'; 
 % fileIn{1}{3}='meas_MID00055_FID02072_SWI_DISORDER_fullsampled_10_10_BW500_pose3'; 
 

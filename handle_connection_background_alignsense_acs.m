@@ -1,6 +1,8 @@
-function handle_connection_background_sense_acs(Recon_ID)
+function handle_connection_background_alignsense_acs(Recon_ID)
     
-    if nargin < 1 || isempty(Recon_ID); Recon_ID='SENSE_ACS';end % modify this if needed
+    %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
+    if nargin < 1 || isempty(Recon_ID); Recon_ID='AlignSENSE_ACS';end % modify this if needed
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     %% Default settings
     % Fix the X11 related warning and crashes
@@ -65,9 +67,11 @@ function handle_connection_background_sense_acs(Recon_ID)
         
         
         %% Custom reconstruction
+        %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
         % Put your custom reconstruction here
         % e.g., the SENSE reconstruction demo case
-        rec=InlineReconPipeline(twix_like);
+        rec=Inline_AlignSENSE_recon_acs(twix_like);
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         %% Save the image to be retrieved
         % define saving related config

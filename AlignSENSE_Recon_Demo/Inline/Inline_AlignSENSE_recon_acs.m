@@ -1,56 +1,39 @@
-
-function [] = runRecon(idFile, idRef, idRefB, seq_type)
-
-%% 0. Initialization
-% List with all the names of the studies
-studyNames;
-B0In = fillCell(fileIn, '');
-B1In = fillCell(fileIn, '');
-isPT = fillCell(fileIn, 0);
-supportReadout = fillCell(fileIn,[]);
-resRec = fillCell(fileIn,[]);
-if idRefB == 0
-    refBIn{1}{1} = '';
-    refBIn = fillCell(fileIn, '');
-end
-noiseFile = fillCell(fileIn,[]);
-
-idPath= 1; 
-
-supportReadoutRecon = fillCell(cell(1,length(idFile)),[]);
-resRecRecon = fillCell(cell(1,length(idFile)),[]);
-
-% Extract studies
-[pathIn, fileIn, refIn, refBIn, B0In, B1In,...
-fileUnique, refUnique, refBUnique, B0Unique, B1Unique, ...
-isPTUnique,noiseFileUnique, supportReadoutUnique, resRecUnique, RDesiredUnique] ...
-    =  extractStudies (pathIn, fileIn, refIn, refBIn, B0In, B1In, idPath,idFile, idRef,[],[], isPT, noiseFile, supportReadout, resRec, RDesired);
-
-% DATA CONVERSION PARAMETERS
-estSensExplicit=0;
-invDataExplicit = 0;
-
+function rec = Inline_AlignSENSE_recon_acs(twix)
 %% 1. Generate the input of reconstruction (REC based on the twix-like structure
-%%% CONVERT TO REC STRUCTURE
-for p=1:length(pathIn)  
-    %BUILD THE ACQUISITION DATA - start with this if an acquisition file is also used as a reference, you don't read it ouy twice (dat2Se checks if rec structure exist whereas dat2Rec reads data out by default)
-    for f=1:length(fileUnique{p})
-        fileName=strcat(pathIn{p},filesep,fileUnique{p}{f});
-        if (~exist(strcat(fileName,'.mat'),'file') || invDataExplicit) && ~strcmp(fileName,'')
-            [rec, TW] = dat2Rec(fileName,supportReadoutUnique{p}{f},[],1,[],isPTUnique{p}{f},[],noiseFileUnique{p}{f},resRecUnique{p}{f},[],RDesiredUnique{p}{f});
-        end                
-    end
-end
-TW = [];
+%%% RECOGNIZE SEQ TYPE
+[seq_type,~] = recogSeqType(twix.hdr.sequenceParameters.sequence_type,...
+twix.hdr.Meas.tScanningSequence,1);
 
-%% 2. Estimate coil sensitivity map 
+%%% CONVERT TO REC STRUCTURE
+fprintf('=========== Converting data to a reconstruction structure.\n');
+fprintf('----------- Original raw read-in as converted twix-like data from ISMRMRD. \n');
+if isequal(seq_type,'mege') 
+    recon_flexFOV = [256 256 208];
+    rec = twixlike2rec(twix,recon_flexFOV);
+else
+    rec = twixlike2rec(twix);
+end
+fprintf('Converted from twix-like data to input REC for following recon!\n');
+fprintf('Acquisition name: %s.\n', rec.Names.Name);
+
+% relief bufferData to save the memory 
+% still keep the header info (twix.image,
+% twix.bucket_header,twix.hdr,twix.sampling_description) to
+% generate the header of the reconstructed image (see more details
+% in referenceFromReconData_general.m
+twix.data = []; 
+if isfield(twix,'reference'); twix.reference = []; end
+if isfield(twix,'noise'); twix.noise = []; end
+
+
+%% 2. Estimate coil sensitivity map (load the exterREF)
 % ZN: estimation method
 solve_espirit = 1;
 isFailed = 0;
 
 fprintf('=========== Estimating coil sensitivity map using ACS line.\n'); 
-sens_name = ['REF_DATA_ACS_',fileUnique{p}{f},'.mat']; % ZN: the ref file will contain seq name in the file name
-nameRef = fullfile( rec.Names.pathOu, sens_name);
+sens_name = ['REF_DATA_ACS_',rec.Names.Name,'.mat']; % ZN: the ref file will contain seq name in the file name
+nameRef = fullfile(rec.Names.pathOu, sens_name);
 
 recS = rec; % ZN: borrow the rec structure
 recS.y = rec.ACS;
@@ -60,10 +43,9 @@ recS.Plan.Suff=''; recS.Plan.SuffOu='';
 recS=solveSensit7T(recS); 
 save(nameRef, 'recS','-v7.3');
 
-%% 3. CALL RECONSTRUCTION
+%% 4. CALL RECONSTRUCTION
 % pre-set parameters
-seq_type = 'mprage';
-accel_type = 'GRAPPA'; % ZN: currently support GRAPPA (uniformed undersampling) & CAIPI undersampling
+if isfield(twix.hdr.acceleration,'type');accel_type = twix.hdr.acceleration.type;end % ZN: currently support GRAPPA (uniformed undersampling) & CAIPI undersampling
 rec.Alg.Gibbsring_flag=1; % ZN: do gibbs ringing reduction in matlab
 rec.Alg.gibbsRinging = [0.4 0.4]; 
 rec.Alg.CoilCompress_flag=0;  % ZN: do not use coil compression for MEGE sequence
@@ -114,4 +96,3 @@ switch accel_type
         if ~isempty(img_Aq);p = img_Aq; end
         rec.x=img_Di;
 end
-

@@ -1,5 +1,5 @@
 
-function [] = handle_connection_sense_acs(connection)
+function [] = handle_connection_alignsense_acs(connection)
     %%% This is a blank handle
     %%% Just read in Bucket including noise scan (refer to:
     %%% config/configDISORDER_test_Bucket_SWI.xml)
@@ -58,11 +58,19 @@ function [] = handle_connection_sense_acs(connection)
     twix_like = BucketToBuffer_matlab(bucketData,connection.header,noiseData,0);
     
     %% SAVE RAW AND INFO FOR PARALLEL COMPUTATION
-    Recon_ID = 'SENSE_ACS'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
+    %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
+    Recon_ID = 'AlignSENSE_ACS'; % the configurations of each research ID is set within Framework_config.xml, including saved path, related bash, etc
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     save_raw_info(twix_like,connection.header,Recon_ID,Recon_ID);
     
     %% CALL SUBCALL FUNCTION IN PARALLEL AND RELEASE SCANNER RECON CHAIN
+    
+    %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
     debug_mode = 1; % 1: debug mode-run the background function on the interface directly; 0: auto mode-launch a matlab program to run target function on the background
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
     if debug_mode
 %         handle_connection_background_sense_acs
         fprintf('=========== Debug mode \n');
