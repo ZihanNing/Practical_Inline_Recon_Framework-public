@@ -26,6 +26,7 @@ rec.Enc.(t).AcqN = [size(rec.TWD.(t),1),size(rec.TWD.(t),3),size(rec.TWD.(t),4)]
 if size(rec.TWD.(t),4)>1; rec.Enc.(t).ThreeD = 1; end
 fprintf('Acquired size (no PF):%s\n',sprintf(' %d',rec.Enc.(t).AcqN));
 
+
 %NUMBER OF COILS
 rec.Enc.(t).CoilN=size(rec.TWD.(t),2);
 fprintf('Number of coils: %d\n',rec.Enc.(t).CoilN);
@@ -61,30 +62,6 @@ end
 
 %PARTIAL FOURIER
 if strcmp(field,'image') 
-%     rec.Enc.(t).AcqNNoPF=rec.Enc.(t).AcqN;
-%     if rec.Enc.(t).ThreeD;rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength TW.hdr.Config.N0F3DFTLength];
-%     else rec.Enc.(t).AcqN=[rec.Enc.(t).AcqN(1) TW.hdr.Config.N0FPEFTLength rec.Enc.(t).AcqN(3)];
-%     end
-%     pad=rec.Enc.(t).AcqN-rec.Enc.(t).AcqNNoPF;
-%     rec.Enc.(t).APF=cell(1,3);
-%     for d=1:3
-%         rec.Enc.(t).APF{d}=ones(rec.Enc.(t).AcqNNoPF(d),1,'single');
-%         if useGPU;rec.Enc.(t).APF{d}=gpuArray(rec.Enc.(t).APF{d});end
-%         rec.Enc.(t).APF{d}=padarray(rec.Enc.(t).APF{d},pad(d),0,'post');
-%     end   
-%     pad=[pad(1) 0 pad(2:3)];
-%     rec.TWD.(t)=padarray(rec.TWD.(t),pad,0,'post');
-%     if rec.Enc.(t).ThreeD;dims=[3 4];else dims=3;end
-%     cshift=zeros(1,4);
-%     for d=dims
-%         if d==3;cshift(3)=ceil((rec.Enc.(t).AcqN(2)+1)/2)-TW.(field).centerLin(1);
-%         else cshift(4)=ceil((rec.Enc.(t).AcqN(3)+1)/2)-TW.(field).centerPar(1);
-%         end                
-%         rec.Enc.(t).APF{d-1}=circshift(rec.Enc.(t).APF{d-1},cshift(d));
-%     end
-%     rec.TWD.(t)=circshift(rec.TWD.(t),cshift);
-%     for d=1:3;rec.Enc.(t).APF{d}=shiftdim(rec.Enc.(t).APF{d},d-1);end
-
     % easier tool for zero-padding due to PF
     % ZN: taking care both partial Fourier and (reconstruction resolution < acquisition resolution)
     % ZN: only pad the Lin & Par, supposing that asymmetric echo is handled by AsymmetricEcho gadget
@@ -122,14 +99,8 @@ fprintf('Output size:%s\n',sprintf(' %d',rec.Enc.(t).OutN));%This is not used
 %     fprintf('Slice separation: %.2f\n',rec.Enc.(t).SliceSeparation);
 % end
 
-% aux=TW.hdr.MeasYaps.sSliceArray.asSlice{1};
+
 %FULL ACQUIRED FOV
-% if rec.Enc.(t).ThreeD
-%     rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV aux.dThickness];rec.Enc.(t).SliceThickness=0;
-% else 
-%     rec.Enc.(t).AcqFOV=[aux.dReadoutFOV aux.dPhaseFOV rec.Enc.(t).SliceSeparation*rec.Enc.(t).AcqN(3)];rec.Enc.(t).SliceThickness=aux.dThickness;
-%     fprintf('Slice thickness: %.2f\n',rec.Enc.(t).SliceSeparation);
-% end
 rec.Enc.(t).AcqFOV = TW.sampling_description.recon_fov; % used the FOV and matrix size provided by the header
 rec.Enc.(t).AcqFOV=rec.Enc.(t).AcqFOV.*rec.Enc.(t).Overs;
 fprintf('Acquired field of view:%s\n',sprintf(' %.2f',rec.Enc.(t).AcqFOV));
@@ -147,36 +118,8 @@ NX=size(rec.TWD.(t));
 iSlicePositionsMin=1;
 if ~isempty(rec.Alg.maxNumberRepeats);rec.TWD.(t)=dynInd(rec.TWD.(t),1:min(size(rec.TWD.(t),9),rec.Alg.maxNumberRepeats),9);end
 
-%%%%%%%%%%%%%%%%%%%%%%%GEOMETRY%%%%%%%%%%%%%%%%%%%%%%%
-% N=rec.Enc.(t).AcqN;
-% MS=rec.Enc.(t).AcqDelta;
-% S=diag([MS 1]);
-% rec.Geom.(t).MS=MS;
-% slicePos=TW.(field).slicePos(:,iSlicePositionsMin);
-% quaternionRaw = slicePos(4:7);
-% R=eye(4);
-% R(1:3,1:3)=convertNIIGeom(ones([1,3]),quaternionRaw','qForm','sForm');%PE-RO-SL to PCS
-% R=R(:,[2 1 3 4]);
-% T=eye(4);T(1:3,4)=slicePos(1:3);%in mm for center FOV (I think)
-% %MT=T*R(:,[2 1 3 4])*S;%Of the center of the FOV
-% MT=T*R*S;%Of the center of the FOV
-% Nsub=N/2;
-% if ~rec.Enc.(t).ThreeD;Nsub(3)=1/2;end
-% %Nsub(1)=Nsub(1)-2;%---it is the solution
-% T(:,4)=MT*[-floor(Nsub)';1];
-% %T(:,4)=MT*[-Nsub';1];
-% %MT=T*R(:,[2 1 3 4])*S;%Of the origin
-% MT=T*R*S;
-% rec.Geom.(t).patientPosition=TW.hdr.Dicom.tPatientPosition;
-% fprintf('Patient position: %s\n',rec.Geom.(t).patientPosition);
-% rec.Geom.(t).PCS2RAS=getPCS2RAS(rec.Geom.(t).patientPosition);
-% rec.Geom.(t).MT=rec.Geom.(t).PCS2RAS*MT;
-% % tI=rec.Geom.(t).MT*[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))';1]; % ZN: debug, should be here, but comment out
-% % %[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))']
-% % %tI
-% % %tI=rec.Geom.(t).MT*[vr(1)-1;0;0;1];
-% % rec.Geom.(t).MT(1:3,4)=tI(1:3);
 
+%%%%%%%%%%%%%%%%%%%%%%%GEOMETRY%%%%%%%%%%%%%%%%%%%%%%%
 % for the twix-like structure, some geom related headers are still missing
 % we use another way to compute the geom
 if isequal(field,'refscan') % refscan ACS

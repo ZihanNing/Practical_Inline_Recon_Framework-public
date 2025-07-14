@@ -21,9 +21,10 @@ ND=16;
 gpu=useGPU;
 
 %ACQUIRED GRID SIZES
-rec.Enc.(t).AcqN = [size(rec.TWD.(t),1),size(rec.TWD.(t),3),size(rec.TWD.(t),4)];
+rec.Enc.(t).AcqN = [TW.(field).NCol,size(rec.TWD.(t),3),size(rec.TWD.(t),4)]; % not using size(rec.TWD.(t),1), since it has been remvoed the RO-OS
 if size(rec.TWD.(t),4)>1; rec.Enc.(t).ThreeD = 1; end
 fprintf('Acquired size (no PF):%s\n',sprintf(' %d',rec.Enc.(t).AcqN));
+
 
 %NUMBER OF COILS
 rec.Enc.(t).CoilN=size(rec.TWD.(t),2);
@@ -116,6 +117,7 @@ NX=size(rec.TWD.(t));
 iSlicePositionsMin=1;
 if ~isempty(rec.Alg.maxNumberRepeats);rec.TWD.(t)=dynInd(rec.TWD.(t),1:min(size(rec.TWD.(t),9),rec.Alg.maxNumberRepeats),9);end
 
+
 %%%%%%%%%%%%%%%%%%%%%%%GEOMETRY%%%%%%%%%%%%%%%%%%%%%%%
 N=rec.Enc.(t).AcqN;
 MS=rec.Enc.(t).AcqDelta;
@@ -140,11 +142,11 @@ rec.Geom.(t).patientPosition=TW.hdr.Dicom.tPatientPosition;
 fprintf('Patient position: %s\n',rec.Geom.(t).patientPosition);
 rec.Geom.(t).PCS2RAS=getPCS2RAS(rec.Geom.(t).patientPosition);
 rec.Geom.(t).MT=rec.Geom.(t).PCS2RAS*MT;
-% tI=rec.Geom.(t).MT*[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))';1]; % ZN: debug, should be here, but comment out
-% %[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))']
-% %tI
-% %tI=rec.Geom.(t).MT*[vr(1)-1;0;0;1];
-% rec.Geom.(t).MT(1:3,4)=tI(1:3);
+tI=rec.Geom.(t).MT*[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))';1]; 
+%[vr(1)-1;(rec.Enc.(t).OutN(2:3)-rec.Enc.(t).RecN(2:3))']
+%tI
+%tI=rec.Geom.(t).MT*[vr(1)-1;0;0;1];
+rec.Geom.(t).MT(1:3,4)=tI(1:3);
 
 %%%%%%%%%%%%%%%%%%%%%%%INVERSION%%%%%%%%%%%%%%%%%%%%%%%
 %INVERT NOISE
@@ -158,6 +160,7 @@ rec.Geom.(t).MT=rec.Geom.(t).PCS2RAS*MT;
 % else
 %     rec.N.(t)=[];
 % end
+rec.N.(t)=[];
 
 %INVERT PHASE
 if strcmp(field,'image');fieldPhase='phasecor';
@@ -216,6 +219,7 @@ if strcmp(field,'image');rec.Ay=rec.Ay+(1-rec.Enc.(t).APF{2});end
 %MULTIBAND
 rec.Enc.(t).MultiBandFactor=1;
 rec.Ay=ifftshiftGPU(rec.Ay,2);
+rec.Az = [];
 
 %INVERT
 blkSz=blkSz*2;

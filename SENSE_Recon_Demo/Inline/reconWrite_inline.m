@@ -48,31 +48,9 @@ if typ==2 % ZN: refscan, to be modified
             writenii(fileName,rec.B,'B',MSS,MTT);
             writenii(fileName,rec.S,'S',MSS,MTT);
     end
-%     if ~strcmp(field,'refscan');writenii(fileName,rec.(t),t,MS,MT);
-%     else writenii(fileName,rec.S,'S',MSS,MTT);
-%     end
-%     if typ==2 || strcmp(field,'refscan')
-%         if strcmp(field,'refscan');writenii(fileName,rec.M,'M',MSS,MTT);else writenii(fileName,rec.M,'M',MS,MT);end
-%         if strcmp(field,'refscan');writenii(fileName,rec.B,'B',MSS,MTT);else writenii(fileName,rec.B,'B',MS,MT);end
-%         %return
-%         if isfield(rec,'W') && ~isempty(rec.W)
-%             if strcmp(field,'refscan');writenii(fileName,rec.W,'W',MSS,MTT);else writenii(fileName,rec.W,'W',MS,MT);end
-%         end
-%         writenii(fileName,rec.xS,'xS',MS,MT);
-%         if isfield(rec,'PS');writenii(fileName,rec.PS,'PS',MS,MT);end
-%         %rec=rmfield(rec,'xS');
-%     end
 else % ZN: high-res, to be modified
     switch status
         case 'reconInvert'
-%             dims = ndims(rec.(t)); 
-%             if dims>4
-%                 idx = repmat({':'},1,dims);
-%                 for k = 5:dims; idx{k} = 1;end % ZN: took first echo/inv
-%                 save_x = RSOS(rec.(t)(idx{:}));
-%             else
-%                 save_x = RSOS(rec.(t));
-%             end
             save_x = ones([size(rec.x,1:3),size(rec.x,8)]); % save all echoes
             for i = 1:size(rec.x,8)
                 save_x(:,:,:,i) = RSOS(squeeze(rec.x(:,:,:,:,1,1,1,i)));
@@ -82,13 +60,5 @@ else % ZN: high-res, to be modified
         case 'final'
             writenii(fileName,squeeze(rec.x),'x',MS,MT);
     end
-%     if rec.Alg.writeRaw;writenii(fileName,x,'x',MS,MT,gatherStruct(rec));
-%     else 
-%         NX=size(rec.x);
-%         rec.x=resampling(rec.x,[NX(1) rec.Enc.x.OutN(2:3)],3);
-%         tI=MT*[0;-0.5*(rec.Enc.x.OutN(2:3)-rec.Enc.x.RecN(2:3))';1];
-%         MT(1:3,4)=tI(1:3);
-%         writenii(fileName,rec.x,'x',MS,MT);
-%     end
 end
 

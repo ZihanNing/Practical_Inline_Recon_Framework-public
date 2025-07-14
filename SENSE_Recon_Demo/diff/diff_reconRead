@@ -1,12 +1,12 @@
---- /home/zn23/DISORDER/Gadgetron_Framework/compare/reconRead.m
-+++ /home/zn23/DISORDER/Gadgetron_Framework/compare/reconRead_inline.m
+--- /home/zn23/DISORDER/Gadgetron_Framework/compare/SENSE/reconRead.m
++++ /home/zn23/DISORDER/Gadgetron_Framework/compare/SENSE/reconRead_inline.m
 @@ -1,4 +1,4 @@
 -function [rec,cont]=reconRead(rec,typ)
 +function [rec,cont]=reconRead_inline(rec,typ,twix_like)
  
  %RECCONREAD   Reads data
  %   REC=RECONREAD(REC,TYP)
-@@ -8,28 +8,28 @@
+@@ -8,28 +8,17 @@
  %   ** REC is a recon structure
  %
  
@@ -14,10 +14,6 @@
 -elseif typ==2;fileName=rec.Nam.surfIn;%Surface
 -elseif typ==3;fileName=rec.Nam.dataIn;%Data
 -end
-+% if typ==1;fileName=rec.Nam.bodyIn;%Body
-+% elseif typ==2;fileName=rec.Nam.surfIn;%Surface
-+% elseif typ==3;fileName=rec.Nam.dataIn;%Data
-+% end
  
  ND=16;
  typV=['B' 'S' 'x'];
@@ -36,34 +32,25 @@
 -        rec.TW.(t)=rec.TW.(t){length(rec.TW.(t))};        
 -    end%We take the last element if it is a cell
 -    rec.TW.(t).image.flagIgnoreSeg=1;%Ignores segment mdh index
-+%     rec.TW.(t)=mapVBVD(fileName);
-+    rec.TW.(t)=twix_like;
-+%     if iscell(rec.TW.(t));
-+%         fprintf('Cell information, taking last element\n');
-+%         for m=1:length(rec.TW.(t));fprintf('Number of profiles element %d: %d\n',m,rec.TW.(t){m}.image.NAcq);end
-+%         rec.TW.(t)=rec.TW.(t){length(rec.TW.(t))};        
-+%     end%We take the last element if it is a cell
-+%     rec.TW.(t).image.flagIgnoreSeg=1;%Ignores segment mdh index
++rec.TW.(t)=twix_like;
      %return
          
      if isfield(rec.TW.(t),'refscan') && ~isfield(rec,'PS') && rec.Alg.useBuiltInCalibration>0 && ~strcmp(t,'x')
-@@ -39,8 +39,8 @@
+@@ -39,8 +28,7 @@
              rec.TW=renameStructField(rec.TW,'x','S');t=typV(typ);
              rec=rmfield(rec,'B');
          end
 -        if rec.Alg.removeOversamplingReadout;rec.TW.(t).refscan.flagRemoveOS=true;end
 -        rec.TWD.(t)=dynInd(rec.TW.(t).refscan,{':'},ND);      
-+%         if rec.Alg.removeOversamplingReadout;rec.TW.(t).refscan.flagRemoveOS=true;end
 +        rec.TWD.(t)=dynInd(rec.TW.(t).refscan,{':'},ND);  
          %size(rec.TWD.(t))
      
          fprintf('----------------------\n');
-@@ -48,16 +48,22 @@
+@@ -48,13 +36,18 @@
  
          %INVERT
          tsta=tic;
 -        rec=reconInvert(rec,typ,'refscan');
-+%         rec=reconInvert(rec,typ,'refscan');
 +        rec=reconInvert_inline(rec,typ,'refscan');
          fprintf('Time inverting %s: %.2f\n',t,toc(tsta));
      
@@ -78,17 +65,45 @@
 +        fprintf('Time writing %s: %.2f\n',t,toc(tsta));
  
  
--        fprintf('----------------------\n');        
-+        fprintf('----------------------\n');         
- 
-         if rec.Alg.useBuiltInCalibration==2
+         fprintf('----------------------\n');        
+@@ -63,6 +56,32 @@
              typ=3;
-@@ -73,6 +79,7 @@
+             rec.TW=renameStructField(rec.TW,'S','x');t=typV(typ);
+         end
++        cont=1;
++    elseif rec.Alg.useBuiltInCalibration==-2 % external REF
++        rec.TWD.(t)=rec.TW.(t).data;  
++        %size(rec.TWD.(t))
++    
++        fprintf('----------------------\n');
++        fprintf('Reconstructing refscan\n');tsta=tic;
++
++        %INVERT
++        tsta=tic;
++%         rec=reconInvert(rec,typ,'refscan');
++        rec=reconInvert_inline(rec,typ,'exterREF');
++        fprintf('Time inverting %s: %.2f\n',t,toc(tsta));
++    
++        %RECONSTRUCT
++        tsta=tic;
++        rec=reconReconstruct(rec,typ,'refscan');
++        fprintf('Time reconstructing %s: %.2f\n',t,toc(tsta));
++        
++        %WRITE
++        tsta=tic;
++        rec=reconWrite_inline(rec,typ,'refscan');
++        fprintf('Time writing %s: %.2f\n',t,toc(tsta));
++
++
++        fprintf('----------------------\n');    
+         cont=1;
+     else
+         cont=0;
+@@ -73,6 +92,6 @@
      %rec.TWD.(t)=dynInd(rec.TW.(t).image,{':'},7);
      if rec.Alg.removeOversamplingReadout;rec.TW.(t).image.flagRemoveOS = true;end
      %rec.TWD.(t)=rec.TW.(t).image(:,:,:,:,:,:,:,1);
 -    rec.TWD.(t)=dynInd(rec.TW.(t).image,{':'},ND);
-+%     rec.TWD.(t)=dynInd(rec.TW.(t).image,{':'},ND);
 +    rec.TWD.(t) = rec.TW.(t).data;
  %end
  if typ>1 && isfield(rec,'TWD') && isfield(rec.TWD,typV(typ-1));rec.TWD=rmfield(rec.TWD,typV(typ-1));end%We release data
