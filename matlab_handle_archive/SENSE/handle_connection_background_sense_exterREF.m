@@ -95,6 +95,7 @@ function handle_connection_background_sense_exterREF(Recon_ID)
         if enable_multiGPU; logError(SubcallError,gpuIndex_activate);  end% ZN: catch the error log & log off the current GPU & exit (put 0 as the last input if do not wish to exit)
     end
     
+    updateGPUStatus(gpuIndex_activate, 'free');
     exit; % exit the matlab program to save the RAM
     
 end

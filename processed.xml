@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <ismrmrdHeader xmlns="http://www.ismrm.org/ISMRMRD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.ismrm.org/ISMRMRD ismrmrd.xsd">
 	<subjectInformation>
-		<patientName>xxxxxxxxxxxxxxxxxxxxxxx</patientName>
-		<patientWeight_kg>75</patientWeight_kg>
-		<patientID>xxxxxxxxxxxxxxxxxxxxxxxx</patientID>
-		<patientGender>M</patientGender>
+		<patientName>xxxxxxxxxxxxx</patientName>
+		<patientWeight_kg>60</patientWeight_kg>
+		<patientID>xxxxxxxxxxxxxxxx</patientID>
+		<patientGender>F</patientGender>
 	</subjectInformation>
 	<studyInformation>
-		<studyTime>21:03:12</studyTime>
-		<studyInstanceUID>30000024040919123010700000011</studyInstanceUID>
+		<studyTime>10:37:53</studyTime>
+		<studyInstanceUID>30000025050205555783800000005</studyInstanceUID>
 	</studyInformation>
 	<measurementInformation>
-		<measurementID>176289_30000024040919123010700000011_30000024040919123010700000011_107</measurementID>
+		<measurementID>176289_30000025050205555783800000005_30000025050205555783800000005_186</measurementID>
 		<patientPosition>HFS</patientPosition>
-		<protocolName>T1_MPRAGE_DISORDER_sag_Gad</protocolName>
+		<protocolName>SWI_DIS_smallFOV_exterREF_Gadget</protocolName>
 		<measurementDependency>
 			<dependencyType>SenMap</dependencyType>
-			<measurementID>176289_30000024040919123010700000011_30000024040919123010700000011_105</measurementID>
+			<measurementID>176289_30000025050205555783800000005_30000025050205555783800000005_180</measurementID>
 		</measurementDependency>
 		<measurementDependency>
 			<dependencyType>Noise</dependencyType>
-			<measurementID>176289_30000024040919123010700000011_30000024040919123010700000011_105</measurementID>
+			<measurementID>176289_30000025050205555783800000005_30000025050205555783800000005_180</measurementID>
 		</measurementDependency>
-		<frameOfReferenceUID>1.3.12.2.1107.5.2.50.176289.1.20240409210020363.0.0.4946</frameOfReferenceUID>
+		<frameOfReferenceUID>1.3.12.2.1107.5.2.50.176289.1.20250502102001241.0.0.4968</frameOfReferenceUID>
 	</measurementInformation>
 	<acquisitionSystemInformation>
 		<systemVendor>Siemens</systemVendor>
@@ -31,302 +31,302 @@
 		<relativeReceiverNoiseBandwidth>0.792999983</relativeReceiverNoiseBandwidth>
 		<receiverChannels>64</receiverChannels>
 		<coilLabel>
-			<coilNumber>4</coilNumber>
+			<coilNumber>63</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H10</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>1</coilNumber>
+			<coilNumber>42</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H11</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>2</coilNumber>
+			<coilNumber>41</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H12</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>3</coilNumber>
+			<coilNumber>44</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H13</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>7</coilNumber>
+			<coilNumber>43</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H31</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>6</coilNumber>
+			<coilNumber>64</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H30</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>5</coilNumber>
+			<coilNumber>46</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H33</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>8</coilNumber>
+			<coilNumber>25</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H32</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>10</coilNumber>
+			<coilNumber>26</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H35</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>9</coilNumber>
+			<coilNumber>27</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H34</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>18</coilNumber>
+			<coilNumber>28</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H52</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>12</coilNumber>
+			<coilNumber>45</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H51</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>11</coilNumber>
+			<coilNumber>4</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H54</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>14</coilNumber>
+			<coilNumber>1</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H53</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>13</coilNumber>
+			<coilNumber>2</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H50</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>16</coilNumber>
+			<coilNumber>3</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H70</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>15</coilNumber>
+			<coilNumber>23</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H71</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>17</coilNumber>
+			<coilNumber>20</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H55</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>23</coilNumber>
+			<coilNumber>19</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N10</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>20</coilNumber>
+			<coilNumber>22</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N30</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>19</coilNumber>
+			<coilNumber>21</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N11</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>22</coilNumber>
+			<coilNumber>24</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N31</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>21</coilNumber>
+			<coilNumber>61</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N32</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>24</coilNumber>
+			<coilNumber>37</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N12</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>45</coilNumber>
+			<coilNumber>38</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H20</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>25</coilNumber>
+			<coilNumber>40</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H21</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>26</coilNumber>
+			<coilNumber>39</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H22</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>27</coilNumber>
+			<coilNumber>60</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H23</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>28</coilNumber>
+			<coilNumber>59</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H40</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>46</coilNumber>
+			<coilNumber>62</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H41</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>49</coilNumber>
+			<coilNumber>9</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H42</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>29</coilNumber>
+			<coilNumber>6</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H43</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>30</coilNumber>
+			<coilNumber>5</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H61</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>31</coilNumber>
+			<coilNumber>8</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H60</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>32</coilNumber>
+			<coilNumber>7</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H63</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>48</coilNumber>
+			<coilNumber>10</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H62</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>47</coilNumber>
+			<coilNumber>32</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H80</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>50</coilNumber>
+			<coilNumber>29</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H81</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>51</coilNumber>
+			<coilNumber>30</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H83</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>52</coilNumber>
+			<coilNumber>31</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H82</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>58</coilNumber>
+			<coilNumber>48</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N21</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>34</coilNumber>
+			<coilNumber>47</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N20</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>33</coilNumber>
+			<coilNumber>49</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N23</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>36</coilNumber>
+			<coilNumber>50</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N22</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>35</coilNumber>
+			<coilNumber>51</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H24</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>54</coilNumber>
+			<coilNumber>52</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H25</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>53</coilNumber>
+			<coilNumber>58</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H45</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>56</coilNumber>
+			<coilNumber>34</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H44</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>55</coilNumber>
+			<coilNumber>33</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H46</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>57</coilNumber>
+			<coilNumber>36</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H47</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>62</coilNumber>
+			<coilNumber>35</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H48</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>37</coilNumber>
+			<coilNumber>54</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H49</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>38</coilNumber>
+			<coilNumber>53</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H65</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>40</coilNumber>
+			<coilNumber>56</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H64</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>39</coilNumber>
+			<coilNumber>55</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H67</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>60</coilNumber>
+			<coilNumber>57</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H66</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>59</coilNumber>
+			<coilNumber>17</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H69</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>61</coilNumber>
+			<coilNumber>12</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H68</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>43</coilNumber>
+			<coilNumber>11</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H85</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>42</coilNumber>
+			<coilNumber>14</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H84</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>41</coilNumber>
+			<coilNumber>13</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H86</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>44</coilNumber>
+			<coilNumber>16</coilNumber>
 			<coilName>HeadNeck_64_CS:1:H87</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>64</coilNumber>
+			<coilNumber>15</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N25</coilName>
 		</coilLabel>
 		<coilLabel>
-			<coilNumber>63</coilNumber>
+			<coilNumber>18</coilNumber>
 			<coilName>HeadNeck_64_CS:1:N24</coilName>
 		</coilLabel>
 		<institutionName>St Thomas Hospital</institutionName>
 		<deviceID>176289</deviceID>
 	</acquisitionSystemInformation>
 	<experimentalConditions>
-		<H1resonanceFrequency_Hz>123257422</H1resonanceFrequency_Hz>
+		<H1resonanceFrequency_Hz>123220827</H1resonanceFrequency_Hz>
 	</experimentalConditions>
 	<encoding>
 		<encodedSpace>
 			<matrixSize>
-				<x>512</x>
-				<y>270</y>
-				<z>208</z>
+				<x>448</x>
+				<y>200</y>
+				<z>52</z>
 			</matrixSize>
 			<fieldOfView_mm>
-				<x>512</x>
-				<y>268.999939</y>
-				<z>208</z>
+				<x>360</x>
+				<y>160.714005</y>
+				<z>156</z>
 			</fieldOfView_mm>
 		</encodedSpace>
 		<reconSpace>
 			<matrixSize>
-				<x>256</x>
-				<y>256</y>
-				<z>208</z>
+				<x>224</x>
+				<y>200</y>
+				<z>48</z>
 			</matrixSize>
 			<fieldOfView_mm>
-				<x>256</x>
-				<y>256</y>
-				<z>208</z>
+				<x>180</x>
+				<y>160.714005</y>
+				<z>144</z>
 			</fieldOfView_mm>
 		</reconSpace>
 		<encodingLimits>
 			<kspace_encoding_step_1>
 				<minimum>0</minimum>
-				<maximum>268</maximum>
-				<center>134</center>
+				<maximum>173</maximum>
+				<center>75</center>
 			</kspace_encoding_step_1>
 			<kspace_encoding_step_2>
 				<minimum>0</minimum>
-				<maximum>207</maximum>
-				<center>104</center>
+				<maximum>45</maximum>
+				<center>20</center>
 			</kspace_encoding_step_2>
 			<average>
 				<minimum>0</minimum>
@@ -340,7 +340,7 @@
 			</slice>
 			<contrast>
 				<minimum>0</minimum>
-				<maximum>0</maximum>
+				<maximum>1</maximum>
 				<center>0</center>
 			</contrast>
 			<phase>
@@ -374,18 +374,17 @@
 		</parallelImaging>
 	</encoding>
 	<sequenceParameters>
-		<TR>2000</TR>
-		<TE>1.97000003</TE>
-		<TI>880</TI>
-		<TI>1000</TI>
-		<flipAngle_deg>8</flipAngle_deg>
+		<TR>27</TR>
+		<TE>9.42000008</TE>
+		<TE>19.7000008</TE>
+		<TI>300</TI>
+		<flipAngle_deg>15</flipAngle_deg>
 		<sequence_type>Flash</sequence_type>
-		<echo_spacing>5.94000006</echo_spacing>
 	</sequenceParameters>
 	<userParameters>
 		<userParameterLong>
 			<name>lScanTimeSec_zihan</name>
-			<value>283</value>
+			<value>126</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>unReordering_zihan</name>
@@ -393,19 +392,19 @@
 		</userParameterLong>
 		<userParameterLong>
 			<name>lBaseResolution_zihan</name>
-			<value>256</value>
+			<value>224</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>lGlobalTablePosTra_zihan</name>
-			<value>-54</value>
+			<value>-32</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>iNoOfFourierLines</name>
-			<value>269</value>
+			<value>174</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>lImagesPerSlab</name>
-			<value>208</value>
+			<value>48</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>alRegridMode</name>
@@ -421,7 +420,7 @@
 		</userParameterLong>
 		<userParameterLong>
 			<name>lTurboFactor</name>
-			<value>208</value>
+			<value>1</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>lEchoTrainDuration</name>
@@ -429,11 +428,11 @@
 		</userParameterLong>
 		<userParameterLong>
 			<name>sWipMemBlock_alFree_2</name>
-			<value>15</value>
+			<value>5</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>sWipMemBlock_alFree_3</name>
-			<value>9</value>
+			<value>8</value>
 		</userParameterLong>
 		<userParameterLong>
 			<name>EmbeddedRefLinesE1</name>
@@ -441,7 +440,7 @@
 		</userParameterLong>
 		<userParameterLong>
 			<name>EmbeddedRefLinesE2</name>
-			<value>64</value>
+			<value>46</value>
 		</userParameterLong>
 		<userParameterDouble>
 			<name>T2PrepDuration_0</name>
@@ -516,8 +515,8 @@
 			<value>2</value>
 		</userParameterDouble>
 		<userParameterDouble>
-			<name>flPhaseOS_zihan</name>
-			<value>0.050781</value>
+			<name>flSliceOS_zihan</name>
+			<value>0.083333</value>
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>dPhaseResolution_zihan</name>
@@ -525,11 +524,11 @@
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>alDwellTime_zihan</name>
-			<value>8200</value>
+			<value>15900</value>
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>dReadoutFOV_zihan</name>
-			<value>256</value>
+			<value>180</value>
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>flReadoutOSFactor_zihan</name>
@@ -537,7 +536,7 @@
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>dPhaseFOV</name>
-			<value>256</value>
+			<value>160.714</value>
 		</userParameterDouble>
 		<userParameterDouble>
 			<name>dPhaseResolution</name>
@@ -549,11 +548,11 @@
 		</userParameterDouble>
 		<userParameterString>
 			<name>tScanningSequence_zihan</name>
-			<value>GR\IR</value>
+			<value>GR</value>
 		</userParameterString>
 		<userParameterString>
 			<name>SoftwareVersions</name>
-			<value>syngo MR XA50</value>
+			<value>syngo MR XA60</value>
 		</userParameterString>
 	</userParameters>
 </ismrmrdHeader>

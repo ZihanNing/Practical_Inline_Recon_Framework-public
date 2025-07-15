@@ -150,7 +150,8 @@ function rec = twix2rec(twix,recon_flexFOV,removeZeroSamples,rawFilter)
     if mod(NKSpaceParsGrid,1)~=0; warning('KSpace array size for PE_2 based on over-sampling and relative resolution not an integer. Rounded array size used ( %.3f --> %d ).',NKSpaceParsGrid,round(NKSpaceParsGrid)); NKSpaceParsGrid = round(NKSpaceParsGrid);end
 
     matrix_size = [size(rec.y,1),NKSpaceLinsGrid,NKSpaceParsGrid]; % ZN: for the case recon_resol < acq_resol, to be tested
-    Acq_matrix_size = size(permute(rec.y,[1 3 4 2]),1:3);
+    ND = length(size(rec.y));
+    Acq_matrix_size = size(permute(rec.y,[1 3 4 2 5:ND]),1:3);
     Lin_center = max(twix.image.centerLin);
     Par_center = max(twix.image.centerPar);
     [rec.y,kspace_Pad,Lin,Par] = zeroPadKSpace(rec.y,matrix_size,Acq_matrix_size,Lin_center,Par_center,Lin,Par,1);

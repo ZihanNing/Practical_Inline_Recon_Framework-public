@@ -62,7 +62,6 @@ save(nameRef, 'recS','-v7.3');
 
 %% 3. CALL RECONSTRUCTION
 % pre-set parameters
-seq_type = 'mprage';
 accel_type = 'GRAPPA'; % ZN: currently support GRAPPA (uniformed undersampling) & CAIPI undersampling
 rec.Alg.Gibbsring_flag=1; % ZN: do gibbs ringing reduction in matlab
 rec.Alg.gibbsRinging = [0.4 0.4]; 
@@ -78,7 +77,17 @@ switch accel_type
     case 'GRAPPA'
         fprintf('The data is detected to be undersampled uniformly.\n');
         rec=assignSensitivities_bucket(rec, recS, solve_espirit);% Assign the sensitivities
-        NCon = size(rec.y,6);
+        multiCon = size(rec.y,6)>1;
+        multiEcho = size(rec.y,8)>1;
+        if multiCon && multiEcho
+            error('Cannot handling this currently.');
+        else
+            if multiCon
+                NRep = size(rec.y,6);
+            else
+                NRep = size(rec.y,8);
+            end
+        end
         NAve = size(rec.y,5); 
         if isequal(seq_type,'mege') % For steady-state seq, we need to set the group motion states
             rec.Alg.parXT.sampleToGroup = round( rec.Par.Labels.TFEfactor/prod(rec.Enc.DISORDERInfo.tileSize));
@@ -87,11 +96,16 @@ switch accel_type
         % suppose single average for now
         p = []; % ZN: the image before moco
         x = []; % ZN: the image after moco
-        for con = 1:NCon
+        for rep = 1:NRep
             recTemp.Plan.Suff='_MotCorr';
-            recTemp.Plan.SuffOu=sprintf('_Con%d',con);
-            recTemp.y = dynInd(rec.y,con,6);
-            if con==1 || seperate_recon
+            if multiCon
+                recTemp.Plan.SuffOu=sprintf('_Con%d',rep);
+                recTemp.y = dynInd(rec.y,rep,6);
+            else
+                recTemp.Plan.SuffOu=sprintf('_Echo%d',rep);
+                recTemp.y = dynInd(rec.y,rep,8);
+            end
+            if rep==1 || seperate_recon
                temp =  solveXT_gadgetron(recTemp);
                temp = gatherStruct(temp);
                p = cat(4,p,temp.x);

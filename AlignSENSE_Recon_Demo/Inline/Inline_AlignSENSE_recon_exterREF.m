@@ -1,4 +1,4 @@
-function rec = Inline_AlignSENSE_recon_acs(twix)
+function rec = Inline_AlignSENSE_recon_exterREF(twix)
 %% 1. Generate the input of reconstruction (REC based on the twix-like structure
 %%% RECOGNIZE SEQ TYPE
 [seq_type,~] = recogSeqType(twix.hdr.sequenceParameters.sequence_type,...

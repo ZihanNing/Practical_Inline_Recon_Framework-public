@@ -16,7 +16,7 @@ idRef = 1; %Should not be touched - only change if you acquired different ref sc
 idRefB = 0; % added by ZN, if there's a refB need to be used
 
 %% RUN
-seq_type = 'mprage';% mprage, mege supported for this version of the code
+seq_type = 'mege';% mprage, mege supported for this version of the code
 tic
 runRecon(idFile, idRef,idRefB, seq_type)
 Compute_Time = toc/60

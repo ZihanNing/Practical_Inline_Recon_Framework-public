@@ -70,7 +70,7 @@ function handle_connection_background_alignsense_exterREF(Recon_ID)
         %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
         % Put your custom reconstruction here
         % e.g., the SENSE reconstruction demo case
-        rec=Inline_AlignSENSE_recon(twix_like);
+        rec=Inline_AlignSENSE_recon_exterREF(twix_like);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         %% Save the image to be retrieved
@@ -99,6 +99,7 @@ function handle_connection_background_alignsense_exterREF(Recon_ID)
         if enable_multiGPU; logError(SubcallError,gpuIndex_activate);  end% ZN: catch the error log & log off the current GPU & exit (put 0 as the last input if do not wish to exit)
     end
     
+    updateGPUStatus(gpuIndex_activate, 'free');
     exit; % exit the matlab program to save the RAM
     
 end

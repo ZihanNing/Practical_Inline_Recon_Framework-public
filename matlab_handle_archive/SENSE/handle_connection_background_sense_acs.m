@@ -56,7 +56,7 @@ function handle_connection_background_sense_acs(Recon_ID)
         fprintf('=========== Loading the raw data.\n');
         [fileName, nameRef, patientID, save_path, save_time, sorting_info] = read_sortinginfo(Recon_ID); % ZN: the earliest registered data will be loaded for processing
         pause(5); load(nameRef); % 'bufferData','fileName','hdrConnection' are saved in nameRef
-        flag_erase = erase_sortinginfo(sorting_info, save_path,patientID,fileName, save_time, Recon_ID); % ZN: the loaded data's sorting info will be wiped from the structure to prevent re-recon; corresponding main_to_sub file is updated
+        flag_erase = erase_sortinginfo(gpuIndex_activatesorting_info, save_path,patientID,fileName, save_time, Recon_ID); % ZN: the loaded data's sorting info will be wiped from the structure to prevent re-recon; corresponding main_to_sub file is updated
         if flag_erase
             fprintf('=========== Raw data successfully loaded.\n');
         else
@@ -95,6 +95,7 @@ function handle_connection_background_sense_acs(Recon_ID)
         if enable_multiGPU; logError(SubcallError,gpuIndex_activate);  end% ZN: catch the error log & log off the current GPU & exit (put 0 as the last input if do not wish to exit)
     end
     
+    updateGPUStatus(gpuIndex_activate, 'free');
     exit; % exit the matlab program to save the RAM
     
 end
