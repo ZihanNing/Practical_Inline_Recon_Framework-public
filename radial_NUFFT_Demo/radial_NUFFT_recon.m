@@ -47,7 +47,7 @@ end
 
 %% KSPACE TO IMAGE %%
 % recon of array image(s)
-do_shift = 'n'; % trajectory shifting not supported in this demo
+doshift = 'n'; % trajectory shifting not supported in this demo
 
 disp("Commenced recon of array image")
 [img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n",doshift,shift_noTE,[],[],shift_img);
