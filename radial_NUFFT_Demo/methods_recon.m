@@ -21,7 +21,7 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
     % a) array: reconstructed images
     % b) single: resolution (mm ?)
     % c) single: echo time (s)
-    % d) array: trajectory shifts for TE0 if computed 
+    % d) array: trajectory shifts for TE1 if computed 
     % e) array: trajectory shifts if computed
     %-----------------------------------------------------------
     % Notes: 
@@ -165,28 +165,30 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
         ky = pi.*ky./0.5;
         kz = pi.*kz./0.5;        
         w = calcWeightsRef(kx,ky,kz)';
-        % flip the odd echoes ()
-        for echo=1:numEchoes
+        % flip the odd echoes (counting half spoke as nr. 1)
+        for echo=1:numEchoes % here 1 is the first full spoke
             if mod(echo,2) == 0
                 raw_TErest(:,:,:,echo) = flip(raw_TErest(:,:,:,echo),1);
             end
         end
         for echo = 1:numEchoes
+
+            %% apply k-space shifts if using (commented out for this demo)
             ws = zeros(size(w)); 
-            if not(isempty(dx))
-                kxs = kx + 1.0 .* dx(:,1,echo,2);
-                kys = ky + 1.0 .* dy(:,1,echo,2);
-                kzs = kz + 1.0 .* dz(:,1,echo,2);
-                for spoke=1:numROs
-                    ds = squeeze(1.0.*dr(spoke,chanshift,echo,2)) .* (2*MTX / (2*pi));
-                    ws(:,spoke) = fraccircshift(w(:,spoke),ds);
-                end
-            else
-                kxs = kx;
-                kys = ky;
-                kzs = kz;
-                ws = w;
-            end
+            %if not(isempty(dx))
+            %    kxs = kx + 1.0 .* dx(:,1,echo,2);
+            %    kys = ky + 1.0 .* dy(:,1,echo,2);
+            %    kzs = kz + 1.0 .* dz(:,1,echo,2);
+            %    for spoke=1:numROs
+            %        ds = squeeze(1.0.*dr(spoke,chanshift,echo,2)) .* (2*MTX / (2*pi));
+            %        ws(:,spoke) = fraccircshift(w(:,spoke),ds);
+            %    end
+            %else
+            kxs = kx;
+            kys = ky;
+            kzs = kz;
+            ws = w;
+            %end
             kxs = permute(kxs,[2,1]);
             kys = permute(kys,[2,1]);
             kzs = permute(kzs,[2,1]);
@@ -205,9 +207,9 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
                 img_out(:,:,:,:,echo+1) = reshape(out,[1,size(out)]);
             else
                 img_out(:,:,:,:,echo+1) = permute(out,[4,1,2,3]);
-            end            
+            end
             disp(['Reconstructed echo ', num2str(echo+1), ' out of ', num2str(numEchoes+1)])
-        end        
+        end
     end
     
     result = permute(img_out,[2,3,4,1,5]); %permute to x,y,z,ch,echo
