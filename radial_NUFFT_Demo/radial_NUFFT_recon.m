@@ -64,11 +64,11 @@ end
 
 
 disp("Commenced recon of array image")
-[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n","n",[],doshift,shift_noTE,shift,shift_TE1,shift_img,"n");
+[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n",doshift,shift_noTE,shift,shift_TE1,shift_img);
 disp("Completed recon of array image")
 
 
-%%% sos combination
+%% sos channel combination
 disp("Commenced sos channel combination")
 img_array_sos = squeeze(sqrt(sum(abs(img_array).^2,4)));
 disp("Completed sos channel combination")
