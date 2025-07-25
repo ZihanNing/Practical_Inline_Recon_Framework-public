@@ -2,15 +2,12 @@
 % Main execution script for MERINA sodium MRI k-space to im-
 % age reconstruction. Handles various settings and options, 
 % reconstructs images with optional trajectory shift corr.,
-% combines channel images, saves images and settings. If 
-% applicable, aligns multiple repeats in image space. 
+% (not supported in demo!), combines channel images (sos 
+% only in demo), saves nifti images.
 %-----------------------------------------------------------
 % Sam Rot (UCL)
 %-----------------------------------------------------------
-% Notes: currently only has Finufft recon supported, but pl-
-% anning to include legacy reconstruction for completeness. 
-% Some extensions to come: B1 mapping and correction, B0 map-
-% ping and correction, improved trajectory realignment. 
+% Notes: reduced functionality for demo
 %===========================================================
 
 %% DEPENDENCIES 
@@ -32,7 +29,6 @@ settings.check_shift = 1;
 settings.shift_img = 'Vol';
 settings.shift_noTE = 12;
 
-
 % PARSING INPUT %
 out_dir = settings.out_dir;
 array_raw1_fname = settings.rawarrname1;
@@ -50,25 +46,14 @@ else
 end
 
 %% KSPACE TO IMAGE %%
-%%% recon of array image(s) %%%
-if contains(shift_img,"Arr") && skip_shift == false
-    doshift = 'y'; 
-else
-    doshift = 'n';
-end
-
-if ~(exist('shift', 'var')) % if the shift wasn't calculated from volume images
-    shift = [];
-    shift_TE1 = [];
-end
-
+% recon of array image(s)
+do_shift = 'n'; % trajectory shifting not supported in this demo
 
 disp("Commenced recon of array image")
-[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n",doshift,shift_noTE,shift,shift_TE1,shift_img);
+[img_array, res_array, ~, ~, ~] = methods_recon([raw_path,'/',array_raw1_fname],'',Tro,"n",doshift,shift_noTE,[],[],shift_img);
 disp("Completed recon of array image")
 
-
-%% sos channel combination
+%% SOS CHANNEL COMBINATION %% 
 disp("Commenced sos channel combination")
 img_array_sos = squeeze(sqrt(sum(abs(img_array).^2,4)));
 disp("Completed sos channel combination")

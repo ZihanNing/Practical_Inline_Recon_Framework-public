@@ -25,7 +25,7 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
     % e) array: trajectory shifts if computed
     %-----------------------------------------------------------
     % Notes: 
-    %
+    % computation of radial trajectory shift not supported in demo
     %===========================================================
         
     %% loading data and fetching some parameters
@@ -47,7 +47,7 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
         numEchoes = (data.dataSize(1)-MTX)/(2*MTX); % nr refocused echoes, i.e. half-spoke is echo 0
     end
     
-    if TE1only == "y" %force use only 1st echo
+    if TE1only == "y" %force recon only 1st echo
         numEchoes = 0;
     end
     
@@ -63,41 +63,41 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
         clear raw2
     end    
     
-    % calculate shift of first echo
+    % calculate shift of first echo (commented out, not supported in this demo)
     raw_TE1 = raw(1:MTX,:,:); % pick first TE
     raw_TE1 = permute(raw_TE1,[1 3 2]);
-    if shift == "y" % if shift is to be computed
-        [dr_TE1,dx_TE1,dy_TE1,dz_TE1] = methods_eccshift_TE1(raw_TE1, shift_img);
-        disp('Calculating trajectory shifts for TE1')
-    elseif not(isempty(shift_in_TE1)) % if shift was provided
-        dr_TE1 = shift_in_TE1(:,:,:,1);
-        dx_TE1 = shift_in_TE1(:,:,:,2);
-        dy_TE1 = shift_in_TE1(:,:,:,3);
-        dz_TE1 = shift_in_TE1(:,:,:,4);
-        disp('Using precalculated trajectory shifts for TE1')
-    else % no traectory shifts
-        dx_TE1 = [];
-        disp('Not using trajectory shifts for TE1')
-    end
+    %if shift == "y" % if shift is to be computed
+    %    [dr_TE1,dx_TE1,dy_TE1,dz_TE1] = methods_eccshift_TE1(raw_TE1, shift_img);
+    %    disp('Calculating trajectory shifts for TE1')
+    %elseif not(isempty(shift_in_TE1)) % if shift was provided
+    %    dr_TE1 = shift_in_TE1(:,:,:,1);
+    %    dx_TE1 = shift_in_TE1(:,:,:,2);
+    %    dy_TE1 = shift_in_TE1(:,:,:,3);
+    %    dz_TE1 = shift_in_TE1(:,:,:,4);
+    %    disp('Using precalculated trajectory shifts for TE1')
+    %else % no traectory shifts
+    dx_TE1 = [];
+    disp('Not using trajectory shifts for TE1')
+    %end
 
     if numEchoes > 0 % if we have a multiecho dataset
         raw_TErest = raw(MTX+1:end,:,:);
         raw_TErest = reshape(raw_TErest,[2*MTX,numEchoes,numChan,numROs]);
         raw_TErest = permute(raw_TErest,[1,4,3,2]);
-        % calculate shift of second echo
-        if shift == "y" % if shift is to be computed
-            disp('Calculating trajectory shifts for TErest')
-            [dr,dx,dy,dz] = methods_eccshift(raw_TErest,shift_echoes, shift_img);
-        elseif not(isempty(shift_in)) % if shift was provided
-            disp('Using precalculated trajectory shifts for TErest')
-            dr = shift_in(:,:,:,:,1);
-            dx = shift_in(:,:,:,:,2);
-            dy = shift_in(:,:,:,:,3);
-            dz = shift_in(:,:,:,:,4);
-        else % no traectory shifts
-            dx = [];
-            disp('Not using trajectory shifts for TErest')
-        end
+        % calculate shift of remaining echoes (commented out, not supported in this demo)
+        %if shift == "y" % if shift is to be computed
+        %    disp('Calculating trajectory shifts for TErest')
+        %    [dr,dx,dy,dz] = methods_eccshift(raw_TErest,shift_echoes, shift_img);
+        %elseif not(isempty(shift_in)) % if shift was provided
+        %    disp('Using precalculated trajectory shifts for TErest')
+        %    dr = shift_in(:,:,:,:,1);
+        %    dx = shift_in(:,:,:,:,2);
+        %    dy = shift_in(:,:,:,:,3);
+        %    dz = shift_in(:,:,:,:,4);
+        %else % no traectory shifts
+        dx = [];
+        disp('Not using trajectory shifts for TErest')
+        %end
     end
 
     %% some parameters for calculating k-space coordinates
@@ -119,21 +119,21 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
     w = calcWeights(kx,ky,kz)'; % density compensation weights
     ws = zeros(size(w)); 
     
-    %% apply k-space shifts if using
-    if not(isempty(dx_TE1))
-        kxs = kx - 0.10 .* dx_TE1(:,2); %use 0.1 fudge factor here to scale
-        kys = ky - 0.10 .* dy_TE1(:,2); %shift accounting for ramp sampling
-        kzs = kz - 0.10 .* dz_TE1(:,2);
-        for spoke=1:numROs % shift the compensation weights as well
-            ds = - squeeze(0.10.*dr_TE1(spoke,2)) .* (MTX / (pi));
-            ws(:,spoke) = fraccircshift(w(:,spoke),ds);
-        end
-    else
-        kxs = kx;
-        kys = ky;
-        kzs = kz;
-        ws = w;
-    end
+    %% apply k-space shifts if using (commented out for this demo)
+    %if not(isempty(dx_TE1))
+    %    kxs = kx - 0.10 .* dx_TE1(:,2); %use 0.1 fudge factor here to scale
+    %    kys = ky - 0.10 .* dy_TE1(:,2); %shift accounting for ramp sampling
+    %    kzs = kz - 0.10 .* dz_TE1(:,2);
+    %    for spoke=1:numROs % shift the compensation weights as well
+    %        ds = - squeeze(0.10.*dr_TE1(spoke,2)) .* (MTX / (pi));
+    %        ws(:,spoke) = fraccircshift(w(:,spoke),ds);
+    %    end
+    %else
+    kxs = kx;
+    kys = ky;
+    kzs = kz;
+    ws = w;
+    %end
     
     %% reshape and prepare for NUFFT
     kxs = permute(kxs,[2,1]);
