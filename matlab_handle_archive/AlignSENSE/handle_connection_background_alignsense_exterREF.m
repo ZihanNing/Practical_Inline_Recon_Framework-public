@@ -1,4 +1,20 @@
 function handle_connection_background_alignsense_exterREF(Recon_ID)
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for AlignSENSE reconstruction using external reference
+% 
+% This handler runs the AlignSENSE reconstruction on the background and
+% saves the images to be retrieved within the server
+% Need to scan an external reference scan first before run this target
+% scan. The pre-saved coil sensitivity map will be loaded for
+% reconstruction.
+% See handle_connection_background_exterREF_ESPIRIT.m for coil sensitivity
+% map estimation using external reference scan.
+% ---------------------------------------------------------------
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
     if nargin < 1 || isempty(Recon_ID); Recon_ID='AlignSENSE_exterREF';end % modify this if needed

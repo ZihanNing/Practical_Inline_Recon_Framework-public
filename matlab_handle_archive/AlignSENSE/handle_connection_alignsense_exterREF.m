@@ -1,9 +1,16 @@
 
 function [] = handle_connection_alignsense_exterREF(connection)
-    %%% This is a blank handle
-    %%% Just read in Bucket including noise scan (refer to:
-    %%% config/configDISORDER_test_Bucket_SWI.xml)
-    %%% by Zihan Ning
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for AlignSENSE reconstruction using external reference scan 
+% 
+% This handler receive data from gadgetron client and convert them back to
+% Twixlike structure, then launch the background computation
+% ---------------------------------------------------------------
     
     %% SET ENVIRONMENT
     % ZN: better to be sure that the matlab is launched in

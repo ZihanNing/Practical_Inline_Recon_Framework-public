@@ -1,14 +1,18 @@
 
 function [] = handle_connection_retrieval_auto_alignsense_acs(connection)
-    %%% This is a handler to retrieve the reconstructed images back to
-    %%% console 
-    %%% Two methods for retrieval available based on this framework:
-    %%% - short retrieval dummy scan: its name should contains the target
-    %%% scan's name and the planning should be the same as the target scan
-    %%% - retro recon
-    %%%
-    %%% by Zihan Ning
-    
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% This is a handler to retrieve the reconstructed images back to console 
+% Two methods for retrieval available based on this framework:
+% - short retrieval dummy scan: its name should contains the target
+% scan's name and the planning should be the same as the target scan
+% - retro recon
+% ---------------------------------------------------------------
+
     %% SET ENVIRONMENT
     % ZN: better to be sure that the matlab is launched in
     % /Gadgetron_Parallel_Framework folder to allow file/function

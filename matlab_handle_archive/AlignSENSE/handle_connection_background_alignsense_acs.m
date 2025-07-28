@@ -1,4 +1,17 @@
 function handle_connection_background_alignsense_acs(Recon_ID)
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for AlignSENSE reconstruction using ACS
+% 
+% This handler runs the AlignSENSE reconstruction on the background and
+% saves the images to be retrieved within the server
+% ACS lines of the scan are used for coil sensitivity map estimation using
+% ESPIRiT
+% ---------------------------------------------------------------
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
     if nargin < 1 || isempty(Recon_ID); Recon_ID='AlignSENSE_ACS';end % modify this if needed

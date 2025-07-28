@@ -1,4 +1,19 @@
 function handle_connection_background_exterREF_ESPIRIT(Recon_ID)
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for coil sensitivity estimation with the external reference scan
+% 
+% This handler runs the ESPIRiT for coil sensitivity map estimation on the
+% background and saves the coil sensitivity map within the server
+% The saved coil sensitivity map can be further used for SENSE or
+% AlignSENSE reconstruction
+% Please make sure that the coil sensitivity map and the undersampled
+% dataset are saved within the same folder (check Framework_config.xml)
+% ---------------------------------------------------------------
     
     if nargin < 1 || isempty(Recon_ID); Recon_ID='exterREF_ESPIRIT';end % modify this if needed
     
