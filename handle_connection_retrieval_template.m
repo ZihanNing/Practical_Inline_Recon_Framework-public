@@ -1,13 +1,26 @@
 
 function [] = handle_connection_retrieval_template(connection)
-    %%% This is a handler to retrieve the reconstructed images back to
-    %%% console 
-    %%% Two methods for retrieval available based on this framework:
-    %%% - short retrieval dummy scan: its name should contains the target
-    %%% scan's name and the planning should be the same as the target scan
-    %%% - retro recon
-    %%%
-    %%% by Zihan Ning
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for image retrieval to the scanner console
+% 
+% This handler reads the raw data from a retrieval fast dummy scan or a
+% retro-recon - grab its header, dump the acquired raw, pick up the
+% image_to_be_send files (saved recontructed images) and resign the headers
+% Finally, it returns the picked up images to the console
+%
+% To note:
+% (1) This function will automatically check the images to be retrieved,
+% but if you are using a retrieval dummy scan, please be sure that you
+% align the name with it to the target scan
+% (2) The matrix size of the target scan and retrieval scan should be
+% aligned - this file will automatic interpolate or crop the reconstructed
+% images to make sure this with the function 'adjust_fileToSend'
+% ---------------------------------------------------------------
     
     %% SET ENVIRONMENT
     % ZN: better to be sure that the matlab is launched in
@@ -16,7 +29,7 @@ function [] = handle_connection_retrieval_template(connection)
     addpath(genpath('Gadgetron_tools'))
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
-    Recon_ID = 'SENSE_exterREF';
+    Recon_ID = 'AlignSENSE_ACS';
     debug_mode = 0; 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     

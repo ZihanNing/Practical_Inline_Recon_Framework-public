@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+This is a central configuration file to sort loading path/support function path/saving path, etc for each workflows
+Please remember to register a new workflow first if you would like to start the implementation of a new method
+Or, check every time when you apply an tested worflow in a new server/machine
+
 by Zihan Ning <zihan.1.ning@kcl.ac.uk>
 @King's College London
 22-May-2025
@@ -7,7 +11,7 @@ by Zihan Ning <zihan.1.ning@kcl.ac.uk>
 
 <Framework>
     <Component name="Default">
-        <data_saved_path>/home/zn23/data/</data_saved_path>
+        <data_saved_path>/home/gadgegron/data/</data_saved_path>
     </Component>
     
     <!--SENSE reconstruction with ACS for coil senstivity map-->

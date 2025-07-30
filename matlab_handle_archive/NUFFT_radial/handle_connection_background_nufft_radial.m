@@ -1,4 +1,17 @@
 function handle_connection_background_nufft_radial(Recon_ID)
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-16
+%
+% Description:
+% handler for NUFFT reconstruction for radial trajectory
+% 
+% This handler runs the NUFFT reconstruction on the background and
+% saves the images to be retrieved within the server
+% applied and tested via a multi-echo gre sequence for Sodium imaging with
+% radial trajectory
+% ---------------------------------------------------------------
     
     %%%%%%%%%%%%%%% HERE NEED TO BE MODIFIED %%%%%%%%%%%%%
     if nargin < 1 || isempty(Recon_ID); Recon_ID='NUFFT_radial';end % modify this if needed
@@ -71,7 +84,7 @@ function handle_connection_background_nufft_radial(Recon_ID)
         % Put your custom reconstruction here
         % e.g., the SENSE reconstruction demo case
         PIPE_folder = supportPaths{1};
-        [arrayimg1_sos,arrayimg_adc,arrayimg_adc_norm] = Inline_NUFFT_radial(PIPE_folder,twix_like);
+        arrayimg1_sos = Inline_NUFFT_radial(PIPE_folder,twix_like);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         %% Save the image to be retrieved

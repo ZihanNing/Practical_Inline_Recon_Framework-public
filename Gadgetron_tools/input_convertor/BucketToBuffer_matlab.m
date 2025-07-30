@@ -1,18 +1,42 @@
 function twix = BucketToBuffer_matlab(bucket,connection_hdr,noiseData,saveJSON_flag,compulsory_traj)
-% ZN: modified based on create_slice_from_bucket from gadgetron matlab
-% toolbox demo
-% ZN: to note, this currently only take care of the case with single
-% contrast/echoes/invs... For the cases with multiple averages, this might
-% not work
-% ZN: currently this might only works for data with sprial trajectory,
-% and other non-cartesian trejectories related code still needs to be
-% tested
+% ---------------------------------------------------------------
+% This function is developed by Zihan Ning <zihan.1.ning@kcl.ac.uk>
+% @King's College London
+% Date: 2025-07-30
+%
+% Description:
+% This is a general input conventor that convert the ISMRMRD raw format
+% back to the Twix(-like) format read by mapVBVD for maximum code reuse
+% purpose
+%
+% To note:
+% (1) This input convertor should be used with the corresponding
+% ParameterMaps (user stylesheet & map), as for the default ParameterMap
+% provided by siemens_to_ismrmrd can only map small range of the headers
+% and the most of the Twix headers missing
+% (2) currently, we mapped most-used headers to this input convertor and
+% realted ParameterMaps, but not all headers. If you find any headers
+% missing, please refer to the user manual of this repo for the detailed
+% instruction to add that within this convertor and ParameterMaps. We are
+% encouraging you to contribute your addings to this repo as well :-)
+% ---------------------------------------------------------------
+
+%% Update diary
 % current support: 
 % - spiral data (single echo & single average)
+% - radial data (multi-echo & single average)
+% - cartesian data
+%
+% - some missing headers related to geometry computation in the TW.image
+% filed. Please use the provided tools within
+% /Gadgetron_tools/input_convertor/geom_computation for geometry related
+% handling. For the demo case, please refer to AlignSENSE_Demo
+% (twixlike2rec.m)
 %
 % last modification: 12-Mar-2025
 % by Zihan Ning @ King's College London
 
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if nargin < 3 || isempty(noiseData); noiseData=[];end 
     if nargin < 4 || isempty(saveJSON_flag); saveJSON_flag = 0; end 
     if nargin < 5 || isempty(compulsory_traj); compulsory_traj = []; end % ZN: in case the traj is encoded wrong in the twix header
