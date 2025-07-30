@@ -4,18 +4,6 @@
 
 ---
 
-## 🧭 Overview
-
-This repository provides a plug-and-play framework for converting custom MR reconstructions—originally developed for offline use—into robust, scalable, and clinically usable inline workflows.
-
-* ✔️ Compatible with **Siemens platforms**
-* 🔁 Enables **multi-input**, **parallel & resource-aware**, and **asynchronous** inline execution
-* 🧩 Preserves **scanner-based post-processing** for unified image appearance and clinical review
-
-This framework has been validated in both routine clinical protocols and large-scale studies such as **TwinsUK**, supporting inline deployment of reconstructions like **SENSE**, **AlignSENSE**, and **radial NUFFT**.
-
----
-
 ## ✨ Key Features
 
 ### ✅ Easy Prototyping of Offline Reconstructions
