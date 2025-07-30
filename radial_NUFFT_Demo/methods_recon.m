@@ -55,14 +55,6 @@ function [result, res, TE, shifts_TE1, shifts] = methods_recon(filename, filenam
     numChan = size(raw,2);
     img_out = zeros(numChan,MTX,MTX,MTX,numEchoes+1);
     
-    %% averaging of k-spaces
-    if not(isempty(filename2))
-        measDat2 = mapVBVD(char(filename2));
-        raw2 = measDat2.image();
-        raw = (raw + raw2) ./ 2;
-        clear raw2
-    end    
-    
     % calculate shift of first echo (commented out, not supported in this demo)
     raw_TE1 = raw(1:MTX,:,:); % pick first TE
     raw_TE1 = permute(raw_TE1,[1 3 2]);

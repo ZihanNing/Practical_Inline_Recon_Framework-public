@@ -11,16 +11,12 @@
 %===========================================================
 
 %% DEPENDENCIES 
-clear
-% addpath('dialog/')
 addpath(genpath('radial_NUFFT_Demo'));
 addpath(genpath('/home/zn23/matlab/finufft')); % ZN: load the finufft path; finufft toolbox need to be installed first
-setPath
 
-%% UI FOR INPUTS
+%% CONFIGS FOR INPUTS
 home_path = getenv('HOME')
 raw_path = [home_path,'/Gadgetron_Parallel_Framework/raw'];
-%load([home_path,'/Gadgetron_Parallel_Framework/radial_NUFFT_Demo/Config_NUFFT_radial_MEGE_offline.mat']);
 
 settings.out_dir = 'out2';
 settings.rawarrname1 = 'meas_MID00165_FID10766_KCL_miniflash_JC_merina1000proj_tro2_spiral_37e_tept6_t245v_fa9.dat';
