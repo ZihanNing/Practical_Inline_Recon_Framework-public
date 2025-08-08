@@ -76,6 +76,7 @@ Inline implementations included:
 
 - **SENSE**: `SENSE_Recon_Demo/`
    - Reference: Pruessmann KP et al., *SENSE: Sensitivity Encoding for Fast MRI*. MRM 1999. [DOI:10.1002/mrm.1910420526](https://doi.org/10.1002/mrm.1910420526)
+  
   ![Inline SENSE results](./SENSE_Recon_Demo/Demo_SWI.png)
   
   *Figure 1. SENSE reconstruction results of a SWI sequence using the inline demo script*
@@ -83,28 +84,32 @@ Inline implementations included:
   - Reference:
     - L. Cordero-Grande, et al., *Sensitivity Encoding for Aligned Multishot Magnetic Resonance Reconstruction*. IEEE Transactions on Computational Imaging, 2016. [DOI: 10.1109/TCI.2016.2557069](https://ieeexplore.ieee.org/document/7457367)
     - L. Cordero-Grande, et al., *Motion-corrected MRI with DISORDER: Distributed and incoherent sample orders for reconstruction deblurring using encoding redundancy*. MRM. 2020. [DOI: 10.1002/mrm.28157](https://onlinelibrary.wiley.com/doi/10.1002/mrm.28157)
-    ![Inline AlignSENSE results: MPRAGE](./AlignSENSE_Recon_Demo/Demo_MoCo_MPRAGE.png)
 
-    *Figure 2. AlignSENSE reconstruction results of a MPRAGE sequence using the inline demo script. (A) before MoCo; (B) after MoCo via AlignSENSE*
+![Inline AlignSENSE results: MPRAGE](./AlignSENSE_Recon_Demo/Demo_MoCo_MPRAGE.png)
 
-    ![Inline AlignSENSE results: SWI](./AlignSENSE_Recon_Demo/Demo_MoCo_smallFOV_SWI.png)
+*Figure 2. AlignSENSE reconstruction results of a MPRAGE sequence using the inline demo script. (A) before MoCo; (B) after MoCo via AlignSENSE*
 
-    *Figure 3. AlignSENSE reconstruction results of a SWI sequence using the inline demo script. (A) before MoCo & using auto-calibration lines for coil sensitivity estimation; (B) after MoCo via AlignSENSE & using auto-calibration lines; (C) before MoCo & using an external reference for coil sensitivity estimation and reconstruct to a lager FOV (wrapping removed compared to A); (D) after MoCo via AlignSENSE & using an external reference*
+![Inline AlignSENSE results: SWI](./AlignSENSE_Recon_Demo/Demo_MoCo_smallFOV_SWI.png)
+
+*Figure 3. AlignSENSE reconstruction results of a SWI sequence using the inline demo script. (A) before MoCo & using auto-calibration lines for coil sensitivity estimation; (B) after MoCo via AlignSENSE & using auto-calibration lines; (C) before MoCo & using an external reference for coil sensitivity estimation and reconstruct to a lager FOV (wrapping removed compared to A); (D) after MoCo via AlignSENSE & using an external reference*
     
 
 
 - **radial NUFFT**: `radial_NUFFT_Demo/`
    - Reference: Blunck Y, et al., *3D-multi-echo radial imaging of 23 Na (3D-MERINA) for time-efficient multi-parameter tissue compartment mapping*. MRM, 2018. [DOI: 10.1002/mrm.26848](https://onlinelibrary.wiley.com/doi/10.1002/mrm.26848)
  
-     ![Inline NUFFT results: multi-echo GRE for Sodium imaging using radial trajectory](./radial_NUFFT_Demo/Demo_radial_sodium_phantom.jpg)
+![Inline NUFFT results: multi-echo GRE for Sodium imaging using radial trajectory](./radial_NUFFT_Demo/Demo_radial_sodium_invivo.jpg)
 
-    *Figure 4. NUFFT reconstruction results of a multi-echo GRE Sodium imaging sequence with radial trajectory using the inline demo script for three views (A, axial; B, sagittal; C, coronal)*
+*Figure 4. NUFFT reconstruction results of a multi-echo GRE Sodium imaging sequence with radial trajectory using the inline demo script for three views (A,D, axial; B,E, sagittal; C,F, coronal; A-C, first echo; D-F, second echo)*
 
 Each demo contains:
 
 * Offline version
 * Inline version (`inline/` subfolder)
 * `diff/` subfolder showing minimal modifications for inline adaptation
+
+The demo datasets (raws) can be downloaded at Zenodo: 
+👉 [demo datasets at Zenodo](https://zenodo.org/uploads/15839027)
 
 ---
 
