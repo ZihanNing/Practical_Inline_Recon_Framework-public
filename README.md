@@ -74,8 +74,9 @@ Gadgetron_Parallel_Framework/
 
 ### 📖 Full Documentation
 
-All setup instructions and tutorials are available at:
+All setup instructions and tutorials are available at [Wiki of this repo](https://github.com/ZihanNing/Practical_Inline_Recon_Framework-public.wiki.git)
 
+Or see:
 👉 [User Manual on Notion](https://shine-pond-caf.notion.site/User-manual-20961ff38021807f89a8fdcc819acd0b?source=copy_link)
 
 ---
