@@ -4,6 +4,16 @@
 
 ---
 
+## 📝 Citation
+
+If you use this framework in your research, please cite:
+
+> Ning Z, et al. (2025). A Framework for Inline Parallel Multi-Sequence Reconstructions: A Head Motion Correction Application. Proceedings of the International Society for Magnetic Resonance in Medicine (ISMRM), Abstract 0032.
+
+> [In submission] Ning Z, et al. *"From Offline to Inline Without Pain: A Practical Framework for Translating Offline MR Reconstructions to Inline Deployment Using the Gadgetron Platform."* (2025)
+
+---
+
 ## ✨ Key Features
 
 ### ✅ Easy Prototyping of Offline Reconstructions
@@ -123,15 +133,6 @@ Validated on:
 
   * N = 480 subjects
   * 99% successful inline retrieval rate (via retrieval scans or retro-recon)
-
----
-
-## 📝 Citation
-
-If you use this framework in your research, please cite:
-
-> Ning Z, et al. (2025). A Framework for Inline Parallel Multi-Sequence Reconstructions: A Head Motion Correction Application. Proceedings of the International Society for Magnetic Resonance in Medicine (ISMRM), Abstract 0032.
-> [In submission] Ning Z, et al. *"From Offline to Inline Without Pain: A Practical Framework for Translating Offline MR Reconstructions to Inline Deployment Using the Gadgetron Platform."* (2025)
 
 ---
 
