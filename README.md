@@ -10,7 +10,7 @@ If you use this framework in your research, please cite:
 
 > Ning Z, et al. (2025). A Framework for Inline Parallel Multi-Sequence Reconstructions: A Head Motion Correction Application. Proceedings of the International Society for Magnetic Resonance in Medicine (ISMRM), Abstract 0032.
 
-> [In submission] Ning Z, et al. *"From Offline to Inline Without Pain: A Practical Framework for Translating Offline MR Reconstructions to Inline Deployment Using the Gadgetron Platform."* (2025)
+> [In submission] Ning Z, et al. *"From Offline to Inline Without Pain: A Practical Framework for Translating Offline MR Reconstructions to Inline Deployment Using the Gadgetron Platform."* (2025). Please cite the preprint: https://doi.org/10.48550/arXiv.2509.06473 
 
 ---
 
